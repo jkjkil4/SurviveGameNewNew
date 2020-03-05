@@ -27,9 +27,14 @@ LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵
 LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 INT t = 0;
+INT currentT = 0;
 
 INT timeLogic = 0;	//逻辑时间
-INT timeDraw = 10;	//绘制时间
+INT timeRender = 10;	//绘制时间
+INT timeThreadLogic = 0;
+INT timeThreadRender = 0;
+INT timeMainMsgLoop = 0;
+INT startTime = timeGetTime();
 //INT wBefore = -1;
 //INT hBefore = -1;
 
@@ -85,10 +90,10 @@ VOID onInit()
 		             &imageInfo, &g_pTexture );
 
 }
-VOID onLogic(float fElapsedTime)
+VOID onLogic()
 {
 	//得到逻辑开始时的时间
-	long long tStart = getCurrentTime();
+	int tStart = timeGetTime();
 	//RECT rect;
 	//GetClientRect(g_hWnd, &rect);
 	//int w = rect.right - rect.left;
@@ -99,13 +104,17 @@ VOID onLogic(float fElapsedTime)
 
 	//}
 	t++;
+	if (t % 60 == 0) {
+		currentT = t;
+		startTime = timeGetTime() - 10;
+	}
 	//得到逻辑消耗的时间
-	timeLogic = static_cast<int>(getCurrentTime() - tStart);
+	timeLogic = timeGetTime() - tStart;
 }
-VOID onRender(float fElapsedTime)
+VOID onRender()
 {
 	//得到绘制开始时的时间
-	long long tStart = getCurrentTime();
+	int tStart = timeGetTime();
 	g_pDevice->Clear(
 		0,			//清空矩形的数量
 		nullptr,	//清空矩形的临接信息
@@ -132,7 +141,7 @@ VOID onRender(float fElapsedTime)
 	//前后台缓冲区交换的"源动力"
 	g_pDevice->Present(nullptr, nullptr, 0, nullptr);
 	//得到绘制消耗的时间
-	timeDraw = static_cast<int>(getCurrentTime() - tStart);
+	timeRender = timeGetTime() - tStart;
 }
 VOID onDestroy()
 {
@@ -140,6 +149,39 @@ VOID onDestroy()
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pDevice);
 	Safe_Release(g_pD3D);
+}
+
+//VOID onLogicAndRender(bool needRender = true) {
+//	int currentTime = timeGetTime();
+//	int elapsedTime = currentTime - timeMsg;
+//	onLogic(elapsedTime);	//逻辑
+//	if (!IsIconic(g_hWnd) && needRender) {
+//		onRender(elapsedTime);	//绘制
+//	}
+//	//OutputDebugString(stringToLPCWSTR(std::to_string(elapsedTime)+'\t'+std::to_string(1000 * (t - currentT) / (timeGetTime() - startTime))+'\n'));
+//	if (elapsedTime < 1000 / 60)
+//		Sleep(1000 / 60 - elapsedTime);	//延时
+//	timeMsg = currentTime;
+//}
+
+VOID threadLogic() {
+	while (true) {
+		onLogic();
+		OutputDebugString( stringToLPCWSTR( "threadLogic\t" + std::to_string(timeGetTime()) + '\n' ) );
+		Sleep(17);
+	}
+}
+VOID threadRender() {
+	while (true) {
+		int currentTime = timeGetTime();
+		int elapsedTime = currentTime - timeThreadRender;
+		if (!IsIconic(g_hWnd)) {
+			onRender();	//绘制
+		}
+		if (elapsedTime < 17)
+			Sleep(17 - elapsedTime);	//延时
+		timeThreadRender = currentTime;
+	}
 }
 
 INT WINAPI WinMain(__in HINSTANCE hInstance,
@@ -166,8 +208,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		TEXT("Linimass"), WS_OVERLAPPEDWINDOW,
 		50, 20, 800, 600, NULL, NULL, hInstance, NULL);
 
-	if (g_hWnd)
-	{
+	if (g_hWnd){
 		g_hInstance = hInstance;
 
 		onInit();
@@ -176,26 +217,20 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		UpdateWindow(g_hWnd);
 	}
 
+	//多线程
+	std::thread thLogic(threadLogic);
+	thLogic.detach();
+	std::thread thRender(threadRender);
+	thRender.detach();
+
+	//消息循环
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
+	while (msg.message != WM_QUIT) {
+		if (GetMessage(&msg, NULL, 0, 0)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		static DWORD dwTime = timeGetTime();
-		DWORD dwCurrentTime = timeGetTime();
-		DWORD dwElapsedTime = dwCurrentTime - dwTime;
-		float fElapsedTime = dwElapsedTime * 0.001f;
-		onLogic(fElapsedTime);	//逻辑
-		if (!IsIconic(g_hWnd)) {
-			onRender(fElapsedTime);	//绘制
-		}
-		if (dwElapsedTime < 1000 / 120)
-			Sleep(1000 / 120 - dwElapsedTime);	//延时
-		dwTime = dwCurrentTime;
 	}
 	onDestroy();
 	UnregisterClass(wc.lpszClassName, hInstance);
@@ -205,8 +240,15 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
-	{
+	switch (uMsg) {
+	case WM_MOVE:
+		//OutputDebugStringW(stringToLPCWSTR("MOVEING\n"));
+		//onLogicAndRender(false);
+		break;
+	case WM_SIZE:
+		//OutputDebugStringW( stringToLPCWSTR("RESIZE\n") );
+		//onLogicAndRender(false);
+		break;
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE)
 			DestroyWindow(hWnd);

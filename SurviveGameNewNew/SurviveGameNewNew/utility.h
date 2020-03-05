@@ -35,18 +35,23 @@ template<typename T>inline void Safe_Release(T*& p)
 #endif
 
 //------读取纹理-------
-#ifndef READ_TEXTURE
-#define READ_TEXTURE
+#ifndef READ_TEXTURE_
+#define READ_TEXTURE_
 #include <string>
 LPCWSTR stringToLPCWSTR(std::string orig);
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
 #endif
 
 //------得到时间(ms)------
-#ifndef GET_TIME
-#define GET_TIME
-#include <time.h>
-#include <sys/timeb.h>
-#include <sstream>
-long long getCurrentTime();
+//#ifndef GET_TIME_
+//#define GET_TIME_
+//#include <time.h>
+//#include <sys/timeb.h>
+//#include <sstream>
+//long long getCurrentTime();
+
+//------多线程--------
+#ifndef PTHREAD_
+#define PTHREAD_
+#include <thread>
 #endif

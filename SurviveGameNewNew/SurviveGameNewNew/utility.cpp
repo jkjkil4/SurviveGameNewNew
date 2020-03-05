@@ -10,13 +10,9 @@ LPCWSTR stringToLPCWSTR(std::string orig) {
 	return wcstring;
 }
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture) {
-	D3DXCreateTextureFromFileEx(
+	D3DXCreateTextureFromFileExW(
 		g_pDevice,	//设备指针
-#ifndef _DEBUG
-		path.c_str(),//路径及文件名
-#else
 		stringToLPCWSTR(path),//路径及文件名
-#endif
 		D3DX_FROM_FILE,	//图片的宽来自于文件本身
 		D3DX_FROM_FILE,	//图片的高来自于文件本身
 		0,				//多级渐进纹理的等级
@@ -32,16 +28,16 @@ void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_IN
 	);
 }
 
-long long getCurrentTime() {
-	long long time_last;
-	time_last = time(NULL);
-
-	struct timeb t1;
-	ftime(&t1);
-	time_t ttt = t1.millitm + t1.time * 1000;
-	//std::stringstream ss;
-	//ss << ttt;
-	//std::string ts = ss.str();
-	//return ts;
-	return static_cast<long long>(ttt);
-}
+//long long getCurrentTime() {
+//	long long time_last;
+//	time_last = time(NULL);
+//
+//	struct timeb t1;
+//	ftime(&t1);
+//	time_t ttt = t1.millitm + t1.time * 1000;
+//	//std::stringstream ss;
+//	//ss << ttt;
+//	//std::string ts = ss.str();
+//	//return ts;
+//	return static_cast<long long>(ttt);
+//}
