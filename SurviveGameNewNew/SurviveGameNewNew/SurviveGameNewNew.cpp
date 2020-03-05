@@ -10,17 +10,6 @@
 HWND g_hWnd = 0;
 HINSTANCE g_hInstance = 0;
 
-/*
-绘图窗口改造的步骤：
-1、包含头文件及库文件，见Utility.h文件
-2、声明变量
-3、创建D3D接口指针
-4、创建D3D设备指针
-5、创建Sprite精灵指针
-6、改造onRender函数
-*/
-
-//COM：组件对象模型
 
 LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
@@ -29,44 +18,29 @@ LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 INT t = 0;
 INT currentT = 0;
 
-INT timeLogic = 0;	//逻辑时间
-INT timeRender = 10;	//绘制时间
-INT timeThreadLogic = 0;
-INT timeThreadRender = 0;
-INT timeMainMsgLoop = 0;
-INT startTime = timeGetTime();
-//INT wBefore = -1;
-//INT hBefore = -1;
+INT timeThreadLogic = 0;	//逻辑处理
+INT timeThreadRender = 0;	//渲染
+
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
 
-VOID onInit()
-{
-	//3、创建D3D接口指针
+VOID onInit() {
+	//创建D3D接口指针
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	D3DDISPLAYMODE d3ddm;		//D3D显示模式结构体
 	ZeroMemory(&d3ddm, sizeof(d3ddm));
 
 	//获取当前显卡的显示模式
-	g_pD3D->GetAdapterDisplayMode(
-		D3DADAPTER_DEFAULT,		//哪张显卡的显示模式
-		&d3ddm);				//获取到的显示模式的存储位置
+	g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 
-	//4、创建D3D的设备指针
+	//创建D3D的设备指针
 	D3DPRESENT_PARAMETERS d3dpp;	//描述D3D设备的能力
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
 
 	d3dpp.BackBufferCount = 1;	//后台缓冲区的个数（双缓冲技术）
-
-	//-----窗口模式的写发-----
-	d3dpp.Windowed = TRUE;		//当前窗口是否为"窗口模式"
-
-	//-----全屏模式的写发-----
-	//d3dpp.Windowed = FALSE;
-	//d3dpp.BackBufferWidth = d3ddm.Width;
-	//d3dpp.BackBufferHeight = d3ddm.Height;
-
+	d3dpp.Windowed = TRUE;
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;	//翻转效果：抛弃
 
 	//创建设备指针
@@ -79,50 +53,25 @@ VOID onInit()
 		&g_pDevice	//返回的设备指针
 	);
 
-
-	//5、创建精灵指针
-	D3DXCreateSprite(
-		g_pDevice,		//设备指针
-		&g_pSprite);	//返回的精灵指针
+	//创建精灵指针
+	D3DXCreateSprite(g_pDevice, &g_pSprite);
 
 	D3DXIMAGE_INFO imageInfo;
-	myCreateTexture( g_pDevice, "texture\\test.png",
-		             &imageInfo, &g_pTexture );
-
+	myCreateTexture( g_pDevice, "texture\\test2.png", &imageInfo, &g_pTexture );
 }
-VOID onLogic()
-{
-	//得到逻辑开始时的时间
+INT onLogic() {
+	//得到逻辑处理开始时的时间
 	int tStart = timeGetTime();
-	//RECT rect;
-	//GetClientRect(g_hWnd, &rect);
-	//int w = rect.right - rect.left;
-	//int h = rect.bottom - rect.top;
-	//if (w != wBefore || h != hBefore) {
-	//	wBefore = w;
-	//	hBefore = h;
-
-	//}
+	//逻辑处理
 	t++;
-	if (t % 60 == 0) {
-		currentT = t;
-		startTime = timeGetTime() - 10;
-	}
-	//得到逻辑消耗的时间
-	timeLogic = timeGetTime() - tStart;
+	//得到逻辑处理消耗的时间
+	return timeGetTime() - tStart;
 }
-VOID onRender()
-{
+INT onRender() {
 	//得到绘制开始时的时间
 	int tStart = timeGetTime();
-	g_pDevice->Clear(
-		0,			//清空矩形的数量
-		nullptr,	//清空矩形的临接信息
-		D3DCLEAR_TARGET,	//要清空颜色缓冲区
-		D3DCOLOR_XRGB(102, 204, 255),	//清成什么颜色   由于我喜欢洛天依，我每次都清成天依蓝
-		1.0f,	//深度缓冲区的初始值
-		0		//模板缓冲区的初始值
-	);
+	//D3DCOLOR_XRGB(102, 204, 255)
+	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
 	g_pDevice->BeginScene();		//获取绘制权限
 	//---------------------------------------
 	//		渲染代码
@@ -132,47 +81,34 @@ VOID onRender()
 		g_pTexture,				//绘制哪张图片		
 		nullptr,	//绘制图片的哪个部分
 		&D3DXVECTOR3(0, 0, 0),	//图片的锚点
-		&D3DXVECTOR3(0, 0, 0),	//绘制在客户区的哪个位置
+		&D3DXVECTOR3(t/5.0f, 0, 0),	//绘制在客户区的哪个位置
 		D3DCOLOR_XRGB((int)(cos(t * PI / 180) * 127 + 127), (int)(sin(t * PI / 180) * 127 + 127), 255)//绘制混合色
 	);
 	g_pSprite->End();	//告诉系统，在3D的窗口中绘制2D的工作结束
 	//---------------------------------------
 	g_pDevice->EndScene();		//结束绘制
-	//前后台缓冲区交换的"源动力"
-	g_pDevice->Present(nullptr, nullptr, 0, nullptr);
-	//得到绘制消耗的时间
-	timeRender = timeGetTime() - tStart;
+	g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+	return timeGetTime() - tStart;	//得到绘制消耗的时间
 }
-VOID onDestroy()
-{
+VOID onDestroy() {
 	Safe_Release(g_pTexture);
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pDevice);
 	Safe_Release(g_pD3D);
 }
 
-//VOID onLogicAndRender(bool needRender = true) {
-//	int currentTime = timeGetTime();
-//	int elapsedTime = currentTime - timeMsg;
-//	onLogic(elapsedTime);	//逻辑
-//	if (!IsIconic(g_hWnd) && needRender) {
-//		onRender(elapsedTime);	//绘制
-//	}
-//	//OutputDebugString(stringToLPCWSTR(std::to_string(elapsedTime)+'\t'+std::to_string(1000 * (t - currentT) / (timeGetTime() - startTime))+'\n'));
-//	if (elapsedTime < 1000 / 60)
-//		Sleep(1000 / 60 - elapsedTime);	//延时
-//	timeMsg = currentTime;
-//}
-
-VOID threadLogic() {
+VOID threadLogic(bool* flag) {
 	while (true) {
+		if (*flag)
+			break;
 		onLogic();
-		OutputDebugString( stringToLPCWSTR( "threadLogic\t" + std::to_string(timeGetTime()) + '\n' ) );
 		Sleep(17);
 	}
 }
-VOID threadRender() {
+VOID threadRender(bool* flag) {
 	while (true) {
+		if (*flag)
+			break;
 		int currentTime = timeGetTime();
 		int elapsedTime = currentTime - timeThreadRender;
 		if (!IsIconic(g_hWnd)) {
@@ -218,18 +154,25 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	}
 
 	//多线程
-	std::thread thLogic(threadLogic);
+	bool flagLogic = false;
+	std::thread thLogic(threadLogic, &flagLogic);
 	thLogic.detach();
-	std::thread thRender(threadRender);
+	bool flagRender = false;
+	std::thread thRender(threadRender, &flagRender);
 	thRender.detach();
 
 	//消息循环
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-	while (msg.message != WM_QUIT) {
+	while (true) {
 		if (GetMessage(&msg, NULL, 0, 0)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
+		if (msg.message == WM_QUIT) {
+			flagLogic = true;
+			flagRender = true;
+			break;
 		}
 	}
 	onDestroy();
@@ -241,14 +184,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg) {
-	case WM_MOVE:
-		//OutputDebugStringW(stringToLPCWSTR("MOVEING\n"));
-		//onLogicAndRender(false);
-		break;
-	case WM_SIZE:
-		//OutputDebugStringW( stringToLPCWSTR("RESIZE\n") );
-		//onLogicAndRender(false);
-		break;
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE)
 			DestroyWindow(hWnd);

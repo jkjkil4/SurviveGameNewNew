@@ -23,13 +23,11 @@
 #ifndef SAFE_DELETE_T_
 #define SAFE_DELETE_T_
 
-template<typename T>inline void Safe_Delete(T*& p)
-{
+template<typename T>inline void Safe_Delete(T*& p){
     if (p) { delete p; p = nullptr; }
 }
 
-template<typename T>inline void Safe_Release(T*& p)
-{
+template<typename T>inline void Safe_Release(T*& p){
     if (p) { p->Release(); p = nullptr; }
 }
 #endif
@@ -42,15 +40,7 @@ LPCWSTR stringToLPCWSTR(std::string orig);
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
 #endif
 
-//------得到时间(ms)------
-//#ifndef GET_TIME_
-//#define GET_TIME_
-//#include <time.h>
-//#include <sys/timeb.h>
-//#include <sstream>
-//long long getCurrentTime();
-
-//------多线程--------
+//------多线程---------
 #ifndef PTHREAD_
 #define PTHREAD_
 #include <thread>
