@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="utility.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="MyGame\MyPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGame\MyState.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
@@ -27,13 +30,13 @@
     <ClInclude Include="SurviveGameNewNew.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="utility.h">
+    <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyGame\MyPlayer.h">
+    <ClInclude Include="MyRooms\MyRoom.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyGame\MyState.h">
+    <ClInclude Include="MyRooms\MyRoom_title.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -45,6 +48,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyGame\MyPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom_title.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

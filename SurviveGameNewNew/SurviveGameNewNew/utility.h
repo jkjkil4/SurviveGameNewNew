@@ -2,6 +2,7 @@
 #ifndef WINDOWS_PLATFORM_
 #define WINDOWS_PLATFORM_
 
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <mmsystem.h>
 #pragma comment(lib,"Winmm.lib")
@@ -50,4 +51,10 @@ std::wstring stringToWstring(std::string orig);
 #ifndef PTHREAD_
 #define PTHREAD_
 #include <thread>
+#endif
+
+//------math----------
+#ifndef MATH_
+#include <cmath>
+#define PI acos(-1)
 #endif

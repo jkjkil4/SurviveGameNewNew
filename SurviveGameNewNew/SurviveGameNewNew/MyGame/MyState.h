@@ -1,5 +1,6 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 class MyKey
@@ -59,9 +60,11 @@ public:
 	bool left_released = false;
 	bool mid_released = false;
 	bool right_released = false;
-};
 
-void setState(int chKey, bool* pKey, bool* pKeyPressed, bool* pKeyReleased) {
+	int x = 0;
+	int y = 0;
+};
+static void setState(int chKey, bool* pKey, bool* pKeyPressed, bool* pKeyReleased) {
 	bool has = GetKeyState(chKey) < 0;
 	if (!*pKey && has) {
 		*pKeyPressed = true;

@@ -1,7 +1,4 @@
 ﻿#include "utility.h"
-#include <cmath>
-
-#define PI acos(-1)
 
 HWND g_hWnd = 0;
 HINSTANCE g_hInstance = 0;
@@ -10,22 +7,24 @@ HINSTANCE g_hInstance = 0;
 LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
 LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
-LPD3DXSPRITE g_pSpriteRender = nullptr;	//用来渲染到纹理
+LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
 LPDIRECT3DTEXTURE9 g_pTexture = nullptr;//纹理对象
-LPD3DXFONT g_pFont = nullptr;			//字体对象
-RECT clientRect;
+
+//RECT clientRect;
 
 // 渲染到纹理
 BOOL isInit = false;
 IDirect3DTexture9* g_pRenderTexture = NULL;
 IDirect3DSurface9* g_pRenderSurface = NULL;
 
-INT t = 0;
-INT resizeTime = timeGetTime();
+INT resizeTime = timeGetTime();	//上次大小被改变 的时间
+INT doneTime = 0;	//完成初始化的时间
 
-INT timeThreadLogic = 0;	//逻辑处理耗时
-INT timeThreadRender = 0;	//渲染耗时
+//耗时
+INT timeThreadLogic = 0;
+INT timeThreadRender = 0;
 
+//画面大小
 INT defWidth = 800;
 INT defHeight = 608;
 INT viewWidth = 800;
@@ -37,12 +36,15 @@ BOOL hasFocus = true;
 MyKey key;
 MyMouse mouse;
 
+//Room
+#include "MyRooms/MyRoom_title.h"
+MyRoom* currentRoom = nullptr;
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
 
 VOID onInit() {
-
 	//创建D3D接口指针
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	D3DDISPLAYMODE d3ddm;		//D3D显示模式结构体
@@ -79,10 +81,6 @@ VOID onInit() {
 	D3DXIMAGE_INFO imageInfo;
 	myCreateTexture( g_pDevice, "data\\texture\\test.png", &imageInfo, &g_pTexture );
 
-	//字体
-	D3DXCreateFont(g_pDevice, 40, 20, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
-	GetClientRect(g_hWnd, &clientRect);
-
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
 		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
@@ -93,6 +91,10 @@ VOID onInit() {
 		NULL);
 	//得到纹理的Surface
 	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
+
+	//初始化Room
+	currentRoom = new MyRoom_title(key, mouse, g_pD3D, g_pDevice, g_pSprite,
+		g_pSpriteRender, g_pTexture, g_pRenderTexture, g_pRenderSurface);
 }
 VOID onKeyAndMouseCheck() {
 	//清空状态
@@ -110,53 +112,58 @@ VOID onKeyAndMouseCheck() {
 		setState(VK_LBUTTON, &mouse.left, &mouse.left_pressed, &mouse.left_released);
 		setState(VK_MBUTTON, &mouse.mid, &mouse.mid_pressed, &mouse.mid_released);
 		setState(VK_RBUTTON, &mouse.right, &mouse.right_pressed, &mouse.right_released);
+
+		POINT m_mouse;
+		GetCursorPos(&m_mouse);
+		ScreenToClient(g_hWnd, &m_mouse);  //屏幕转化为客户端
+		cDebug( std::to_string(m_mouse.x)+'\n' );
 	}
 }
-INT onLogic() {
-	//得到逻辑处理开始时的时间
-	int tStart = timeGetTime();
-	//逻辑处理
-	t++;
-	//得到逻辑处理消耗的时间
-	return timeGetTime() - tStart;
-}
-INT onRender() {
-	//得到绘制开始时的时间
-	int tStart = timeGetTime();
-
-	// 渲染到纹理
-	IDirect3DSurface9* g_pOldRenderTarget;
-	g_pDevice->GetRenderTarget(0, &g_pOldRenderTarget);
-	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
-	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
-	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-	g_pSprite->Draw(
-		g_pTexture,				//绘制哪张图片		
-		nullptr,	//绘制图片的哪个部分
-		&D3DXVECTOR3(0, 0, 0),	//图片的锚点
-		&D3DXVECTOR3(0, 0, 0),	//绘制在客户区的哪个位置
-		D3DCOLOR_XRGB((int)(cos(t * PI / 180) * 127 + 127), (int)(sin(t * PI / 180) * 127 + 127), 255)//绘制混合色
-	);
-	g_pSprite->End();
-	//绘制文字
-	std::string text = "TESTTEXT 这是一段测试文字\naasdsdsd";
-	g_pFont->DrawText(NULL, stringToWstring(text).c_str(), -1, &clientRect, DT_SINGLELINE | DT_NOCLIP | DT_CENTER | DT_VCENTER, 0xffffffff);
-	// 绘制纹理
-	g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
-	//g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
-	g_pDevice->BeginScene();		//获取绘制权限
-	g_pSpriteRender->Begin(NULL);
-	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0),   //绘制函数
-		&D3DXVECTOR3(0, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
-	g_pSpriteRender->End();
-	g_pDevice->EndScene();		//结束绘制
-	g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
-
-	// 得到绘制消耗的时间
-	return timeGetTime() - tStart;	
-}
+//INT onLogic() {
+//	//得到逻辑处理开始时的时间
+//	int tStart = timeGetTime();
+//	//逻辑处理
+//	t++;
+//	//得到逻辑处理消耗的时间
+//	return timeGetTime() - tStart;
+//}
+//INT onRender() {
+//	//得到绘制开始时的时间
+//	int tStart = timeGetTime();
+//
+//	// 渲染到纹理
+//	IDirect3DSurface9* g_pOldRenderTarget;
+//	g_pDevice->GetRenderTarget(0, &g_pOldRenderTarget);
+//	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
+//	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
+//	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+//	g_pSprite->Draw(
+//		g_pTexture,				//绘制哪张图片		
+//		nullptr,	//绘制图片的哪个部分
+//		&D3DXVECTOR3(0, 0, 0),	//图片的锚点
+//		&D3DXVECTOR3(0, 0, 0),	//绘制在客户区的哪个位置
+//		D3DCOLOR_XRGB((int)(cos(t * PI / 180) * 127 + 127), (int)(sin(t * PI / 180) * 127 + 127), 255)//绘制混合色
+//	);
+//	g_pSprite->End();
+//	//绘制文字
+//	std::string text = "TESTTEXT 这是一段测试文字\naasdsdsd";
+//	g_pFont->DrawText(NULL, stringToWstring(text).c_str(), -1, &clientRect, DT_SINGLELINE | DT_NOCLIP | DT_CENTER | DT_VCENTER, 0xffffffff);
+//	// 绘制纹理
+//	g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
+//	//g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
+//	g_pDevice->BeginScene();		//获取绘制权限
+//	g_pSpriteRender->Begin(NULL);
+//	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0),   //绘制函数
+//		&D3DXVECTOR3(0, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
+//	g_pSpriteRender->End();
+//	g_pDevice->EndScene();		//结束绘制
+//	g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+//
+//	// 得到绘制消耗的时间
+//	return timeGetTime() - tStart;	
+//}
 VOID onDestroy() {
-	Safe_Release(g_pFont);
+	//Safe_Release(g_pFont);
 	Safe_Release(g_pTexture);
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pSpriteRender);
@@ -171,7 +178,8 @@ VOID threadLogic(bool* flag) {
 			break;
 		}
 		onKeyAndMouseCheck();
-		onLogic();
+		if (currentRoom)
+			currentRoom->onLogic();
 		Sleep(17);
 	}
 }
@@ -184,7 +192,8 @@ VOID threadRender(bool* flag) {
 		int currentTime = timeGetTime();
 		int elapsedTime = currentTime - timeThreadRender;
 		if (!IsIconic(g_hWnd) && currentTime - resizeTime > 120 ) {
-			onRender();	//绘制
+			if (currentRoom)
+				currentRoom->onRender();	//绘制
 		}
 		if (elapsedTime < 17)
 			Sleep(17 - elapsedTime);	//延时
@@ -248,6 +257,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	//消息循环
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
+	doneTime = timeGetTime();
 	while (true) {
 		if (GetMessage(&msg, NULL, 0, 0)) {
 			TranslateMessage(&msg);
@@ -256,6 +266,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		if (msg.message == WM_QUIT) {
 			flagLogic = true;
 			flagRender = true;
+			currentRoom->onDestroy();
 			while (flagLogic || flagRender)
 				Sleep(10);
 			break;
@@ -303,11 +314,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 		break;
 	}
 	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE)
+		if (wParam == VK_ESCAPE && timeGetTime() - doneTime > 10 )
 			DestroyWindow(hWnd);
 		break;
 	case WM_CLOSE:
-		DestroyWindow(hWnd);
+		if (timeGetTime() - doneTime > 5000)
+			DestroyWindow(hWnd);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
