@@ -11,7 +11,9 @@ LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
 LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 LPD3DXSPRITE g_pSpriteRender = nullptr;	//用来渲染到纹理
-LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
+LPDIRECT3DTEXTURE9 g_pTexture = nullptr;//纹理对象
+LPD3DXFONT g_pFont = nullptr;			//字体对象
+RECT clientRect;
 
 // 渲染到纹理
 BOOL isInit = false;
@@ -26,12 +28,19 @@ INT timeThreadRender = 0;	//渲染耗时
 
 INT defWidth = 800;
 INT defHeight = 608;
+INT viewWidth = 800;
+INT viewHeight = 608;
+
+//按键状态
+#include "MyState.h"
+MyKey key;
+MyMouse mouse;
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
 
-VOID onInit() {
+VOID onInit(HWND hWnd) {
 
 	//创建D3D接口指针
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -69,6 +78,10 @@ VOID onInit() {
 	D3DXIMAGE_INFO imageInfo;
 	myCreateTexture( g_pDevice, "texture\\test.png", &imageInfo, &g_pTexture );
 
+	//字体
+	D3DXCreateFont(g_pDevice, 0, 0, 20, 20, 0, 0, 0, 0, 0, NULL, &g_pFont);
+	GetClientRect(hWnd, &clientRect);
+
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
 		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
@@ -79,6 +92,11 @@ VOID onInit() {
 		NULL);
 	//得到纹理的Surface
 	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
+}
+VOID onKeyAndMouseCheck() {
+	//清空状态
+	mouse.clearState();
+	key.clearState();
 }
 INT onLogic() {
 	//得到逻辑处理开始时的时间
@@ -106,7 +124,9 @@ INT onRender() {
 		D3DCOLOR_XRGB((int)(cos(t * PI / 180) * 127 + 127), (int)(sin(t * PI / 180) * 127 + 127), 255)//绘制混合色
 	);
 	g_pSprite->End();
-
+	//绘制文字
+	std::string text = "TESTTEXT 测试文字a";
+	g_pFont->DrawText(NULL, stringToWstring(text).c_str(), -1, &clientRect, DT_SINGLELINE | DT_NOCLIP | DT_CENTER | DT_VCENTER, 0xffffffff);
 	// 绘制纹理
 	g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
 	//g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
@@ -122,6 +142,7 @@ INT onRender() {
 	return timeGetTime() - tStart;	
 }
 VOID onDestroy() {
+	Safe_Release(g_pFont);
 	Safe_Release(g_pTexture);
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pSpriteRender);
@@ -133,6 +154,7 @@ VOID threadLogic(bool* flag) {
 	while (true) {
 		if (*flag)
 			break;
+		onKeyAndMouseCheck();
 		onLogic();
 		Sleep(17);
 	}
@@ -183,13 +205,15 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	//得到视野宽高
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
-	defWidth = rect.right - rect.left;
-	defHeight = rect.bottom - rect.top;
+	viewWidth = rect.right - rect.left;
+	viewHeight = rect.bottom - rect.top;
+	defWidth = viewWidth;
+	defHeight = viewHeight;
 
 	if (g_hWnd){
 		g_hInstance = hInstance;
 
-		onInit();
+		onInit(g_hWnd);
 		isInit = true;
 
 		UpdateWindow(g_hWnd);
@@ -234,6 +258,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 			GetClientRect(g_hWnd, &rect);
 			int w = rect.right - rect.left;
 			int h = rect.bottom - rect.top;
+			viewWidth = w;
+			viewHeight = h;
 			D3DXMatrixTransformation2D(
 				&g_scale,		//返回的矩阵
 				nullptr,		//缩放的中心

@@ -1,23 +1,22 @@
 #include "utility.h"
 
-LPCWSTR stringToLPCWSTR(std::string orig) {
-	size_t origsize = orig.length() + 1;
-	const size_t newsize = 100;
-	size_t convertedChars = 0;
-	wchar_t* wcstring = (wchar_t*)malloc(sizeof(wchar_t) * (orig.length() - 1));
-	mbstowcs_s(&convertedChars, wcstring, origsize, orig.c_str(), _TRUNCATE);
-
-	return wcstring;
+std::wstring stringToWstring(std::string orig) {
+	int slength = (int)orig.length() + 1;
+	wchar_t* m_wchar;
+	int len = MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, NULL, 0);
+	m_wchar = new wchar_t[len + 1];
+	MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, m_wchar, len);
+	m_wchar[len] = '\0';
+	std::wstring r(m_wchar);
+	delete[] m_wchar;
+	return r;
 }
+
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path,
 	D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture) {
 	D3DXCreateTextureFromFileEx(
 		g_pDevice,	//设备指针
-#ifndef _DEBUG
-		path.c_str(),
-#else
-		stringToLPCWSTR(path),//路径及文件名
-#endif
+		stringToWstring(path).c_str(),
 		D3DX_FROM_FILE,	//图片的宽来自于文件本身
 		D3DX_FROM_FILE,	//图片的高来自于文件本身
 		0,				//多级渐进纹理的等级
