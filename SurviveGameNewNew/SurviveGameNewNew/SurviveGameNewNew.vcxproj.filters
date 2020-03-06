@@ -30,10 +30,10 @@
     <ClInclude Include="utility.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyState.h">
+    <ClInclude Include="MyGame\MyPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyPlayer.h">
+    <ClInclude Include="MyGame\MyState.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClCompile Include="utility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyPlayer.cpp">
+    <ClCompile Include="MyGame\MyPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

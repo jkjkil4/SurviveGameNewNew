@@ -1,5 +1,7 @@
 #pragma once
 
+#include <windows.h>
+
 class MyKey
 {
 public:
@@ -16,17 +18,17 @@ public:
 		d_released = false;
 		space_released = false;
 	}
-	bool w = false;
-	bool a = false;
-	bool s = false;
-	bool d = false;
-	bool space = false;
-
 	bool w_pressed = false;
 	bool a_pressed = false;
 	bool s_pressed = false;
 	bool d_pressed = false;
 	bool space_pressed = false;
+
+	bool w = false;
+	bool a = false;
+	bool s = false;
+	bool d = false;
+	bool space = false;
 
 	bool w_released = false;
 	bool a_released = false;
@@ -42,21 +44,31 @@ public:
 		left_pressed = false;
 		mid_pressed = false;
 		right_pressed = false;
-
 		left_released = false;
 		mid_released = false;
 		right_released = false;
 	}
-	bool left = false;
-	bool mid = false;
-	bool right = false;
-
 	bool left_pressed = false;
 	bool mid_pressed = false;
 	bool right_pressed = false;
+
+	bool left = false;
+	bool mid = false;
+	bool right = false;
 
 	bool left_released = false;
 	bool mid_released = false;
 	bool right_released = false;
 };
 
+void setState(int chKey, bool* pKey, bool* pKeyPressed, bool* pKeyReleased) {
+	bool has = GetKeyState(chKey) < 0;
+	if (!*pKey && has) {
+		*pKeyPressed = true;
+		*pKey = has;
+	}
+	else if (*pKey && !has) {
+		*pKeyReleased = true;
+		*pKey = has;
+	}
+}

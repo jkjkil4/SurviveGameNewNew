@@ -42,6 +42,7 @@ void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_IN
 //------ÀàÐÍ×ª»»-------
 #ifndef TYPE_TRANSLATE_
 #define TYPE_TRANSLATE_
+#define cDebug(str) OutputDebugString( stringToWstring(str).c_str() )
 std::wstring stringToWstring(std::string orig);
 #endif
 

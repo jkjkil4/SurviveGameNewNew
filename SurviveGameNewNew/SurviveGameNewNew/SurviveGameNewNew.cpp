@@ -32,7 +32,8 @@ INT viewWidth = 800;
 INT viewHeight = 608;
 
 //按键状态
-#include "MyState.h"
+#include "MyGame/MyState.h"
+BOOL hasFocus = true;
 MyKey key;
 MyMouse mouse;
 
@@ -40,7 +41,7 @@ MyMouse mouse;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
 
-VOID onInit(HWND hWnd) {
+VOID onInit() {
 
 	//创建D3D接口指针
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -54,7 +55,7 @@ VOID onInit(HWND hWnd) {
 	D3DPRESENT_PARAMETERS d3dpp;	//描述D3D设备的能力
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
 
-	d3dpp.BackBufferCount = 1;	//后台缓冲区的个数（双缓冲技术）
+	d3dpp.BackBufferCount = 1;
 	d3dpp.Windowed = TRUE;
 	d3dpp.BackBufferWidth = defWidth;
 	d3dpp.BackBufferHeight = defHeight;
@@ -76,11 +77,11 @@ VOID onInit(HWND hWnd) {
 
 	//载入纹理
 	D3DXIMAGE_INFO imageInfo;
-	myCreateTexture( g_pDevice, "texture\\test.png", &imageInfo, &g_pTexture );
+	myCreateTexture( g_pDevice, "data\\texture\\test.png", &imageInfo, &g_pTexture );
 
 	//字体
-	D3DXCreateFont(g_pDevice, 0, 0, 20, 20, 0, 0, 0, 0, 0, NULL, &g_pFont);
-	GetClientRect(hWnd, &clientRect);
+	D3DXCreateFont(g_pDevice, 40, 20, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
+	GetClientRect(g_hWnd, &clientRect);
 
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
@@ -97,6 +98,19 @@ VOID onKeyAndMouseCheck() {
 	//清空状态
 	mouse.clearState();
 	key.clearState();
+	//设置状态
+	if (hasFocus) {
+		//键盘
+		setState('W', &key.w, &key.w_pressed, &key.w_released);
+		setState('A', &key.a, &key.a_pressed, &key.a_released);
+		setState('S', &key.s, &key.s_pressed, &key.s_released);
+		setState('D', &key.d, &key.d_pressed, &key.d_released);
+		setState(VK_SPACE, &key.space, &key.space_pressed, &key.space_released);
+		//鼠标
+		setState(VK_LBUTTON, &mouse.left, &mouse.left_pressed, &mouse.left_released);
+		setState(VK_MBUTTON, &mouse.mid, &mouse.mid_pressed, &mouse.mid_released);
+		setState(VK_RBUTTON, &mouse.right, &mouse.right_pressed, &mouse.right_released);
+	}
 }
 INT onLogic() {
 	//得到逻辑处理开始时的时间
@@ -125,7 +139,7 @@ INT onRender() {
 	);
 	g_pSprite->End();
 	//绘制文字
-	std::string text = "TESTTEXT 测试文字a";
+	std::string text = "TESTTEXT 这是一段测试文字\naasdsdsd";
 	g_pFont->DrawText(NULL, stringToWstring(text).c_str(), -1, &clientRect, DT_SINGLELINE | DT_NOCLIP | DT_CENTER | DT_VCENTER, 0xffffffff);
 	// 绘制纹理
 	g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
@@ -152,8 +166,10 @@ VOID onDestroy() {
 
 VOID threadLogic(bool* flag) {
 	while (true) {
-		if (*flag)
+		if (*flag) {
+			*flag = false;
 			break;
+		}
 		onKeyAndMouseCheck();
 		onLogic();
 		Sleep(17);
@@ -161,8 +177,10 @@ VOID threadLogic(bool* flag) {
 }
 VOID threadRender(bool* flag) {
 	while (true) {
-		if (*flag)
+		if (*flag) {
+			*flag = false;
 			break;
+		}
 		int currentTime = timeGetTime();
 		int elapsedTime = currentTime - timeThreadRender;
 		if (!IsIconic(g_hWnd) && currentTime - resizeTime > 120 ) {
@@ -202,7 +220,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	//最大化
 	ShowWindow(g_hWnd, SW_SHOWMAXIMIZED);
 
-	//得到视野宽高
+	//得到画面宽高
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
 	viewWidth = rect.right - rect.left;
@@ -213,7 +231,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	if (g_hWnd){
 		g_hInstance = hInstance;
 
-		onInit(g_hWnd);
+		onInit();
 		isInit = true;
 
 		UpdateWindow(g_hWnd);
@@ -238,6 +256,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		if (msg.message == WM_QUIT) {
 			flagLogic = true;
 			flagRender = true;
+			while (flagLogic || flagRender)
+				Sleep(10);
 			break;
 		}
 	}
@@ -250,6 +270,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg) {
+	//------焦点检测------
+	case WM_KILLFOCUS:
+		hasFocus = false;
+		break;
+	case WM_SETFOCUS:
+		hasFocus = true;
+		break;
+	//------大小被改变----
 	case WM_SIZE: {
 		if (isInit) {
 			resizeTime = timeGetTime();
