@@ -32,7 +32,7 @@ int MyRoom_title::onRender(){
 	);
 	g_pSprite->End();
 	//绘制文字
-	std::string text = "TESTTEXT 这是一段测试文字\naasdsdsd";
+	std::string text = "TESTTEXT 这是一段测试文字aasdsdsd";
 	RECT rect;
 	rect.left = 0;
 	rect.top = 0;
@@ -45,7 +45,7 @@ int MyRoom_title::onRender(){
 	g_pDevice->BeginScene();		//获取绘制权限
 	g_pSpriteRender->Begin(NULL);
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0),   //绘制函数
-		&D3DXVECTOR3(0, 0, 0), D3DCOLOR_XRGB(255, 255, 255));
+		&D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制
 	g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
@@ -55,5 +55,4 @@ int MyRoom_title::onRender(){
 
 void MyRoom_title::onDestroy(){
 	Safe_Release(g_pFont);
-	delete this;
 }
