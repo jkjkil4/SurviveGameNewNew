@@ -12,13 +12,13 @@ std::wstring stringToWstring(std::string orig) {
 	return r;
 }
 
-void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path,
+void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT h,
 	D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture) {
 	D3DXCreateTextureFromFileEx(
 		g_pDevice,	//设备指针
 		stringToWstring(path).c_str(),
-		D3DX_FROM_FILE,	//图片的宽来自于文件本身
-		D3DX_FROM_FILE,	//图片的高来自于文件本身
+		w,	//图片的宽  //若要来自于图片本身则是 D3DX_FROM_FILE
+		h,	//图片的高
 		0,				//多级渐进纹理的等级
 		0,				//图片的作用
 		D3DFMT_UNKNOWN,	//未知纹理格式

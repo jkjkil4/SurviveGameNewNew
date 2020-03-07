@@ -10,6 +10,8 @@ LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
 LPDIRECT3DTEXTURE9 g_pTexture = nullptr;//纹理对象
 
+//D3DGraphics gfx;
+
 //RECT clientRect;
 
 // 渲染到纹理
@@ -27,14 +29,13 @@ INT timeThreadRender = 0;
 //画面大小
 INT defWidth = 800;
 INT defHeight = 608;
-INT viewWidth = 800;
-INT viewHeight = 608;
 
 //按键状态
 #include "MyGame/MyState.h"
 BOOL hasFocus = true;
 MyKey key;
 MyMouse mouse;
+MyVaribles vars;
 
 //Room
 #include "MyRooms/MyRoom_title.h"
@@ -79,7 +80,7 @@ VOID onInit() {
 
 	//载入纹理
 	D3DXIMAGE_INFO imageInfo;
-	myCreateTexture( g_pDevice, "data\\texture\\test.png", &imageInfo, &g_pTexture );
+	myCreateTexture( g_pDevice, "data\\texture\\test.png", 128, 128, &imageInfo, &g_pTexture );
 
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
@@ -94,7 +95,7 @@ VOID onInit() {
 
 	//初始化Room
 	setCurrentRoom(&currentRoom, 
-		new MyRoom_title(&key, &mouse, g_pD3D, g_pDevice, g_pSprite,
+		new MyRoom_title(&key, &mouse, &vars, g_pD3D, g_pDevice, g_pSprite,
 		g_pSpriteRender, g_pTexture, g_pRenderTexture, g_pRenderSurface)
 	);
 	
@@ -194,10 +195,10 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	//得到画面宽高
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
-	viewWidth = rect.right - rect.left;
-	viewHeight = rect.bottom - rect.top;
-	defWidth = viewWidth;
-	defHeight = viewHeight;
+	vars.viewW = rect.right - rect.left;
+	vars.viewH = rect.bottom - rect.top;
+	defWidth = vars.viewW;
+	defHeight = vars.viewH;
 
 	if (g_hWnd){
 		g_hInstance = hInstance;
@@ -245,6 +246,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
 {
+	cDebug( std::to_string( atan2(1, 1)*180/PI )+'\n' );
+
 	switch (uMsg) {
 	//------焦点检测------
 	case WM_KILLFOCUS:
@@ -262,8 +265,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 			GetClientRect(g_hWnd, &rect);
 			int w = rect.right - rect.left;
 			int h = rect.bottom - rect.top;
-			viewWidth = w;
-			viewHeight = h;
+			vars.viewW = w;
+			vars.viewH = h;
 			D3DXMatrixTransformation2D(
 				&g_scale,		//返回的矩阵
 				nullptr,		//缩放的中心

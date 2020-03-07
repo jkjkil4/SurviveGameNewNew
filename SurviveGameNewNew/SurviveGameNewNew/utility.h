@@ -37,7 +37,7 @@ template<typename T>inline void Safe_Release(T*& p){
 #ifndef READ_TEXTURE_
 #define READ_TEXTURE_
 #include <string>
-void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
+void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT h, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
 #endif
 
 //------ÀàÐÍ×ª»»-------

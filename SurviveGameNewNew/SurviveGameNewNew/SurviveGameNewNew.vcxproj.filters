@@ -39,6 +39,9 @@
     <ClInclude Include="MyRooms\MyRoom_title.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyViewControls\MyViewControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">
@@ -51,9 +54,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyRooms\MyRoom_title.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

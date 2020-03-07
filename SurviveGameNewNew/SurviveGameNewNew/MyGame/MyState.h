@@ -64,6 +64,15 @@ public:
 	int x = 0;
 	int y = 0;
 };
+
+class MyVaribles
+{
+public:
+
+	int viewW = 100;
+	int viewH = 100;
+};
+
 static void setState(int chKey, bool* pKey, bool* pKeyPressed, bool* pKeyReleased) {
 	bool has = GetKeyState(chKey) < 0;
 	if (!*pKey && has) {
