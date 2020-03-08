@@ -77,7 +77,7 @@ VOID onInit() {
 		D3DADAPTER_DEFAULT,		//默认显卡
 		D3DDEVTYPE_HAL,			//硬件抽象层
 		g_hWnd,					//所依附的窗口（要改造的窗口）
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,	//顶点软件处理模式
+		D3DCREATE_HARDWARE_VERTEXPROCESSING,	//顶点软件处理模式
 		&d3dpp,		//设备的能力
 		&g_pDevice	//返回的设备指针
 	);
@@ -124,7 +124,9 @@ VOID onInit() {
 	//);
 	
 }
-VOID onKeyAndMouseCheck() {
+INT onKeyAndMouseCheck() {
+	//得到开始的时间
+	int startTime = timeGetTime();
 	//清空状态
 	mouse.clearState();
 	key.clearState();
@@ -147,6 +149,8 @@ VOID onKeyAndMouseCheck() {
 		mouse.x = m_mouse.x;
 		mouse.y = m_mouse.y;
 	}
+	//返回消耗的时间
+	return timeGetTime() - startTime;
 }
 
 VOID onDestroy() {
@@ -167,12 +171,11 @@ VOID threadLogic(bool* flag) {
 			break;
 		}
 		int currentTime = timeGetTime();
-		int elapsedTime = currentTime - timeThreadLogic;
 		onKeyAndMouseCheck();
 		if (currentRoom)
 			currentRoom->onLogic();
-		if (elapsedTime < 17)
-			Sleep(17 - elapsedTime);	//延时
+		while (timeGetTime() - currentTime < 17)
+			Sleep(1);
 		timeThreadLogic = currentTime;
 	}
 }
@@ -183,13 +186,12 @@ VOID threadRender(bool* flag) {
 			break;
 		}
 		int currentTime = timeGetTime();
-		int elapsedTime = currentTime - timeThreadRender;
 		if (!IsIconic(g_hWnd) && currentTime - resizeTime > 120 ) {
 			if (currentRoom)
 				currentRoom->onRender();	//绘制
 		}
-		if (elapsedTime < 17)
-			Sleep(17 - elapsedTime);	//延时
+		while (timeGetTime() - currentTime < 17)
+			Sleep(1);
 		timeThreadRender = currentTime;
 	}
 }

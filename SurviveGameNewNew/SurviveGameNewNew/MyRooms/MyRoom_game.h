@@ -3,7 +3,10 @@
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
 #include "../MyGame/MyReadGameData.h"
-
+/*
+	需要释放的对象:
+	g_pSpritePlayer
+*/
 class MyRoom_game : public MyRoom
 {
 public:
@@ -25,6 +28,5 @@ public:
 	LPD3DXSPRITE g_pSpritePlayer;
 	MyPlayer player;
 
-	//临时
 };
 
