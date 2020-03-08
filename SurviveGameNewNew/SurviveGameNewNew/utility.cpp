@@ -32,3 +32,28 @@ void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT
 	);
 }
 
+void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files){
+	files->clear();
+	//文件句柄
+	HANDLE hFile = 0;
+	//文件信息
+	WIN32_FIND_DATAW data;
+
+	std::string file = path + "\\*" + (exd == "" ? "" : "." + exd);
+	
+	std::wstring wfile = stringToWstring(file);
+	std::wstring dot = stringToWstring("."), dotdot = stringToWstring("..");
+
+	hFile = FindFirstFile(wfile.c_str(), &data);
+	if ((int)hFile != -1) {
+		do {
+			if (data.dwFileAttributes & 32) {
+				if (data.cFileName != dot && data.cFileName != dotdot) {
+					files->push_back(data.cFileName);
+					OutputDebugString(data.cFileName);
+				}
+			}
+		} while (FindNextFile(hFile, &data));
+		FindClose(hFile);
+	}
+}

@@ -153,8 +153,10 @@
   <ItemGroup>
     <ClInclude Include="MyGame\MyPlayer.h" />
     <ClInclude Include="MyGame\MyState.h" />
+    <ClInclude Include="MyGame\MyReadGameData.h" />
     <ClInclude Include="MyRooms\MyRoom.h" />
     <ClInclude Include="MyRooms\MyRoom_title.h" />
+    <ClInclude Include="MyRooms\MyRoom_game.h" />
     <ClInclude Include="MyViewControls\MyViewControl.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SurviveGameNewNew.h" />
@@ -163,7 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyGame\MyPlayer.cpp" />
+    <ClCompile Include="MyGame\MyReadGameData.cpp" />
     <ClCompile Include="MyRooms\MyRoom_title.cpp" />
+    <ClCompile Include="MyRooms\MyRoom_game.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>

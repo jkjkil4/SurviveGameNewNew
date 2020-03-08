@@ -42,6 +42,12 @@
     <ClInclude Include="MyViewControls\MyViewControl.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyGame\MyReadGameData.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRooms\MyRoom_game.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">
@@ -54,6 +60,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyRooms\MyRoom_title.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGame\MyReadGameData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom_game.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

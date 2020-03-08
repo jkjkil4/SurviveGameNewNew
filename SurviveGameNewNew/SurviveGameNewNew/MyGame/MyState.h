@@ -2,6 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "../utility.h"
 
 class MyKey
 {
@@ -71,6 +72,13 @@ public:
 
 	int viewW = 100;
 	int viewH = 100;
+
+	LPDIRECT3D9 g_pD3D;
+	LPDIRECT3DDEVICE9 g_pDevice;
+	LPD3DXSPRITE g_pSprite;
+	LPD3DXSPRITE g_pSpriteRender;
+	IDirect3DTexture9* g_pRenderTexture;
+	IDirect3DSurface9* g_pRenderSurface;
 };
 
 static void setState(int chKey, bool* pKey, bool* pKeyPressed, bool* pKeyReleased) {

@@ -1,5 +1,6 @@
 ﻿#include "utility.h"
 
+
 HWND g_hWnd = 0;
 HINSTANCE g_hInstance = 0;
 
@@ -8,7 +9,10 @@ LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
 LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
-LPDIRECT3DTEXTURE9 g_pTexture = nullptr;//纹理对象
+
+//游戏数据
+#include "MyGame/MyReadGameData.h"
+MyTextureData textureData;
 
 //D3DGraphics gfx;
 
@@ -39,6 +43,7 @@ MyVaribles vars;
 
 //Room
 #include "MyRooms/MyRoom_title.h"
+#include "MyRooms/MyRoom_game.h"
 MyRoom* currentRoom = nullptr;
 
 
@@ -79,8 +84,11 @@ VOID onInit() {
 	D3DXCreateSprite(g_pDevice, &g_pSpriteRender);
 
 	//载入纹理
-	D3DXIMAGE_INFO imageInfo;
-	myCreateTexture( g_pDevice, "data\\texture\\test.png", 128, 128, &imageInfo, &g_pTexture );
+	//D3DXIMAGE_INFO imageInfo;
+	//myCreateTexture( g_pDevice, "data\\texture\\test.png", 128, 128, &imageInfo, &g_pTexture );
+	//载入方块纹理
+	
+
 
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
@@ -93,11 +101,26 @@ VOID onInit() {
 	//得到纹理的Surface
 	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
 
+	//创建必要文件夹
+	CreateDirectory(TEXT("data"), NULL);
+	CreateDirectory(TEXT("data\\texture"), NULL);
+	//读取游戏数据
+	textureData.onInit("data\\texture\\blocks", "#blocks.info", g_pDevice);
+
+	//把指针传入vars，方便传递
+	vars.g_pD3D = g_pD3D;
+	vars.g_pDevice = g_pDevice;
+	vars.g_pSprite = g_pSprite;
+	vars.g_pSpriteRender = g_pSpriteRender;
+	vars.g_pRenderTexture = g_pRenderTexture;
+	vars.g_pRenderSurface = g_pRenderSurface;
+
 	//初始化Room
-	setCurrentRoom(&currentRoom, 
-		new MyRoom_title(&key, &mouse, &vars, g_pD3D, g_pDevice, g_pSprite,
-		g_pSpriteRender, g_pTexture, g_pRenderTexture, g_pRenderSurface)
-	);
+	setCurrentRoom(&currentRoom, new MyRoom_game(&key, &mouse, &vars));
+	//setCurrentRoom(&currentRoom, 
+	//	new MyRoom_title(&key, &mouse, &vars, g_pD3D, g_pDevice, g_pSprite,
+	//	g_pSpriteRender, g_pTexture, g_pRenderTexture, g_pRenderSurface)
+	//);
 	
 }
 VOID onKeyAndMouseCheck() {
@@ -127,7 +150,7 @@ VOID onKeyAndMouseCheck() {
 
 VOID onDestroy() {
 	//Safe_Release(g_pFont);
-	Safe_Release(g_pTexture);
+	//Safe_Release(g_pTexture);
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pSpriteRender);
 	Safe_Release(g_pDevice);
@@ -246,8 +269,6 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
 {
-	cDebug( std::to_string( atan2(1, 1)*180/PI )+'\n' );
-
 	switch (uMsg) {
 	//------焦点检测------
 	case WM_KILLFOCUS:

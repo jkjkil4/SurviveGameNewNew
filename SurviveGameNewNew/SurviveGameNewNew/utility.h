@@ -58,3 +58,12 @@ std::wstring stringToWstring(std::string orig);
 #include <cmath>
 #define PI acos(-1)
 #endif
+
+//------ÎÄ¼þ²Ù×÷-------
+#ifndef FILE_DO_
+#define FILE_DO_
+#include <vector>
+#include <fstream>
+
+void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files);
+#endif
