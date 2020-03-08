@@ -4,8 +4,8 @@
 class MyRoom_title : public MyRoom
 {
 public:
-	MyRoom_title(MyKey* key, MyMouse* mouse, MyVaribles* vars)
-	: MyRoom(key, mouse, vars)
+	MyRoom_title(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData* data)
+	: MyRoom(key, mouse, vars, data)
 	{
 		onInit();
 	}

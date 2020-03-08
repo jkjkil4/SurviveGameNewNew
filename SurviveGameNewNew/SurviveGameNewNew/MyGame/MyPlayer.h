@@ -1,16 +1,29 @@
 #pragma once
+
+#include "MyState.h"
+
 class MyPlayer
 {
 public:
-	explicit MyPlayer(int x, int y);
-	void updatePos(int* arrayBlock, int width, int height);
+	void updatePos(int* arrayBlock, int width, int height, MyKey* key);
+
 	//玩家宽高
-	static constexpr int plW = 12;
-	static constexpr int plH = 20;
+	static constexpr int plW = 24;
+	static constexpr int plH = 40;
 	//玩家坐标
-	int plX = 0;
-	int plY = 0;
+	int x = 0;
+	int y = 0;
 	//玩家重力
 	double grav = 0.2;
 
+	//玩家左右方向
+	int direction = 1;
+
 };
+static int bound(int min, int value, int max) {
+	if (value < min)
+		value = min;
+	if (value > max)
+		value = max;
+	return value;
+}

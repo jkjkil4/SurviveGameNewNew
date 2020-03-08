@@ -1,8 +1,8 @@
 #include "MyReadGameData.h"
 using namespace std;
 
-void MyTextureData::onInit(string path, string file, LPDIRECT3DDEVICE9 g_pDevice) {
-	fstream in(path);
+void MyBlocksTextureData::onInit(string path, string file, LPDIRECT3DDEVICE9 g_pDevice) {
+	fstream in(path + "\\" + file);
 	if (in.is_open()) {
 		char buffer[256];
 		in.getline(buffer, 100);
@@ -13,20 +13,20 @@ void MyTextureData::onInit(string path, string file, LPDIRECT3DDEVICE9 g_pDevice
 			if (fileName == "")
 				continue;
 			LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
-			myCreateTexture(g_pDevice, path + "\\" + fileName, 8, 8, nullptr, &g_pTexture);
+			myCreateTexture(g_pDevice, path + "\\" + fileName, 16, 16, nullptr, &g_pTexture);
 			vec_textures.push_back(g_pTexture);
 		}
 	}
 }
 
-LPDIRECT3DTEXTURE9 MyTextureData::texture(int index){
-	if( index >=0 && index < vec_textures.size() )
-		return vec_textures[index];
+LPDIRECT3DTEXTURE9 MyBlocksTextureData::texture(int index){
+	if (index >= 1 && index <= (int)(vec_textures.size()))
+		return vec_textures[index - 1];
 	return nullptr;
 }
 
-void MyTextureData::onDestroy(){
-	for (int i = 0; i < vec_textures.size(); i++) {
+void MyBlocksTextureData::onDestroy(){
+	for (int i = 0; i < (int)(vec_textures.size()); i++) {
 		Safe_Release(vec_textures[i]);
 	}
 }

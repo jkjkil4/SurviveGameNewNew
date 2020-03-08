@@ -1,22 +1,25 @@
 ﻿#include "utility.h"
 
-
 HWND g_hWnd = 0;
 HINSTANCE g_hInstance = 0;
-
-
+/**
+	需要释放的对象:
+	g_pD3D , g_pDevice , g_pSprite , g_pSpriteRender
+	data(g_pTexturePlayer , blocksTextureData(...))
+	g_pRenderTexture , g_pRenderSurface
+*/
 LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
 LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
 
+
+
 //游戏数据
 #include "MyGame/MyReadGameData.h"
-MyTextureData textureData;
-
-//D3DGraphics gfx;
-
-//RECT clientRect;
+LPDIRECT3DTEXTURE9 g_pTexturePlayer = nullptr;	//玩家的贴图指针
+MyBlocksTextureData blocksTextureData;	//方块贴图
+MyData data;
 
 // 渲染到纹理
 BOOL isInit = false;
@@ -83,13 +86,6 @@ VOID onInit() {
 	D3DXCreateSprite(g_pDevice, &g_pSprite);
 	D3DXCreateSprite(g_pDevice, &g_pSpriteRender);
 
-	//载入纹理
-	//D3DXIMAGE_INFO imageInfo;
-	//myCreateTexture( g_pDevice, "data\\texture\\test.png", 128, 128, &imageInfo, &g_pTexture );
-	//载入方块纹理
-	
-
-
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
 		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
@@ -105,7 +101,8 @@ VOID onInit() {
 	CreateDirectory(TEXT("data"), NULL);
 	CreateDirectory(TEXT("data\\texture"), NULL);
 	//读取游戏数据
-	textureData.onInit("data\\texture\\blocks", "#blocks.info", g_pDevice);
+	myCreateTexture(g_pDevice, "data\\texture\\player\\player.png", MyPlayer::plW, MyPlayer::plH, nullptr, &g_pTexturePlayer);	//读取玩家贴图
+	blocksTextureData.onInit("data\\texture\\blocks", "blocks.info", g_pDevice);	//读取方块贴图
 
 	//把指针传入vars，方便传递
 	vars.g_pD3D = g_pD3D;
@@ -115,8 +112,12 @@ VOID onInit() {
 	vars.g_pRenderTexture = g_pRenderTexture;
 	vars.g_pRenderSurface = g_pRenderSurface;
 
+	//把游戏数据指针传入data，方便传递
+	data.g_pTexturePlayer = g_pTexturePlayer;	//玩家贴图
+	data.origBlocksTextureData = &blocksTextureData;	//方块贴图
+
 	//初始化Room
-	setCurrentRoom(&currentRoom, new MyRoom_game(&key, &mouse, &vars));
+	setCurrentRoom(&currentRoom, new MyRoom_game(&key, &mouse, &vars, &data, 400, 400));
 	//setCurrentRoom(&currentRoom, 
 	//	new MyRoom_title(&key, &mouse, &vars, g_pD3D, g_pDevice, g_pSprite,
 	//	g_pSpriteRender, g_pTexture, g_pRenderTexture, g_pRenderSurface)
@@ -151,6 +152,8 @@ VOID onKeyAndMouseCheck() {
 VOID onDestroy() {
 	//Safe_Release(g_pFont);
 	//Safe_Release(g_pTexture);
+	Safe_Release(g_pRenderTexture);
+	Safe_Release(g_pRenderSurface);
 	Safe_Release(g_pSprite);
 	Safe_Release(g_pSpriteRender);
 	Safe_Release(g_pDevice);
@@ -163,10 +166,14 @@ VOID threadLogic(bool* flag) {
 			*flag = false;
 			break;
 		}
+		int currentTime = timeGetTime();
+		int elapsedTime = currentTime - timeThreadLogic;
 		onKeyAndMouseCheck();
 		if (currentRoom)
 			currentRoom->onLogic();
-		Sleep(17);
+		if (elapsedTime < 17)
+			Sleep(17 - elapsedTime);	//延时
+		timeThreadLogic = currentTime;
 	}
 }
 VOID threadRender(bool* flag) {
@@ -252,15 +259,16 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		if (msg.message == WM_QUIT) {
 			flagLogic = true;
 			flagRender = true;
-			if (currentRoom) {
-				currentRoom->onDestroy();
-				Safe_Delete(currentRoom);
-			}
 			while (flagLogic || flagRender)
 				Sleep(10);
 			break;
 		}
 	}
+	if (currentRoom) {
+		currentRoom->onDestroy();
+		Safe_Delete(currentRoom);
+	}
+	data.onDestroy();
 	onDestroy();
 	UnregisterClass(wc.lpszClassName, hInstance);
 	return 0;

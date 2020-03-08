@@ -3,7 +3,7 @@
 
 void MyRoom_title::onInit(){
 	//字体
-	D3DXCreateFont(g_pDevice, 40, 20, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
+	D3DXCreateFont(vars->g_pDevice, 40, 20, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
 }
 int MyRoom_title::onLogic(){
 	//得到逻辑处理开始的时间

@@ -33,11 +33,13 @@ template<typename T>inline void Safe_Release(T*& p){
 }
 #endif
 
-//------读取纹理-------
+//------D3D相关操作----
 #ifndef READ_TEXTURE_
 #define READ_TEXTURE_
 #include <string>
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT h, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
+void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScale, float yScale, 
+    float rotPosX = 0, float rotPosY = 0, float rot = 0);
 #endif
 
 //------类型转换-------
