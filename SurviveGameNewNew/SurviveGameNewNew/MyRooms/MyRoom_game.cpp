@@ -13,12 +13,15 @@ MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *d
 	//Моід
 	for (int j = 0; j < roomHeight; j++) {
 		for (int i = 0; i < roomWidth; i++) {
-			if (i == j || i == 2 * j || i == 3 * j || i == 4 * j) {
+			if ( j > 15 && (i == j || i == 2 * j || i == 3 * j || i == 4 * j || i == 5 * j || i == 6 * j)) {
 				setBlockBy2d(i, j, 1);
 			} else {
 				setBlockBy2d(i, j, 0);
 			}
 		}
+	}
+	for (int i = 0; i < roomWidth; i+=5) {
+		setBlockBy2d(i, 16, 3);
 	}
 	player.x = 100;
 	player.y = 100;

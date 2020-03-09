@@ -15,8 +15,15 @@ public:
 	int y = 0;
 	//玩家重力
 	double grav = 0.2;
-	//玩家横向移动的速度
-	int vSpd = 8;
+
+	//玩家横向移动的加速度
+	int vSpd = 2;
+	//玩家横向移动的最大速度
+	int vSpdMax = 40;
+	//玩家横向移动的阻力
+	int vObs = 1;
+	//玩家目前横向移动的速度
+	int currentVSpd = 0;
 
 	//玩家左右方向
 	int direction = 1;
