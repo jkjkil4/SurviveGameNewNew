@@ -12,8 +12,8 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 	int xMax = width * 16 - plW / 2;
 	int yMin = plH;
 	int yMax = height * 16;
-	x += left_right * 12;
-	y += up_down * 12;
+	x += left_right * vSpd;
+	y += up_down * vSpd;
 	x = bound(xMin, x, xMax);
 	y = bound(yMin, y, yMax);
 }

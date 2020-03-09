@@ -77,7 +77,7 @@ VOID onInit() {
 		D3DADAPTER_DEFAULT,		//默认显卡
 		D3DDEVTYPE_HAL,			//硬件抽象层
 		g_hWnd,					//所依附的窗口（要改造的窗口）
-		D3DCREATE_HARDWARE_VERTEXPROCESSING,	//顶点软件处理模式
+		D3DCREATE_SOFTWARE_VERTEXPROCESSING,	//顶点软件处理模式
 		&d3dpp,		//设备的能力
 		&g_pDevice	//返回的设备指针
 	);
@@ -217,7 +217,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	RegisterClass(&wc);
 
 	g_hWnd = CreateWindow(wc.lpszClassName,
-		TEXT("Linimass"), WS_OVERLAPPEDWINDOW, 40, 20, 
+		TEXT("SurviveGameNewNew"), WS_OVERLAPPEDWINDOW, 40, 20, 
 		GetSystemMetrics(SM_CXFULLSCREEN) - 80, GetSystemMetrics(SM_CYFULLSCREEN) - 40, 
 		NULL, NULL, hInstance, NULL);
 

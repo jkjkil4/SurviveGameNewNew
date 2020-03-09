@@ -42,8 +42,22 @@ int MyRoom_game::onLogic() {
 		Sleep(1);
 	isOnLogic = true;
 	int timeStart = timeGetTime();
+	//得到视野坐标
+	int viewX = player.x - vars->viewW / 2;
+	int viewY = player.y - vars->viewH / 2;
+	viewX = bound(0, viewX, roomWidth * 16 - vars->viewW);
+	viewY = bound(0, viewY, roomHeight * 16 - vars->viewH);
+	//得到鼠标所在方块坐标
+	int blockX = (mouse->x + viewX) / 16;
+	int blockY = (mouse->y + viewY) / 16;
 	//更新玩家位置
 	player.updatePos(blocks, roomWidth, roomHeight, key);
+	//放置方块
+	if (mouse->right) {
+		setBlockBy2d(blockX, blockY, 1);
+	} else if (mouse->left) {
+		setBlockBy2d(blockX, blockY, 0);
+	}
 	//返回逻辑处理消耗的时间
 	isOnLogic = false;
 	return timeGetTime() - timeStart;

@@ -15,6 +15,8 @@ public:
 	int y = 0;
 	//玩家重力
 	double grav = 0.2;
+	//玩家横向移动的速度
+	int vSpd = 8;
 
 	//玩家左右方向
 	int direction = 1;
