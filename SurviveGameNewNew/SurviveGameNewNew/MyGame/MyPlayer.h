@@ -13,20 +13,30 @@ public:
 	//玩家坐标
 	int x = 0;
 	int y = 0;
-	//玩家重力
-	double grav = 0.2;
+	//玩家左右方向
+	int direction = 1;
 
 	//玩家横向移动的加速度
 	int vSpd = 2;
 	//玩家横向移动的最大速度
-	int vSpdMax = 40;
-	//玩家横向移动的阻力
+	int vSpdMax = 6;
+	//玩家横向移动的阻力	(还和速度有关)
 	int vObs = 1;
 	//玩家目前横向移动的速度
 	int currentVSpd = 0;
 
-	//玩家左右方向
-	int direction = 1;
+	//玩家重力
+	float grav = 0.2f;
+	//玩家纵向最大速度
+	int hSpdMax = 7;
+	//玩家跳跃	(这里为什么用int而不用bool?可能是因为要做多段跳吧())
+	int jumped = 0;
+	//玩家跳跃后的速度
+	int jumpSpeed = 6;
+	//玩家最大跳跃次数
+	int jumpMax = 6;
+	//玩家目前纵向移动的速度
+	float currentHSpd = 0.0f;
 
 };
 static int bound(int min, int value, int max) {

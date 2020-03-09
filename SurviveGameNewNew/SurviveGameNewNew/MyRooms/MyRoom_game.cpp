@@ -23,6 +23,7 @@ MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *d
 	for (int i = 0; i < roomWidth; i+=5) {
 		setBlockBy2d(i, 16, 3);
 	}
+	setBlockBy2d(roomWidth - 1, roomHeight - 1, 3);
 	player.x = 100;
 	player.y = 100;
 }
