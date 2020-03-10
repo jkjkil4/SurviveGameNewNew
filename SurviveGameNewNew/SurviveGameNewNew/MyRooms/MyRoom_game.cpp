@@ -5,6 +5,8 @@ MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *d
 {
 	//初始化玩家的精灵指针
 	D3DXCreateSprite(vars->g_pDevice, &g_pSpritePlayer);
+	//初始化字体
+	D3DXCreateFont(vars->g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
 	//其他操作
 	this->roomWidth = roomWidth;
 	this->roomHeight = roomHeight;
@@ -42,9 +44,9 @@ void MyRoom_game::setBlockBy2d(int x, int y, int id) {
 
 int MyRoom_game::onLogic() {
 	//得到逻辑处理开始的时间
-	while (isOnRender)
-		Sleep(1);
-	isOnLogic = true;
+	//while (isOnRender)
+	//	Sleep(1);
+	//isOnLogic = true;
 	int timeStart = timeGetTime();
 	//得到视野坐标
 	int viewX = player.x - vars->viewW / 2;
@@ -57,21 +59,24 @@ int MyRoom_game::onLogic() {
 	//更新玩家位置
 	player.updatePos(blocks, roomWidth, roomHeight, key);
 	//放置方块
-	if (mouse->right) {
-		setBlockBy2d(blockX, blockY, 1);
-	} else if (mouse->left) {
-		setBlockBy2d(blockX, blockY, 0);
+	if (mouse->x >= 0 && mouse->y >= 0 && mouse->x <= vars->viewW && mouse->y <= vars->viewH) {
+		if (mouse->right) {
+			setBlockBy2d(blockX, blockY, 1);
+		}
+		else if (mouse->left) {
+			setBlockBy2d(blockX, blockY, 0);
+		}
 	}
 	//返回逻辑处理消耗的时间
-	isOnLogic = false;
+	//isOnLogic = false;
 	return timeGetTime() - timeStart;
 }
 
 int MyRoom_game::onRender() {
 	//得到渲染开始的时间
-	while (isOnLogic)
-		Sleep(1);
-	isOnRender = true;
+	//while (isOnLogic)
+	//	Sleep(1);
+	//isOnRender = true;
 	int timeStart = timeGetTime();
 	//一些操作
 	int viewX = player.x - vars->viewW / 2;
@@ -109,7 +114,12 @@ int MyRoom_game::onRender() {
 	g_pSpritePlayer->Draw(data->g_pTexturePlayer, nullptr, &D3DXVECTOR3((float)(MyPlayer::plW / 2 + viewX), (float)(MyPlayer::plH + viewY), 0),
 		&D3DXVECTOR3((float)player.x, (float)player.y, 0), 0xffffffff);
 	g_pSpritePlayer->End();
-
+#if MyDebug
+	//绘制DEBUG
+	vars->g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	onDebug();
+	vars->g_pSprite->End();
+#endif
 	// 绘制纹理
 	vars->g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
 	//g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
@@ -120,10 +130,21 @@ int MyRoom_game::onRender() {
 	vars->g_pDevice->EndScene();		//结束绘制
 	vars->g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
 	//返回渲染消耗的时间
-	isOnRender = false;
+	//isOnRender = false;
 	return timeGetTime() - timeStart;
 }
 
 void MyRoom_game::onDestroy() {
 	Safe_Release(g_pSpritePlayer);
+	Safe_Release(g_pFont);
 }
+
+#if MyDebug
+void MyRoom_game::onDebug(){
+	using namespace std;
+	string str = "玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
+		+ "\n玩家速度: " + to_string(player.currentXSpd) + " , " + to_string(player.currentYSpd)
+		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
+	g_pFont->DrawText(NULL, stringToWstring(str).c_str(), -1, NULL, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
+}
+#endif

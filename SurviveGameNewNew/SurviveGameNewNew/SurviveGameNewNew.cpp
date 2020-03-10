@@ -30,8 +30,8 @@ INT resizeTime = timeGetTime();	//上次大小被改变 的时间
 INT doneTime = 0;	//完成初始化的时间
 
 //耗时
-INT timeThreadLogic = 0;
-INT timeThreadRender = 0;
+//INT timeThreadLogic = 0;
+//INT timeThreadRender = 0;
 
 //画面大小
 INT defWidth = 800;
@@ -142,7 +142,6 @@ INT onKeyAndMouseCheck() {
 		setState(VK_LBUTTON, &mouse.left, &mouse.left_pressed, &mouse.left_released);
 		setState(VK_MBUTTON, &mouse.mid, &mouse.mid_pressed, &mouse.mid_released);
 		setState(VK_RBUTTON, &mouse.right, &mouse.right_pressed, &mouse.right_released);
-
 		POINT m_mouse;
 		GetCursorPos(&m_mouse);
 		ScreenToClient(g_hWnd, &m_mouse);  //屏幕转化为客户端
@@ -164,7 +163,7 @@ VOID onDestroy() {
 	Safe_Release(g_pD3D);
 }
 
-VOID threadLogic(bool* flag) {
+VOID threadLoop(bool* flag) {
 	while (true) {
 		if (*flag) {
 			*flag = false;
@@ -172,29 +171,32 @@ VOID threadLogic(bool* flag) {
 		}
 		int currentTime = timeGetTime();
 		onKeyAndMouseCheck();
-		if (currentRoom)
+		if (currentRoom) {
 			currentRoom->onLogic();
-		while (timeGetTime() - currentTime < 17)
-			Sleep(1);
-		timeThreadLogic = currentTime;
-	}
-}
-VOID threadRender(bool* flag) {
-	while (true) {
-		if (*flag) {
-			*flag = false;
-			break;
-		}
-		int currentTime = timeGetTime();
-		if (!IsIconic(g_hWnd) && currentTime - resizeTime > 120 ) {
-			if (currentRoom)
-				currentRoom->onRender();	//绘制
+			if (!IsIconic(g_hWnd)) {
+					currentRoom->onRender();	//绘制
+			}
 		}
 		while (timeGetTime() - currentTime < 17)
 			Sleep(1);
-		timeThreadRender = currentTime;
 	}
 }
+//VOID threadRender(bool* flag) {
+	//while (true) {
+	//	if (*flag) {
+	//		*flag = false;
+	//		break;
+	//	}
+	//	int currentTime = timeGetTime();
+	//	if (!IsIconic(g_hWnd) && currentTime - resizeTime > 120 ) {
+	//		if (currentRoom)
+	//			currentRoom->onRender();	//绘制
+	//	}
+	//	while (timeGetTime() - currentTime < 17)
+	//		Sleep(1);
+	//	timeThreadRender = currentTime;
+	//}
+//}
 
 INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt HINSTANCE hPrevInstance,
@@ -242,12 +244,9 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	}
 
 	//多线程
-	bool flagLogic = false;
-	std::thread thLogic(threadLogic, &flagLogic);
-	thLogic.detach();
-	bool flagRender = false;
-	std::thread thRender(threadRender, &flagRender);
-	thRender.detach();
+	bool flagLoop = false;
+	std::thread thLoop(threadLoop, &flagLoop);
+	thLoop.detach();
 
 	//消息循环
 	MSG msg;
@@ -259,9 +258,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 		if (msg.message == WM_QUIT) {
-			flagLogic = true;
-			flagRender = true;
-			while (flagLogic || flagRender)
+			flagLoop = true;
+			while (flagLoop)
 				Sleep(10);
 			break;
 		}

@@ -1,57 +1,67 @@
 #include "MyPlayer.h"
 
 void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
-	int blockCount = width * height;
+	/*
+		注: 我在向左和向上的判断中有使用如下写法
+			XXX = (XX + 16) / 16 - 1;
+		你可能会想，这不是多此一举吗?
+		我这么写的原因是避免负数时的bug 
+		(		比如在int类型中，-2 / 16 = 0			)
+		(		但是我想要得到的是 -1					)
+		(		所以 (-2 + 16) / 16 - 1 = -1			)
+	*/
 	//左右方向的判断
 	if (key->d_pressed) {
 		direction = 1;
-	} else if (key->a_pressed) {
+	} 
+	else if (key->a_pressed) {
 		direction = -1;
 	}
 	//加速度
 	if( key->d || key->a ){
 		if (direction == 1) {
-			currentVSpd += vSpd;
-			if (currentVSpd > vSpdMax)
-				currentVSpd = vSpdMax;
+			currentXSpd += xSpd;
+			if (currentXSpd > xSpdMax)
+				currentXSpd = xSpdMax;
 		}
 		else if (direction == -1) {
-			currentVSpd -= vSpd;
-			if (currentVSpd < -vSpdMax)
-				currentVSpd = -vSpdMax;
+			currentXSpd -= xSpd;
+			if (currentXSpd < -xSpdMax)
+				currentXSpd = -xSpdMax;
 		}
+	
+	}
 	//阻力
-	} else {
-		if (currentVSpd > 0) {
-			currentVSpd -= vObs + currentVSpd / 8;
-			if (currentVSpd < 0) {
-				currentVSpd = 0;
+	else {
+		if (currentXSpd > 0) {
+			currentXSpd -= xObs + currentXSpd / 8;
+			if (currentXSpd < 0) {
+				currentXSpd = 0;
 			}
 		}
-		else if (currentVSpd < 0) {
-			currentVSpd += vObs - currentVSpd / 8;
-			if (currentVSpd > 0) {
-				currentVSpd = 0;
+		else if (currentXSpd < 0) {
+			currentXSpd += xObs + (-currentXSpd) / 8;
+			if (currentXSpd > 0) {
+				currentXSpd = 0;
 			}
 		}
 	}
 	//向左和向右的判断中通用的两个变量
-	const int vStartY = (y - plH) / 16, vEndY = y / 16 - (y % 16 == 0);
+	int vStartY = (y - plH) / 16, vEndY = y / 16 - (y % 16 == 0);
 	//一些东西
-	const int xMin = plW / 2;
-	const int xMax = width * 16 - plW / 2;
-	int toX = x + currentVSpd;
+	int xMin = plW / 2;
+	int xMax = width * 16 - plW / 2;
+	int toX = x + currentXSpd;
 	//向左移动
-	if (currentVSpd < 0) {
+	if (currentXSpd < 0) {
 		bool flag = false;
-		int startX = (x - plW / 2) / 16 - 1;
-		int endX = (x - plW / 2 + currentVSpd) / 16;
+		int startX = (x - plW / 2 + 16) / 16 - 2;
+		int endX = (x - plW / 2 + currentXSpd + 16) / 16 - 1;
 		for (int i = startX; i >= endX; i--) {
 			for (int j = vStartY; j <= vEndY; j++) {
-				int pos = i + width * j;
-				int id = (pos >= 0 && pos < blockCount ? arrayBlock[pos] : -1);
+				int id = (i>=0 && j>=0 && i<width && j<height ? arrayBlock[i + width * j] : -1);
 				if (id) {
-					currentVSpd = 0;
+					currentXSpd = 0;
 					toX = 16 * (i + 1) + plW / 2;
 					flag = true;
 					break;
@@ -62,16 +72,15 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		}
 	} 
 	//向右移动
-	else if (currentVSpd > 0) {
+	else if (currentXSpd > 0) {
 		bool flag = false;
 		int startX = (x + plW / 2) / 16 + ((x + plW / 2) % 16 != 0);
-		int endX = (x + plW / 2 + currentVSpd) / 16 - ((x + plW / 2 + currentVSpd) % 16 == 0);
+		int endX = (x + plW / 2 + currentXSpd) / 16 - ((x + plW / 2 + currentXSpd) % 16 == 0);
 		for (int i = startX; i <= endX; i++) {
 			for (int j = vStartY; j <= vEndY; j++) {
-				int pos = i + width * j;
-				int id = (pos >= 0 && pos < blockCount ? arrayBlock[pos] : -1);
+				int id = (i >= 0 && j >= 0 && i < width && j < height ? arrayBlock[i + width * j] : -1);
 				if (id) {
-					currentVSpd = 0;
+					currentXSpd = 0;
 					toX = 16 * i - plW / 2;
 					flag = true;
 					break;
@@ -82,14 +91,14 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		}
 	}
 	x = toX;
-	x = bound(xMin, x, xMax);
+	//x = bound(xMin, x, xMax);
 	//向上和向下的判断中通用的两个变量
-	const int hStartX = (x - plW / 2) / 16, hEndX = (x + plW / 2) / 16 - ((x + plW / 2) % 16 == 0);
+	int hStartX = (x - plW / 2) / 16, hEndX = (x + plW / 2) / 16 - ((x + plW / 2) % 16 == 0);
 	//跳跃的判断
 	bool hasBlockBelow = false;
+	int belowY = y / 16;
 	for (int i = hStartX; i <= hEndX; i++) {
-		int pos = i + y / 16 * width;
-		int id = (pos >= 0 && pos < blockCount ? arrayBlock[pos] : -1);
+		int id = (i >= 0 && belowY >= 0 && i < width && belowY < height ? arrayBlock[i + width * belowY] : -1);
 		if (id) {
 			hasBlockBelow = true;
 			break;
@@ -99,34 +108,38 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		if (jumped == 0) {
 			jumped = 1;
 		}
-		currentHSpd += grav;
+		currentYSpd += grav;
+		if (currentYSpd > ySpdMax)
+			currentYSpd = (float)ySpdMax;
+	}
+	else {
+		jumped = 0;
 	}
 	if (key->space_pressed) {
 		if (jumped < jumpMax) {
 			jumped++;
-			currentHSpd = -(float)jumpSpeed;
+			currentYSpd = (float)jumpSpeed;
 		}
 	}
 	if (key->space_released) {
-		if((int)currentHSpd < 0)
-			currentHSpd = 0.0f;
+		if((int)currentYSpd < 0)
+			currentYSpd = 0.0f;
 	}
 	//重力
-	const int yMin = plH;
-	const int yMax = height * 16;
-	int intHSpd = (int)currentHSpd;		//int的纵向速度
+	int yMin = plH;
+	int yMax = height * 16;
+	int intHSpd = (int)currentYSpd;		//int的纵向速度
 	int toY = y + intHSpd;
 	//向上移动
 	if (intHSpd < 0) {
 		bool flag = false;
-		int startY = (y - plH) / 16 - 1;
-		int endY = (y - plH + intHSpd) / 16;	//这里的intHSpd小于0，所以是+
+		int startY = (y - plH + 16) / 16 - 2;
+		int endY = (y - plH + intHSpd + 16) / 16 - 1;	//这里的intHSpd小于0，所以是+
 		for (int j = startY; j >= endY; j--) {
 			for (int i = hStartX; i <= hEndX; i++) {
-				int pos = i + width * j;
-				int id = (pos >= 0 && pos < blockCount ? arrayBlock[pos] : -1);
+				int id = (i >= 0 && j >= 0 && i < width && j < height ? arrayBlock[i + width * j] : -1);
 				if (id) {
-					currentHSpd = 0.0f;
+					currentYSpd = 0.0f;
 					toY = 16 * (j + 1) + plH;
 					flag = true;
 					break;
@@ -143,11 +156,10 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		int endY = (y + intHSpd) / 16 - ((y + intHSpd) % 16 == 0);
 		for (int j = startY; j <= endY; j++) {
 			for (int i = hStartX; i <= hEndX; i++) {
-				int pos = i + width * j;
-				int id = (pos >= 0 && pos < blockCount ? arrayBlock[pos] : -1);
+				int id = (i >= 0 && j >= 0 && i < width && j < height ? arrayBlock[i + width * j] : -1);
 				if (id) {
 					jumped = 0;
-					currentHSpd = 0.0f;
+					currentYSpd = 0.0f;
 					toY = 16 * j;
 					flag = true;
 					break;

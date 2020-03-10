@@ -6,6 +6,7 @@
 /*
 	需要释放的对象:
 	g_pSpritePlayer
+	g_pFont
 */
 class MyRoom_game : public MyRoom
 {
@@ -18,6 +19,9 @@ public:
 	int onLogic() override;
 	int onRender() override;
 	void onDestroy() override;
+#if MyDebug
+	void onDebug() override;
+#endif
 
 	int* blocks;
 
@@ -26,6 +30,7 @@ public:
 	int blockCount = 160000;
 
 	LPD3DXSPRITE g_pSpritePlayer;
+	LPD3DXFONT g_pFont;
 	MyPlayer player;
 
 };

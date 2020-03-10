@@ -4,6 +4,8 @@
 #include "../MyGame/MyState.h"
 #include "../MyGame/MyReadGameData.h"
 
+#define MyDebug 1
+
 class MyRoom
 {
 public:
@@ -19,6 +21,9 @@ public:
 	virtual int onLogic() { return 0; }
 	virtual int onRender() { return 0; }
 	virtual void onDestroy(){}
+#if MyDebug
+	virtual void onDebug(){}
+#endif
 
 	MyRoom** currentRoom = nullptr;
 
@@ -27,8 +32,8 @@ public:
 	MyVaribles* vars;
 	MyData* data;
 
-	bool isOnLogic = false;
-	bool isOnRender = false;
+	//bool isOnLogic = false;
+	//bool isOnRender = false;
 };
 
 static void setCurrentRoom(MyRoom** currentRoom, MyRoom* room) {
