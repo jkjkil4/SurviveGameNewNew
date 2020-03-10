@@ -71,15 +71,18 @@ int MyRoom_game::onLogic() {
 	}
 	//计算fps
 	fpsCount++;
-	if (timeGetTime() - startGetFps > 500) {
-		fps = fpsCount * 2;
+	if (timeGetTime() - startGetFps > 1000) {
+		fps = fpsCount;
 		startGetFps = timeGetTime();
 		fpsCount = 0;
 	}
 	//放置方块
 	if (mouse->x >= 0 && mouse->y >= 0 && mouse->x <= vars->viewW && mouse->y <= vars->viewH) {
 		if (mouse->right) {
-			setBlockBy2d(blockX, blockY, 1);
+			if (16 * (blockX + 1) <= player.x - player.plW / 2 || 16 * blockX >= player.x + player.plW / 2
+				|| 16 * (blockY + 1) <= player.y - player.plH || 16 * blockY >= player.y) {
+				setBlockBy2d(blockX, blockY, 1);
+			}
 		}
 		else if (mouse->left) {
 			setBlockBy2d(blockX, blockY, 0);
@@ -133,7 +136,7 @@ int MyRoom_game::onRender() {
 		&D3DXVECTOR3((float)player.x, (float)player.y, 0), 0xffffffff);
 	g_pSpritePlayer->End();
 #if MyDebug
-	//绘制DEBUG
+	//绘制DEBUG信息
 	vars->g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	onDebug();
 	vars->g_pSprite->End();

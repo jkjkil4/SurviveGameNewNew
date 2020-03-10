@@ -192,9 +192,9 @@ VOID threadLoop(bool* flag) {
 		//}
 		int elapsedTime = timeGetTime() - currentTime;
 		if (elapsedTime < 16) {
-			timeBeginPeriod(2);
+			timeBeginPeriod(1);
 			Sleep(16 - elapsedTime);
-			timeEndPeriod(2);
+			timeEndPeriod(1);
 		}
 		
 
@@ -242,6 +242,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		TEXT("SurviveGameNewNew"), WS_OVERLAPPEDWINDOW, 40, 20, 
 		GetSystemMetrics(SM_CXFULLSCREEN) - 80, GetSystemMetrics(SM_CYFULLSCREEN) - 40, 
 		NULL, NULL, hInstance, NULL);
+	
 
 	//最大化
 	ShowWindow(g_hWnd, SW_SHOWMAXIMIZED);
