@@ -170,7 +170,7 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		}
 	}
 	y = toY;
-	y = bound(yMin, y, yMax);
+	//y = bound(yMin, y, yMax);
 }
 
 

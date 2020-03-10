@@ -32,6 +32,9 @@ public:
 	MyVaribles* vars;
 	MyData* data;
 
+	int fps = 0;
+	int startGetFps = 0;
+	int fpsCount = 0;
 	//bool isOnLogic = false;
 	//bool isOnRender = false;
 };

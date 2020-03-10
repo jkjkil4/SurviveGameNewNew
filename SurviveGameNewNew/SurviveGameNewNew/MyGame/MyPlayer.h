@@ -19,7 +19,7 @@ public:
 	//玩家横向移动的加速度
 	int xSpd = 2;
 	//玩家横向移动的最大速度
-	int xSpdMax = 4;
+	int xSpdMax = 3;
 	//玩家横向移动的阻力	(还和速度有关)
 	int xObs = 1;
 	//玩家目前横向移动的速度

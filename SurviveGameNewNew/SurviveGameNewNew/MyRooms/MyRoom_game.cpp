@@ -28,16 +28,17 @@ MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *d
 	setBlockBy2d(roomWidth - 1, roomHeight - 1, 3);
 	player.x = 100;
 	player.y = 100;
+
+	//fps
+	startGetFps = timeGetTime();
 }
 
 int MyRoom_game::findBlockBy2d(int x, int y) {
-	int pos = x + roomWidth * y;
-	return (pos >= 0 && pos < blockCount ? blocks[pos] : -1);
+	return (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight ? blocks[x + roomWidth * y] : -1);
 }
 void MyRoom_game::setBlockBy2d(int x, int y, int id) {
-	int pos = x + roomWidth * y;
-	if (pos >= 0 && pos < blockCount) {
-		blocks[pos] = id;
+	if (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight) {
+		blocks[x + roomWidth * y] = id;
 	}
 }
 
@@ -58,6 +59,23 @@ int MyRoom_game::onLogic() {
 	int blockY = (mouse->y + viewY) / 16;
 	//更新玩家位置
 	player.updatePos(blocks, roomWidth, roomHeight, key);
+	//加速
+	if (key->w) {
+		player.xSpdMax += 1;
+	}
+	if (key->s) {
+		player.xSpdMax -= 1;
+		if (player.xSpdMax < 3) {
+			player.xSpdMax = 3;
+		}
+	}
+	//计算fps
+	fpsCount++;
+	if (timeGetTime() - startGetFps > 500) {
+		fps = fpsCount * 2;
+		startGetFps = timeGetTime();
+		fpsCount = 0;
+	}
 	//放置方块
 	if (mouse->x >= 0 && mouse->y >= 0 && mouse->x <= vars->viewW && mouse->y <= vars->viewH) {
 		if (mouse->right) {
@@ -142,8 +160,11 @@ void MyRoom_game::onDestroy() {
 #if MyDebug
 void MyRoom_game::onDebug(){
 	using namespace std;
-	string str = "玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
+	string str = "左右移动: A、D    跳跃: 空格键\n左键删除方块 右键放置方块\n"
+		  "\nFPS: " + to_string(fps)
+		+ "\n玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
 		+ "\n玩家速度: " + to_string(player.currentXSpd) + " , " + to_string(player.currentYSpd)
+		+ "\n玩家横向速度限制(可以按W来增加，按S来降低): " + to_string(player.xSpdMax)
 		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
 	g_pFont->DrawText(NULL, stringToWstring(str).c_str(), -1, NULL, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
 }

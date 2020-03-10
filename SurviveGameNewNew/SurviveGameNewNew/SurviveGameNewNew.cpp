@@ -37,6 +37,10 @@ INT doneTime = 0;	//完成初始化的时间
 INT defWidth = 800;
 INT defHeight = 608;
 
+//屏幕大小
+INT screenWidth = 0;
+INT screenHeight = 0;
+
 //按键状态
 #include "MyGame/MyState.h"
 BOOL hasFocus = true;
@@ -53,7 +57,12 @@ MyRoom* currentRoom = nullptr;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
 
+
 VOID onInit() {
+	//屏幕大小
+	screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
 	//创建D3D接口指针
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	D3DDISPLAYMODE d3ddm;		//D3D显示模式结构体
@@ -169,16 +178,27 @@ VOID threadLoop(bool* flag) {
 			*flag = false;
 			break;
 		}
+
 		int currentTime = timeGetTime();
 		onKeyAndMouseCheck();
 		if (currentRoom) {
 			currentRoom->onLogic();
 			if (!IsIconic(g_hWnd)) {
-					currentRoom->onRender();	//绘制
+				currentRoom->onRender();	//绘制
 			}
 		}
-		while (timeGetTime() - currentTime < 17)
-			Sleep(1);
+		//if (GetSystemMetrics(SM_CXSCREEN) != screenWidth || GetSystemMetrics(SM_CYSCREEN) != screenHeight) {
+		//	cDebug("SHIT!!!!!!!!!\n");
+		//}
+		int elapsedTime = timeGetTime() - currentTime;
+		if (elapsedTime < 16) {
+			timeBeginPeriod(2);
+			Sleep(16 - elapsedTime);
+			timeEndPeriod(2);
+		}
+		
+
+		
 	}
 }
 //VOID threadRender(bool* flag) {
