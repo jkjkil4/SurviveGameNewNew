@@ -3,6 +3,9 @@
 MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *data, int roomWidth, int roomHeight) 
 	: MyRoom(key, mouse, vars, data) 
 {
+	std::wstring(*f)(std::string orig);
+	f = &stringToWstring;
+	OutputDebugString( f("测试: " + std::to_string(7)).c_str() );
 	//初始化玩家的精灵指针
 	D3DXCreateSprite(vars->g_pDevice, &g_pSpritePlayer);
 	//初始化字体
@@ -26,8 +29,16 @@ MyRoom_game::MyRoom_game(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData *d
 		setBlockBy2d(i, 16, 3);
 	}
 	setBlockBy2d(roomWidth - 1, roomHeight - 1, 3);
-	player.x = 100;
+	player.x = 1020;
 	player.y = 100;
+
+	//创建窗口控件
+	MyViewControl* viewControl = new MyViewControl(key, mouse, vars, data->guiTextureData->gui_selectSave_main);
+	D3DXIMAGE_INFO info = data->guiTextureData->gui_selectSave_main_info;
+	viewControl->resize(info.Width, info.Height);
+	viewControl->move(20, 20);
+	viewControl->flags = 0;
+	vec_viewControl.push_back(viewControl);
 
 	//fps
 	startGetFps = timeGetTime();
@@ -135,12 +146,14 @@ int MyRoom_game::onRender() {
 	g_pSpritePlayer->Draw(data->g_pTexturePlayer, nullptr, &D3DXVECTOR3((float)(MyPlayer::plW / 2 + viewX), (float)(MyPlayer::plH + viewY), 0),
 		&D3DXVECTOR3((float)player.x, (float)player.y, 0), 0xffffffff);
 	g_pSpritePlayer->End();
-#if MyDebug
-	//绘制DEBUG信息
 	vars->g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	for (int i = 0; i < (int)(vec_viewControl.size()); i++) {
+		vec_viewControl[i]->onRender(vars->g_pSprite, 255, 255, 255);
+	}
+#if MyDebug
 	onDebug();
-	vars->g_pSprite->End();
 #endif
+	vars->g_pSprite->End();
 	// 绘制纹理
 	vars->g_pDevice->SetRenderTarget(0, g_pOldRenderTarget);
 	//g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
@@ -156,8 +169,12 @@ int MyRoom_game::onRender() {
 }
 
 void MyRoom_game::onDestroy() {
+	publicDestroy();
+	//释放d3d对象
 	Safe_Release(g_pSpritePlayer);
 	Safe_Release(g_pFont);
+	//删除方块数组
+	Safe_Delete(blocks);
 }
 
 #if MyDebug

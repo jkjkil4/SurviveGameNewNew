@@ -15,12 +15,12 @@ public:
 
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);
-
+	
 	int onLogic() override;
 	int onRender() override;
 	void onDestroy() override;
 #if MyDebug
-	void onDebug() override;
+	void onDebug();
 #endif
 
 	int* blocks;

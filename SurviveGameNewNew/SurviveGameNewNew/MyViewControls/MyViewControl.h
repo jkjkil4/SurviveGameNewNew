@@ -3,10 +3,10 @@
 #include "../utility.h"
 #include "../MyGame/MyState.h"
 
-#define AlignFlag_left		1;
-#define AlignFlag_right		2;
-#define AlignFlag_top		4;
-#define AlignFlag_bottom	8;
+#define AlignFlag_left		1
+#define AlignFlag_right		2
+#define AlignFlag_top		4
+#define AlignFlag_bottom	8
 
 class MyViewControl
 {
@@ -101,7 +101,7 @@ public:
 				b = (int)(b * 0.8);
 			}
 		}
-		g_pSprite->Draw(g_pTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(posX, posY, 0), D3DCOLOR_XRGB(r, g, b));
+		g_pSprite->Draw(g_pTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3((float)posX, (float)posY, 0), D3DCOLOR_XRGB(r, g, b));
 	}
 	
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
@@ -123,4 +123,3 @@ public:
 	
 	int clickable = false;
 };
-

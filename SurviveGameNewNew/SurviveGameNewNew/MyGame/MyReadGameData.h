@@ -14,16 +14,32 @@ public:
 	std::vector<LPDIRECT3DTEXTURE9> vec_textures;
 };
 
+class MyGUITextureData
+{
+public:
+	void onInit(std::string path, LPDIRECT3DDEVICE9 g_pDevice);
+	void onDestroy();
+
+	LPDIRECT3DTEXTURE9 gui_selectSave_main;
+	D3DXIMAGE_INFO gui_selectSave_main_info;
+};
+
 class MyData
 {
 public:
+	//Íæ¼ÒÌùÍ¼
 	LPDIRECT3DTEXTURE9 g_pTexturePlayer = nullptr;
-
+	//·½¿éÌùÍ¼
 	MyBlocksTextureData* origBlocksTextureData = nullptr;
+	//GUIÌùÍ¼
+	MyGUITextureData* guiTextureData = nullptr;
 
 	void onDestroy() {
 		Safe_Release(g_pTexturePlayer);
-		origBlocksTextureData->onDestroy();
+		if (origBlocksTextureData)
+			origBlocksTextureData->onDestroy();
+		if (guiTextureData)
+			guiTextureData->onDestroy();
 	}
 
 };

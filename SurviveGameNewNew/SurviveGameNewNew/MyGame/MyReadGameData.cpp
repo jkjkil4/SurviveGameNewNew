@@ -1,6 +1,8 @@
 #include "MyReadGameData.h"
 using namespace std;
-
+/*
+	MyBlocksTextureData
+*/
 void MyBlocksTextureData::onInit(string path, string file, LPDIRECT3DDEVICE9 g_pDevice) {
 	fstream in(path + "\\" + file);
 	if (in.is_open()) {
@@ -29,4 +31,14 @@ void MyBlocksTextureData::onDestroy(){
 	for (int i = 0; i < (int)(vec_textures.size()); i++) {
 		Safe_Release(vec_textures[i]);
 	}
+}
+
+/*
+	MyGUITextureData
+*/
+void MyGUITextureData::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
+	myCreateTexture(g_pDevice, path + "\\gui_selectSave_main.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &gui_selectSave_main_info, &gui_selectSave_main);
+}
+void MyGUITextureData::onDestroy() {
+	Safe_Release(gui_selectSave_main);
 }

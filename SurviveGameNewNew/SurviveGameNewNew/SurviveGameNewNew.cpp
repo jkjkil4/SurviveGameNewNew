@@ -19,6 +19,7 @@ LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到�
 #include "MyGame/MyReadGameData.h"
 LPDIRECT3DTEXTURE9 g_pTexturePlayer = nullptr;	//玩家的贴图指针
 MyBlocksTextureData blocksTextureData;	//方块贴图
+MyGUITextureData guiTextureData;
 MyData data;
 
 // 渲染到纹理
@@ -112,6 +113,11 @@ VOID onInit() {
 	//读取游戏数据
 	myCreateTexture(g_pDevice, "data\\texture\\player\\player.png", MyPlayer::plW, MyPlayer::plH, nullptr, &g_pTexturePlayer);	//读取玩家贴图
 	blocksTextureData.onInit("data\\texture\\blocks", "blocks.info", g_pDevice);	//读取方块贴图
+	guiTextureData.onInit("data\\texture\\gui", g_pDevice);		//读取GUI贴图
+	//把游戏数据指针传入data，方便传递
+	data.g_pTexturePlayer = g_pTexturePlayer;	//玩家贴图
+	data.origBlocksTextureData = &blocksTextureData;	//方块贴图
+	data.guiTextureData = &guiTextureData;
 
 	//把指针传入vars，方便传递
 	vars.g_pD3D = g_pD3D;
@@ -120,10 +126,6 @@ VOID onInit() {
 	vars.g_pSpriteRender = g_pSpriteRender;
 	vars.g_pRenderTexture = g_pRenderTexture;
 	vars.g_pRenderSurface = g_pRenderSurface;
-
-	//把游戏数据指针传入data，方便传递
-	data.g_pTexturePlayer = g_pTexturePlayer;	//玩家贴图
-	data.origBlocksTextureData = &blocksTextureData;	//方块贴图
 
 	//初始化Room
 	setCurrentRoom(&currentRoom, new MyRoom_game(&key, &mouse, &vars, &data, 400, 400));

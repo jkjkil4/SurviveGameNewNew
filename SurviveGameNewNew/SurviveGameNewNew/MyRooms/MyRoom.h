@@ -3,6 +3,7 @@
 #include "../utility.h"
 #include "../MyGame/MyState.h"
 #include "../MyGame/MyReadGameData.h"
+#include "../MyViewControls/MyViewControl.h"
 
 #define MyDebug 1
 
@@ -20,9 +21,15 @@ public:
 	}
 	virtual int onLogic() { return 0; }
 	virtual int onRender() { return 0; }
-	virtual void onDestroy(){}
+	virtual void onDestroy() {}
+	void publicDestroy() {
+		//delete窗口控件
+		for (int i = 0; i < (int)(vec_viewControl.size()); i++) {
+			Safe_Delete(vec_viewControl[i]);
+		}
+	}
 #if MyDebug
-	virtual void onDebug(){}
+	void onDebug(){}
 #endif
 
 	MyRoom** currentRoom = nullptr;
@@ -35,8 +42,9 @@ public:
 	int fps = 0;
 	int startGetFps = 0;
 	int fpsCount = 0;
-	//bool isOnLogic = false;
-	//bool isOnRender = false;
+	
+	//存放窗口控件的vector
+	std::vector<MyViewControl*> vec_viewControl;
 };
 
 static void setCurrentRoom(MyRoom** currentRoom, MyRoom* room) {
