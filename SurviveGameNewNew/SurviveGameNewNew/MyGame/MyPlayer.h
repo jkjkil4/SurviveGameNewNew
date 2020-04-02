@@ -1,11 +1,12 @@
-#pragma once
+#ifndef _MYPLAYER_H
+#define _MYPLAYER_H
 
-#include "MyState.h"
+#include "../MyEngine.h"
 
 class MyPlayer
 {
 public:
-	void updatePos(int* arrayBlock, int width, int height, MyKey* key);
+	void updatePos(int* arrayBlock, int width, int height, MyEngine* e);
 
 	//Íæ¼Ò¿í¸ß
 	static constexpr int plW = 24;
@@ -46,3 +47,5 @@ static int bound(int min, int value, int max) {
 		value = max;
 	return value;
 }
+
+#endif

@@ -18,12 +18,6 @@
     <ClInclude Include="utility.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyGame\MyPlayer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -33,19 +27,22 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyEngine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="MyRooms\MyRoom.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_title.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyViewControls\MyViewControl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyReadGameData.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MyRooms\MyRoom_game.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRooms\include_rooms.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGame\MyPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyGame\MyData.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,16 +53,19 @@
     <ClCompile Include="utility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyGame\MyPlayer.cpp">
+    <ClCompile Include="MyEngine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_title.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame\MyReadGameData.cpp">
+    <ClCompile Include="MyRooms\MyRoom.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyRooms\MyRoom_game.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGame\MyPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyGame\MyData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,24 @@
-#pragma once
+#ifndef _MYROOM_H
+#define _MYROOM_H
 
+#include "../MyEngine.h"
+
+class MyRoom
+{
+public:
+	explicit MyRoom(MyEngine* e);
+	virtual ~MyRoom() = 0;
+	
+	virtual void onLogic() = 0;
+	virtual void onRender() = 0;
+	virtual void onDebug() = 0;
+
+	virtual void onDestroy() = 0;
+
+	MyEngine* e = nullptr;
+};
+
+/*
 #include "../utility.h"
 #include "../MyGame/MyState.h"
 #include "../MyGame/MyReadGameData.h"
@@ -55,3 +74,6 @@ static void setCurrentRoom(MyRoom** currentRoom, MyRoom* room) {
 	*currentRoom = room;
 	room->setCurrentRoom(currentRoom);
 }
+*/
+
+#endif //_MYROOM_H

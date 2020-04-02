@@ -8,10 +8,8 @@ std::wstring stringToWstring(std::string orig) {
 	m_wchar = new wchar_t[len + 1];
 	MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, m_wchar, len);
 	m_wchar[len] = '0';
-	//std::wstring r(m_wchar);
 	result.append(m_wchar);
 	delete[] m_wchar;
-	//return r;
 	return result;
 }
 

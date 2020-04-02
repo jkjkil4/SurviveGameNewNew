@@ -1,6 +1,6 @@
 #include "MyPlayer.h"
 
-void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
+void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyEngine* e) {
 	/*
 		注: 我在向左和向上的判断中有使用如下写法
 			XXX = (XX + 16) / 16 - 1;
@@ -11,14 +11,14 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 		(		所以 (-2 + 16) / 16 - 1 = -1			)
 	*/
 	//左右方向的判断
-	if (key->d_pressed) {
+	if (e->keyPressFlag('D')) {
 		direction = 1;
 	} 
-	else if (key->a_pressed) {
+	else if (e->keyPressFlag('A')) {
 		direction = -1;
 	}
 	//加速度
-	if( key->d || key->a ){
+	if( e->keyFlag('D') || e->keyFlag('A') ){
 		if (direction == 1) {
 			currentXSpd += xSpd;
 			if (currentXSpd > xSpdMax)
@@ -115,13 +115,13 @@ void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyKey* key) {
 	else {
 		jumped = 0;
 	}
-	if (key->space_pressed) {
+	if (e->keyPressFlag(VK_SPACE)) {
 		if (jumped < jumpMax) {
 			jumped++;
 			currentYSpd = (float)jumpSpeed;
 		}
 	}
-	if (key->space_released) {
+	if (e->keyReleaseFlag(VK_SPACE)) {
 		if((int)currentYSpd < 0)
 			currentYSpd = 0.0f;
 	}
