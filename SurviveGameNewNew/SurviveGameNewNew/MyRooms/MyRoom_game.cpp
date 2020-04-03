@@ -3,9 +3,6 @@
 using namespace std;
 
 MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
-	MyWidget* w = new MyWidget(e, e->data.test1.g_pTexture, &e->data.test1.info);
-	MyWidget* w2 = new MyPushButton(e, e->data.test2.g_pTexture, &e->data.test2.info, w);
-	widgets.push_back(w);
 	//初始化字体
 	D3DXCreateFont(e->g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
 	//其他操作
@@ -30,6 +27,8 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	setBlockBy2d(roomWidth - 1, roomHeight - 1, 3);
 	player.x = 1020;
 	player.y = 100;
+	//窗口控件
+
 }
 MyRoom_game::~MyRoom_game() {}
 

@@ -6,46 +6,50 @@ MyRoom::MyRoom(MyEngine* e) {
 MyRoom::~MyRoom(){}
 
 void MyRoom::onLogic() {
-	_onLogic();
 	//控件事件
-	int mouse[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
-	//bool flag = false;
+	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
 	for (int i = 0; i < 3; i++) {
-		if (e->keyPressFlag(mouse[i])) {
+		int mouse = mouseArray[i];
+		if (e->keyPressFlag(mouse)) {
 			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 				MyWidget* w = *it;
+				if (!w->isVisible())
+					continue;
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MouseFlags::Press, mouse[i], localX, localY);
+					if (w->mouseEvent(MouseFlags::Press, mouse, localX, localY))
+						e->setKeyPressFlag(mouse, false);
 					break;
 				}
 			}
 		}
-		if (e->keyReleaseFlag(mouse[i])) {
+		if (e->keyReleaseFlag(mouse)) {
 			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 				MyWidget* w = *it;
+				if (!w->isVisible())
+					continue;
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MouseFlags::Release, mouse[i], localX, localY);
+					if (w->mouseEvent(MouseFlags::Release, mouse, localX, localY))
+						e->setKeyReleaseFlag(mouse, false);
 					break;
 				}
 			}
 		}
 	}
-	//if (flag) {
-	//	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
-	//		MyWidget* w = *it;
-
-	//	}
-	//}
+	//继承类中的逻辑处理
+	_onLogic();
 }
 void MyRoom::onRender() {
 	_onRender();
 	//绘制控件
-	for (auto it = widgets.begin(); it < widgets.end(); it++)
-		(*it)->onRender(e->g_pSprite);
+	for (auto it = widgets.begin(); it < widgets.end(); it++) {
+		MyWidget* w = *it;
+		if(w->isVisible())
+			w->onRender(e->g_pSprite);
+	}
 }
 void MyRoom::onDebug() {
 	_onDebug();

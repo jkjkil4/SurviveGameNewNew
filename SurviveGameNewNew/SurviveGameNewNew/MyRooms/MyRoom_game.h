@@ -34,6 +34,8 @@ public:
 
 	LPD3DXFONT g_pFont = nullptr;
 
+	bool visibleFlag = false;
+
 };
 
 

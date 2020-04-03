@@ -18,10 +18,13 @@ public:
 	void setAlign(int flags);
 	void updatePos(int alignW, int alignH);
 
-	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255, int offX = 0, int offY = 0);
+	bool isVisible();
+
+	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
+	virtual void _onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
 	void onDestroy();
 
-	virtual void mouseEvent(int type, int mouse, int x, int y);
+	virtual bool mouseEvent(int type, int mouse, int x, int y);
 
 	//-----------------------------------------------
 	MyEngine* e = nullptr;
@@ -33,9 +36,13 @@ public:
 	int w = 10, h = 10;
 	//真正的坐标
 	int realX = 0, realY = 0;
+	//相对于窗口的坐标
+	int wndX = 0, wndY = 0;
 	//贴图
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 	D3DXIMAGE_INFO* pTextureInfo;
+	//是否可见
+	bool* visible = nullptr;
 	//子控件
 	std::vector<MyWidget*> childs;
 };
