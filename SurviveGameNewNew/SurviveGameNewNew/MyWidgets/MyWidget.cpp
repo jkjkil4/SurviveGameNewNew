@@ -67,3 +67,17 @@ void MyWidget::onDestroy() {
 		safeDelete(w);
 	}
 }
+
+void MyWidget::mouseEvent(int type, int mouse, int x, int y) {
+	if (childs.size() > 0) {
+		for (auto it = childs.rbegin(); it < childs.rend(); it++) {
+			MyWidget* child = *it;
+			int localX = x - child->realX;
+			int localY = y - child->realY;
+			if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
+				child->mouseEvent(type, mouse, localX, localY);
+				break;
+			}
+		}
+	}
+}

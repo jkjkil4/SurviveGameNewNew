@@ -2,8 +2,9 @@
 
 using namespace std;
 
-MyEngine::MyEngine(int* fps) {
+MyEngine::MyEngine(void (*signalScaled)(), int* fps) {
 	this->fps = fps;
+	this->signalScaled = signalScaled;
 	for (int i = 0; i < 123; i++) {
 		keyPressed[i] = false;
 		keyReleased[i] = false;
@@ -87,7 +88,7 @@ void MyEngine::renderEnd() {
 	//将纹理绘制到窗口
 	g_pDevice->SetRenderTarget(0, g_pWindowSurface);	//设置为绘制到窗口
 	g_pDevice->BeginScene();	//获取绘制权限
-	g_pSpriteRender->Begin(D3DXSPRITE_ALPHABLEND);
+	g_pSpriteRender->Begin(0);
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制
@@ -132,17 +133,7 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			viewW = w;
 			viewH = h;
 			mySetScale(g_pSpriteRender, 0, 0, (float)defWidth / w, (float)defHeight / h);
-			//D3DXMatrixTransformation2D(
-			//	&g_scale,		//返回的矩阵
-			//	nullptr,		//缩放的中心
-			//	0.0f,			//影响缩放的因素
-			//	&D3DXVECTOR2((float)defWidth / w, (float)defHeight / h),	//在X、Y方向的缩放量
-			//	nullptr,	//旋转中心
-			//	0,			//旋转弧度
-			//	nullptr		//平移量
-			//	);
-			//g_pSpriteRender->SetTransform(&g_scale);
-			//D3DXMatrixIdentity(&g_scale);
+			signalScaled();
 		}
 		break;
 	}

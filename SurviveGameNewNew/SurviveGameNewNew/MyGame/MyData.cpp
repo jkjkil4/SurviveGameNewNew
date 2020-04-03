@@ -33,15 +33,17 @@ void MyPlayerTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
 	myCreateTexture(g_pDevice, path + "\\player\\player.png", 24, 40, nullptr, &g_pPlayer);
 }
 void MyPlayerTexture::onDestroy() {
-
+	safeRelease(g_pPlayer);
 }
 
 void MyData::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
 	blockTexture.onInit(path, g_pDevice);
 	playerTexture.onInit(path, g_pDevice);
-	myCreateTexture(g_pDevice, path + "\\2.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &info, &testAboutWidgets);
+	myCreateTexture(g_pDevice, path + "\\2.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test1.info, &test1.g_pTexture);
+	myCreateTexture(g_pDevice, path + "\\3.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test2.info, &test2.g_pTexture);
 }
 void MyData::onDestroy() {
 	blockTexture.onDestroy();
 	playerTexture.onDestroy();
+	safeRelease(test1.g_pTexture);
 }

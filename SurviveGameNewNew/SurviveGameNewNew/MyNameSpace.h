@@ -8,4 +8,6 @@ enum AlignFlags {
 	Bottom	=	8
 };
 
+enum MouseFlags { Press, Release };
+
 #endif

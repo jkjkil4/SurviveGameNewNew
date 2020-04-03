@@ -2,16 +2,26 @@
 #include "MyEngine.h"
 #include "MyRooms/include_rooms.h"
 
+void updateWidgetsPos();
+
 int fpsCount = 0;
 int startGetFps = 0;
 int fps = 0;
 
-MyEngine e(&fps);
+MyEngine e(updateWidgetsPos, &fps);
 bool needQuit = false;
 MyRoom* currentRoom = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return e.ProcWndMessage(hWnd, uMsg, wParam, lParam);
+}
+
+void updateWidgetsPos() {
+	if (currentRoom) {
+		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++) {
+			(*it)->updatePos(e.viewW, e.viewH);
+		}
+	}
 }
 
 void mainLoop() {

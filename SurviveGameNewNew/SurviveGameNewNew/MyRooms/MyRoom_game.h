@@ -3,7 +3,7 @@
 
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
-#include "../MyWidgets/MyWidget.h"
+#include "../MyWidgets/MyPushButton.h"
 
 /*
 	需要释放的对象

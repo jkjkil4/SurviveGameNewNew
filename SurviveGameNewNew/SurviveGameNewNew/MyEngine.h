@@ -18,7 +18,7 @@ private:
 	};
 
 public:
-	explicit MyEngine(int* fps);
+	explicit MyEngine(void (*signalScaled)(), int* fps);
 
 	void onInit();
 	void renderStart();
@@ -51,6 +51,7 @@ public:
 	int doneTime = 0, resizeTime = timeGetTime();
 	bool isInited = false;
 	bool hasFocus = true;
+	void (*signalScaled)() = nullptr;
 	//°´¼ü¼ì²â
 	bool keyFlag(int num);
 	void setKeyFlag(int num, bool flag);

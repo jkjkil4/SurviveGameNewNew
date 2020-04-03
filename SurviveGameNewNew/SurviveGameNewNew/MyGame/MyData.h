@@ -6,6 +6,13 @@
 #include <fstream>
 #include <vector>
 
+class MyTexture
+{
+public:
+	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
+	D3DXIMAGE_INFO info;
+};
+
 /*
 	需要释放的对象：
 	vec_textures内容
@@ -20,6 +27,12 @@ public:
 
 	std::vector<LPDIRECT3DTEXTURE9> vec_textures;
 };
+
+/*
+	需要释放的对象：
+	g_pPlayer
+	test1 -> g_pTexture
+*/
 class MyPlayerTexture {
 public:
 	void onInit(std::string path, LPDIRECT3DDEVICE9 g_pDevice);
@@ -39,8 +52,7 @@ public:
 	MyPlayerTexture playerTexture;
 
 	//test
-	LPDIRECT3DTEXTURE9 testAboutWidgets = nullptr;
-	D3DXIMAGE_INFO info;
+	MyTexture test1, test2;
 };
 
 #endif
