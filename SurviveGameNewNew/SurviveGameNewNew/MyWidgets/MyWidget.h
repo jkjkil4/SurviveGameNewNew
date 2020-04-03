@@ -1,8 +1,44 @@
-#pragma once
+
+#ifndef _MYWIDGET_H
+#define _MYWIDGET_H
+
 
 #include "../utility.h"
-#include "../MyGame/MyState.h"
+#include "../MyEngine.h"
+#include "../MyNameSpace.h"
 
+class MyWidget
+{
+public:
+	explicit MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget* parent = nullptr);
+	virtual ~MyWidget();
+
+	void move(int x, int y);
+	void resize(int w, int h);
+	void setAlign(int flags);
+	void updatePos(int alignW, int alignH);
+
+	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255, int offX = 0, int offY = 0);
+	void onDestroy();
+
+	//-----------------------------------------------
+	MyEngine* e = nullptr;
+	MyWidget* parent = nullptr;
+	//对齐方向
+	int alignFlags = 0;
+	//对于对齐方向来说的坐标和宽度
+	int x = 0, y = 0;
+	int w = 10, h = 10;
+	//真正的坐标
+	int realX = 0, realY = 0;
+	//贴图
+	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
+	D3DXIMAGE_INFO* pTextureInfo;
+	//子控件
+	std::vector<MyWidget*> childs;
+};
+
+/*
 #define AlignFlag_left		1
 #define AlignFlag_right		2
 #define AlignFlag_top		4
@@ -11,10 +47,8 @@
 class MyViewControl
 {
 public:
-	explicit MyViewControl(MyKey* key, MyMouse* mouse, MyVaribles* vars, LPDIRECT3DTEXTURE9 g_pTexture) {
-		this->key = key;
-		this->mouse = mouse;
-		this->vars = vars;
+	explicit MyViewControl(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture) {
+		this->e = e;
 		this->g_pTexture = g_pTexture;
 	}
 	bool checkMouseAt(int mouseX, int mouseY) {
@@ -29,10 +63,10 @@ public:
 				rectLeft = x;
 			}
 			else if (right) {
-				rectLeft = vars->viewW - x - w;
+				rectLeft = e->viewW - x - w;
 			}
 			else {
-				rectLeft = (vars->viewW - w) / 2 + x;
+				rectLeft = (e->viewW - w) / 2 + x;
 			}
 			mouseX -= rectLeft;
 
@@ -41,10 +75,10 @@ public:
 				rectTop = y;
 			}
 			else if (bottom) {
-				rectTop = vars->viewH - y - h;
+				rectTop = e->viewH - y - h;
 			}
 			else {
-				rectTop = (vars->viewH - h) / 2 + y;
+				rectTop = (e->viewH - h) / 2 + y;
 			}
 			mouseY -= rectTop;
 
@@ -81,21 +115,21 @@ public:
 		if (left) {
 			posX = x;
 		} else if (right) {
-			posX = vars->viewW - x - w;
+			posX = e->viewW - x - w;
 		} else {
-			posX = (vars->viewW - w) / 2 + x;
+			posX = (e->viewW - w) / 2 + x;
 		}
 
 		if (top) {
 			posY = y;
 		} else if (bottom) {
-			posY = vars->viewH - y - h;
+			posY = e->viewH - y - h;
 		} else {
-			posY = (vars->viewH - h) / 2 + y;
+			posY = (e->viewH - h) / 2 + y;
 		}
 
 		if (clickable) {
-			if (checkMouseAt(mouse->x, mouse->y)) {
+			if (checkMouseAt(e->mouseX, e->mouseY)) {
 				r = (int)(r * 0.8);
 				g = (int)(g * 0.8);
 				b = (int)(b * 0.8);
@@ -117,9 +151,11 @@ public:
 
 	int flags = 0;
 
-	MyKey* key;
-	MyMouse* mouse;
-	MyVaribles* vars;
+	MyEngine* e;
 	
 	int clickable = false;
 };
+
+*/
+
+#endif //_MYWIDGET_H

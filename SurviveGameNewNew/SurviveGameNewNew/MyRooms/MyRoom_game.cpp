@@ -11,9 +11,9 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	this->blockCount = roomWidth * roomHeight;
 	blocks = new int[blockCount];
 	//填充
-	for (int j = 0; j < roomHeight; j++) {
+	for (int j = 16; j < roomHeight; j++) {
 		for (int i = 0; i < roomWidth; i++) {
-			if (j > 15 && (i == j || i == 2 * j || i == 3 * j || i == 4 * j || i == 5 * j || i == 6 * j)) {
+			if (i == j || i == 2 * j || i == 3 * j || i == 4 * j || i == 5 * j || i == 6 * j) {
 				setBlockBy2d(i, j, 1);
 			}
 			else {
@@ -31,14 +31,14 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 MyRoom_game::~MyRoom_game() {}
 
 int MyRoom_game::findBlockBy2d(int x, int y) {
-	return (x >= 0 && y >= 0 && x < roomWidth&& y < roomHeight ? blocks[x + roomWidth * y] : -1);
+	return (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight ? blocks[x + roomWidth * y] : -1);
 }
 void MyRoom_game::setBlockBy2d(int x, int y, int id) {
 	if (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight)
 		blocks[x + roomWidth * y] = id;
 }
 
-void MyRoom_game::onLogic() {
+void MyRoom_game::_onLogic() {
 	int timeStart = timeGetTime();
 	//得到视野坐标
 	int viewX = player.x - e->viewW / 2;
@@ -73,7 +73,7 @@ void MyRoom_game::onLogic() {
 		}
 	}
 }
-void MyRoom_game::onRender() {
+void MyRoom_game::_onRender() {
 	//一些操作
 	int viewX = player.x - e->viewW / 2;
 	int viewY = player.y - e->viewH / 2;
@@ -100,23 +100,19 @@ void MyRoom_game::onRender() {
 	e->g_pSprite->Draw(e->data.playerTexture.g_pPlayer, nullptr, &D3DXVECTOR3((float)(MyPlayer::plW / 2 + viewX), (float)(MyPlayer::plH + viewY), 0),
 		&D3DXVECTOR3((float)player.x, (float)player.y, 0), 0xffffffff);
 	mySetScale(e->g_pSprite, 0, 0, 1, 1);
-	//for (int i = 0; i < (int)(vec_viewControl.size()); i++) {
-	//	vec_viewControl[i]->onRender(e->g_pSprite, 255, 255, 255);
-	//}
 }
-void MyRoom_game::onDebug() {
-	e->g_pSprite->End();
-	e->g_pSprite->Begin(0);
+void MyRoom_game::_onDebug() {
 	string str = "左右移动: A、D    跳跃: 空格键\n左键删除方块 右键放置方块\n"
 		"\nFPS: " + to_string(*e->fps)
 		+ "\n玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
 		+ "\n玩家速度: " + to_string(player.currentXSpd) + " , " + to_string(player.currentYSpd)
 		+ "\n玩家横向速度限制(可以按W来增加，按S来降低): " + to_string(player.xSpdMax)
 		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
-	g_pFont->DrawText(NULL, stringToWstring(str).c_str(), -1, NULL, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
+	wstring wstr = stringToWstring(str);
+	g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, NULL, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
 }
 
-void MyRoom_game::onDestroy() {
+void MyRoom_game::_onDestroy() {
 	safeRelease(g_pFont);
 	delete[] blocks;
 }

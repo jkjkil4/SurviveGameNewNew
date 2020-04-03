@@ -37,6 +37,10 @@ public:
 
 	MyBlockTexture blockTexture;
 	MyPlayerTexture playerTexture;
+
+	//test
+	LPDIRECT3DTEXTURE9 testAboutWidgets = nullptr;
+	D3DXIMAGE_INFO info;
 };
 
 #endif

@@ -157,6 +157,8 @@
     <ClInclude Include="MyRooms\include_rooms.h" />
     <ClInclude Include="MyRooms\MyRoom.h" />
     <ClInclude Include="MyRooms\MyRoom_game.h" />
+    <ClInclude Include="MyNameSpace.h" />
+    <ClInclude Include="MyWidgets\MyWidget.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SurviveGameNewNew.h" />
     <ClInclude Include="targetver.h" />
@@ -168,6 +170,7 @@
     <ClCompile Include="MyGame\MyPlayer.cpp" />
     <ClCompile Include="MyRooms\MyRoom.cpp" />
     <ClCompile Include="MyRooms\MyRoom_game.cpp" />
+    <ClCompile Include="MyWidgets\MyWidget.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>

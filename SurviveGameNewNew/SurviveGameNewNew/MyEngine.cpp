@@ -46,12 +46,8 @@ void MyEngine::onInit() {
 
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
-		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
-		D3DUSAGE_RENDERTARGET,
-		D3DFMT_R5G6B5,
-		D3DPOOL_DEFAULT,
-		&g_pRenderTexture,
-		NULL
+		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 2,
+		D3DUSAGE_RENDERTARGET, D3DFMT_R5G6B5, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL
 		);
 	//得到纹理的Surface
 	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
@@ -91,7 +87,7 @@ void MyEngine::renderEnd() {
 	//将纹理绘制到窗口
 	g_pDevice->SetRenderTarget(0, g_pWindowSurface);	//设置为绘制到窗口
 	g_pDevice->BeginScene();	//获取绘制权限
-	g_pSpriteRender->Begin(NULL);
+	g_pSpriteRender->Begin(D3DXSPRITE_ALPHABLEND);
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制

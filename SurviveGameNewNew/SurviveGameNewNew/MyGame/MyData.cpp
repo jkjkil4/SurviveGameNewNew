@@ -39,6 +39,7 @@ void MyPlayerTexture::onDestroy() {
 void MyData::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
 	blockTexture.onInit(path, g_pDevice);
 	playerTexture.onInit(path, g_pDevice);
+	myCreateTexture(g_pDevice, path + "\\2.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &info, &testAboutWidgets);
 }
 void MyData::onDestroy() {
 	blockTexture.onDestroy();

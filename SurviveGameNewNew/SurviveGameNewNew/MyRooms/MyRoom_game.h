@@ -3,6 +3,7 @@
 
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
+#include "../MyWidgets/MyWidget.h"
 
 /*
 	需要释放的对象
@@ -17,11 +18,11 @@ public:
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);
 
-	void onLogic() override;
-	void onRender() override;
-	void onDebug() override;
+	void _onLogic() override;
+	void _onRender() override;
+	void _onDebug() override;
 
-	void onDestroy() override;
+	void _onDestroy() override;
 
 	int* blocks;	//方块
 
@@ -32,6 +33,7 @@ public:
 	MyPlayer player;
 
 	LPD3DXFONT g_pFont = nullptr;
+
 };
 
 
