@@ -21,7 +21,7 @@ public:
 	bool isVisible();
 
 	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
-	virtual void _onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
+	virtual void _onRender(LPD3DXSPRITE g_pSprite);
 	void onDestroy();
 
 	virtual bool mouseEvent(int type, int mouse, int x, int y);

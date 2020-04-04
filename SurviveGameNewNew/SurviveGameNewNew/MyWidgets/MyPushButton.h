@@ -12,11 +12,12 @@ public:
 
 	bool mouseEvent(int type, int mouse, int x, int y) override;
 
-	void _onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b) override;
+	void _onRender(LPD3DXSPRITE g_pSprite) override;
 
 	LPD3DXFONT g_pFont = nullptr;
-	D3DXCOLOR textColor = D3DCOLOR_XRGB(0, 0, 0);
+	D3DCOLOR textColor = D3DCOLOR_XRGB(0, 0, 0);
 	std::wstring text = TEXT("");
+	
 
 	void (*signalPress)(int) = nullptr, (*signalRelease)(int) = nullptr;
 };

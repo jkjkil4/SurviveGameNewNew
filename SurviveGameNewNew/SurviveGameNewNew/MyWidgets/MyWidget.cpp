@@ -82,9 +82,9 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b) {
 		if(w->isVisible())
 			w->onRender(g_pSprite, a, r, g, b);
 	}
-	_onRender(g_pSprite, a, r, g, b);
+	_onRender(g_pSprite);
 }
-void MyWidget::_onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b){}
+void MyWidget::_onRender(LPD3DXSPRITE g_pSprite){}
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
