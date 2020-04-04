@@ -15,7 +15,7 @@ public:
 	void _onRender(LPD3DXSPRITE g_pSprite) override;
 
 	LPD3DXFONT g_pFont = nullptr;
-	D3DCOLOR textColor = D3DCOLOR_XRGB(0, 0, 0);
+	D3DCOLOR textColor1 = D3DCOLOR_XRGB(255, 255, 255), textColor2 = D3DCOLOR_XRGB(255, 255, 0);
 	std::wstring text = TEXT("");
 	
 

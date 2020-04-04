@@ -3,11 +3,10 @@
 
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
-#include "../MyWidgets/MyPushButton.h"
 
 /*
 	需要释放的对象
-	g_pFont
+	无
 */
 class MyRoom_game : public MyRoom
 {
@@ -31,8 +30,6 @@ public:
 	int blockCount = 160000;	//方块数量
 
 	MyPlayer player;
-
-	LPD3DXFONT g_pFont = nullptr;
 
 	bool visibleFlag = false;
 

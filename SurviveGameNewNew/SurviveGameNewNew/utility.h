@@ -14,10 +14,12 @@
 #pragma comment(lib,"d3dx9.lib")
 
 //-------SAFE_DELETE_----------
-template<typename T>inline void safeDelete(T*& p) 
-{   if (p) { delete p; p = nullptr; }   }
-template<typename T>inline void safeRelease(T*& p) 
-{   if (p) { p->Release(); p = nullptr; }   }
+template<typename T>inline void safeDelete(T*& p) {
+    if (p) { delete p; p = nullptr; }
+}
+template<typename T>inline void safeRelease(T*& p) {
+    if (p) { p->Release(); p = nullptr; }
+}
 
 //------D3D相关操作----
 #include <string>
@@ -51,5 +53,15 @@ inline RECT rect(int x, int y, int w, int h) {
     return rect;
 }
 
+//------计算-------
+template<typename T>inline T myMax(T a, T b) {
+    return a > b ? a : b;
+}
+template<typename T>inline T myMin(T a, T b) {
+    return a > b ? b : a;
+}
+template<typename T>inline T myBound(T min, T value, T max) {
+    return myMin(myMax(value, min), max);
+}
 
 #endif //_UTILITY_H

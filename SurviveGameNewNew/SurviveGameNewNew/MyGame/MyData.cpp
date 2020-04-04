@@ -17,8 +17,10 @@ void readLinesToTexture(string path, string file, LPDIRECT3DDEVICE9 g_pDevice, v
 	}
 }
 
+
+
 void MyBlockTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
-	readLinesToTexture(path + "\\blocks", "blocks.info", g_pDevice, &vec_textures);
+	readLinesToTexture(path, "blocks.info", g_pDevice, &vec_textures);
 }
 void MyBlockTexture::onDestroy() {
 	for (auto it = vec_textures.begin(); it < vec_textures.end(); it++)
@@ -29,16 +31,32 @@ LPDIRECT3DTEXTURE9 MyBlockTexture::texture(int id) {
 	return (index >= 0 && index < (int)vec_textures.size()) ? vec_textures[index] : nullptr;
 }
 
+
+
 void MyPlayerTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
-	myCreateTexture(g_pDevice, path + "\\player\\player.png", 24, 40, nullptr, &g_pPlayer);
+	myCreateTexture(g_pDevice, path + "\\player.png", 24, 40, nullptr, &g_pPlayer);
 }
 void MyPlayerTexture::onDestroy() {
 	safeRelease(g_pPlayer);
 }
 
+
+
+void MyGuiTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
+	myCreateTexture(g_pDevice, path + "\\btnSmall.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnSmall.info, &btnSmall.g_pTexture);
+	myCreateTexture(g_pDevice, path + "\\btnBig.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnBig.info, &btnBig.g_pTexture);
+}
+void MyGuiTexture::onDestroy() {
+	safeRelease(btnSmall.g_pTexture);
+	safeRelease(btnBig.g_pTexture);
+}
+
+
+
 void MyData::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
-	blockTexture.onInit(path, g_pDevice);
-	playerTexture.onInit(path, g_pDevice);
+	blockTexture.onInit(path + "\\blocks", g_pDevice);
+	playerTexture.onInit(path + "\\player", g_pDevice);
+	guiTexture.onInit(path + "\\gui", g_pDevice);
 	myCreateTexture(g_pDevice, path + "\\2.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test1.info, &test1.g_pTexture);
 	myCreateTexture(g_pDevice, path + "\\3.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test2.info, &test2.g_pTexture);
 }

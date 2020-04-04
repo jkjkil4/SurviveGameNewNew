@@ -24,6 +24,8 @@ bool MyPushButton::mouseEvent(int type, int mouse, int x, int y) {
 }
 
 void MyPushButton::_onRender(LPD3DXSPRITE g_pSprite) {
-	g_pFont->DrawText(g_pSprite, text.c_str(), -1, &rect(wndX, wndY, w, h), DT_CENTER | DT_VCENTER, textColor);
+	int localX = e->mouseX - wndX, localY = e->mouseY - wndY;
+	bool flag = (localX >= 0 && localY >= 0 && localX <= w && localY <= h);
+	g_pFont->DrawText(g_pSprite, text.c_str(), -1, &rect(wndX, wndY, w, h), DT_CENTER | DT_VCENTER, 
+		flag ? textColor2 : textColor1);
 }
-

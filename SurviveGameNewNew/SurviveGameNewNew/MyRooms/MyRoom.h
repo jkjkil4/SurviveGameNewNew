@@ -3,6 +3,7 @@
 
 #include "../MyEngine.h"
 #include "../MyWidgets/MyWidget.h"
+#include "../MyWidgets/MyPushButton.h"
 
 class MyRoom
 {

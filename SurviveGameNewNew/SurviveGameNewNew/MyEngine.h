@@ -7,7 +7,9 @@
 	需要释放的对象：
 	g_pD3D, g_pDevice, 
 	g_pSprite, g_pSpriteRender,
-	g_pRenderTexture, g_pRenderSurface, g_pWindowSurface
+	g_pRenderTexture, g_pRenderSurface, g_pWindowSurface,
+
+	g_pFont
 */
 class MyEngine
 {
@@ -43,15 +45,21 @@ public:
 	IDirect3DTexture9* g_pRenderTexture = nullptr;
 	IDirect3DSurface9* g_pRenderSurface = nullptr;
 	IDirect3DSurface9* g_pWindowSurface = nullptr;
+
 	//处理
 	void onKeyCheck();
+
 	//贴图
 	MyData data;
+	//清空时的颜色
+	D3DCOLOR clearColor = D3DCOLOR_XRGB(102, 204, 255);
+
 	//一些东西
 	int doneTime = 0, resizeTime = timeGetTime();
 	bool isInited = false;
 	bool hasFocus = true;
 	void (*signalScaled)() = nullptr;
+
 	//按键检测
 	bool keyFlag(int num);
 	void setKeyFlag(int num, bool flag);
@@ -63,9 +71,13 @@ public:
 	bool key[123];
 	bool keyPressed[123];
 	bool keyReleased[123];
+
 	//鼠标位置
 	int mouseX = -1;
 	int mouseY = -1;
+
+	//字体
+	LPD3DXFONT g_pFont = nullptr;
 
 	//pointer
 	int* fps = nullptr;

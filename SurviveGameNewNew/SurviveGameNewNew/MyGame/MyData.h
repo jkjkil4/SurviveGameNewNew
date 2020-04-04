@@ -42,6 +42,23 @@ public:
 	LPDIRECT3DTEXTURE9 g_pPlayer;
 };
 
+/*
+	需要释放的对象：
+	btnSmall -> g_pTexture
+	btnBig -> g_pTexture
+*/
+class MyGuiTexture
+{
+public:
+	void onInit(std::string path, LPDIRECT3DDEVICE9 g_pDevice);
+
+	void onDestroy();
+
+	MyTexture btnSmall;
+	MyTexture btnBig;
+};
+
+
 class MyData {
 public:
 	void onInit(std::string path, LPDIRECT3DDEVICE9 g_pDevice);
@@ -50,6 +67,7 @@ public:
 
 	MyBlockTexture blockTexture;
 	MyPlayerTexture playerTexture;
+	MyGuiTexture guiTexture;
 
 	//test
 	MyTexture test1, test2;

@@ -56,6 +56,7 @@ void mainLoop() {
 			timeEndPeriod(1);
 		}
 	}
+	currentRoom->onDestroy();
 	safeDelete(currentRoom);
 	needQuit = false;
 }
@@ -110,7 +111,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	if (g_hWnd) {
 		e.g_hInstance = hInstance;
 		e.onInit();
-		changeRoom(new MyRoom_game(&e));
+		changeRoom(new MyRoom_title(&e));
 		e.isInited = true;
 		UpdateWindow(g_hWnd);
 	}
@@ -123,12 +124,12 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 	while (true) {
+		if (msg.message == WM_QUIT)
+			break;
 		if (GetMessage(&msg, NULL, 0, 0)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		if (msg.message == WM_QUIT)
-			break;
 	}
 	needQuit = true;
 	while (needQuit)

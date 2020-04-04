@@ -56,6 +56,9 @@ void MyEngine::onInit() {
 	g_pDevice->GetRenderTarget(0, &g_pWindowSurface);
 	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
 
+	//初始化字体
+	D3DXCreateFont(g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
+
 	//其他操作
 	data.onInit("data\\texture", g_pDevice);
 	doneTime = timeGetTime();
@@ -78,7 +81,7 @@ void MyEngine::onKeyCheck() {
 }
 void MyEngine::renderStart() {
 	//填充
-	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_XRGB(102, 204, 255), 1.0f, 0);
+	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, clearColor, 1.0f, 0);
 	//开始绘制
 	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
@@ -104,6 +107,7 @@ void MyEngine::onDestroy() {
 	safeRelease(g_pRenderTexture);
 	safeRelease(g_pRenderSurface);
 	safeRelease(g_pWindowSurface);
+	safeRelease(g_pFont);
 	//销毁
 	for (auto it = vec_keyBuffer.begin(); it < vec_keyBuffer.end(); it++)
 		delete(*it);

@@ -4,19 +4,19 @@
 class MyRoom_title : public MyRoom
 {
 public:
-	MyRoom_title(MyKey* key, MyMouse* mouse, MyVaribles* vars, MyData* data)
-	: MyRoom(key, mouse, vars, data)
-	{
-		onInit();
-	}
+	MyRoom_title(MyEngine* e);
+	~MyRoom_title() override;
 
-	void onInit();
-	int onLogic() override;
-	int onRender() override;
-	void onDestroy() override;
+	void _onLogic() override;
+	void _onRender() override;
+	void _onDebug() override;
+	void _onDestroy() override;
 
-	INT t = 0;
+	void _btnSiglePressed(int mouse);
+	void _btnMultiPressed(int mouse);
+	void _btnSettingsPressed(int mouse);
+	void _btnExitPressed(int mouse);
 
-	LPD3DXFONT g_pFont = nullptr;	//×ÖÌå¶ÔÏó
+	MyEngine* e = nullptr;
 };
 

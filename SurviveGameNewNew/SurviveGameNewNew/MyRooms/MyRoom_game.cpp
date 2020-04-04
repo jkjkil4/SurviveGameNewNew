@@ -3,8 +3,6 @@
 using namespace std;
 
 MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
-	//初始化字体
-	D3DXCreateFont(e->g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
 	//其他操作
 	this->roomWidth = roomWidth;
 	this->roomHeight = roomHeight;
@@ -111,10 +109,9 @@ void MyRoom_game::_onDebug() {
 		+ "\n玩家横向速度限制(可以按W来增加，按S来降低): " + to_string(player.xSpdMax)
 		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
 	wstring wstr = stringToWstring(str);
-	g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, 0, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
+	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, 0, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
 }
 
 void MyRoom_game::_onDestroy() {
-	safeRelease(g_pFont);
 	delete[] blocks;
 }
