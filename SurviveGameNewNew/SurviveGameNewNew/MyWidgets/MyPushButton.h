@@ -10,7 +10,7 @@ public:
 		void (*signalPress)(int) = nullptr, void (*signalRelease)(int) = nullptr, MyWidget* parent = nullptr);
 	~MyPushButton() override;
 
-	bool mouseEvent(int type, int mouse, int x, int y) override;
+	void _mouseEvent(int type, int mouse, int x, int y) override;
 
 	void _onRender(LPD3DXSPRITE g_pSprite) override;
 

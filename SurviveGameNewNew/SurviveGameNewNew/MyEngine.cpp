@@ -58,6 +58,7 @@ void MyEngine::onInit() {
 
 	//初始化字体
 	D3DXCreateFont(g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
+	D3DXCreateFont(g_pDevice, 12, 6, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontSmall);
 
 	//其他操作
 	data.onInit("data\\texture", g_pDevice);
@@ -178,6 +179,11 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		setKeyFlag(keyNum, true);
 		MyKey* key = new MyKey{ true, keyNum };
 		vec_keyBuffer.push_back(key);
+		break;
+	}
+	case WM_CHAR: {
+		TCHAR code = wParam;
+		OutputDebugString((code + stringToWstring("\n")).c_str());
 		break;
 	}
 	case WM_CLOSE:

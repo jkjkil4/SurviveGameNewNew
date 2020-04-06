@@ -68,8 +68,8 @@ void MyWidget::updatePos(int alignW, int alignH) {
 }
 
 bool MyWidget::isVisible() {
-	if (visible)
-		return *visible;
+	if (pVisible)
+		return visible == *pVisible;
 	return true;
 }
 
@@ -93,7 +93,7 @@ void MyWidget::onDestroy() {
 	}
 }
 
-bool MyWidget::mouseEvent(int type, int mouse, int x, int y) {
+void MyWidget::mouseEvent(int type, int mouse, int x, int y) {
 	if (childs.size() > 0) {
 		for (auto it = childs.rbegin(); it < childs.rend(); it++) {
 			MyWidget* child = *it;
@@ -102,11 +102,11 @@ bool MyWidget::mouseEvent(int type, int mouse, int x, int y) {
 			int localX = x - child->realX;
 			int localY = y - child->realY;
 			if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
-				if (child->mouseEvent(type, mouse, localX, localY))
-					return true;
-				return false;
+				child->mouseEvent(type, mouse, localX, localY);
+				return;
 			}
 		}
 	}
-	return true;
+	_mouseEvent(type, mouse, x, y);
 }
+void MyWidget::_mouseEvent(int type, int mouse, int x, int y) {}

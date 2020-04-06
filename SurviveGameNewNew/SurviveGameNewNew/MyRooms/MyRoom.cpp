@@ -8,6 +8,7 @@ MyRoom::~MyRoom(){}
 void MyRoom::onLogic() {
 	//¿Ø¼þÊÂ¼þ
 	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
+	bool flag = false;
 	for (int i = 0; i < 3; i++) {
 		int mouse = mouseArray[i];
 		if (e->keyPressFlag(mouse)) {
@@ -18,8 +19,8 @@ void MyRoom::onLogic() {
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					if (w->mouseEvent(MouseFlags::Press, mouse, localX, localY))
-						e->setKeyPressFlag(mouse, false);
+					w->mouseEvent(MouseFlags::Press, mouse, localX, localY);
+					e->setKeyPressFlag(mouse, false);
 					break;
 				}
 			}
@@ -32,8 +33,8 @@ void MyRoom::onLogic() {
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					if (w->mouseEvent(MouseFlags::Release, mouse, localX, localY))
-						e->setKeyReleaseFlag(mouse, false);
+					w->mouseEvent(MouseFlags::Release, mouse, localX, localY);
+					e->setKeyReleaseFlag(mouse, false);
 					break;
 				}
 			}

@@ -78,6 +78,7 @@ public:
 
 	//×ÖÌå
 	LPD3DXFONT g_pFont = nullptr;
+	LPD3DXFONT g_pFontSmall = nullptr;
 
 	//pointer
 	int* fps = nullptr;

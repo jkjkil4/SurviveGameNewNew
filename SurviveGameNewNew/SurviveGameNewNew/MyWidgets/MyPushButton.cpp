@@ -13,14 +13,13 @@ MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE
 
 MyPushButton::~MyPushButton(){}
 
-bool MyPushButton::mouseEvent(int type, int mouse, int x, int y) {
+void MyPushButton::_mouseEvent(int type, int mouse, int x, int y) {
 	if (type == MouseFlags::Press && signalPress) {
 		signalPress(mouse);
 	}
 	else if (type == MouseFlags::Release && signalRelease) {
 		signalRelease(mouse);
 	}
-	return true;
 }
 
 void MyPushButton::_onRender(LPD3DXSPRITE g_pSprite) {

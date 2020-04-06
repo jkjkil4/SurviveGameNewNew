@@ -1,4 +1,5 @@
-﻿#include "utility.h"
+﻿
+#include "utility.h"
 #include "MyEngine.h"
 #include "MyRooms/include_rooms.h"
 
@@ -56,8 +57,10 @@ void mainLoop() {
 			timeEndPeriod(1);
 		}
 	}
-	currentRoom->onDestroy();
-	safeDelete(currentRoom);
+	if (currentRoom) {
+		currentRoom->onDestroy();
+		safeDelete(currentRoom);
+	}
 	needQuit = false;
 }
 

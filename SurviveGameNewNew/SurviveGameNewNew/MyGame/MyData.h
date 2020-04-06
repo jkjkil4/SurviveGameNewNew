@@ -44,8 +44,12 @@ public:
 
 /*
 	需要释放的对象：
+	btnVerySmall -> g_pTexture
 	btnSmall -> g_pTexture
+	btnMedium -> g_pTexture
 	btnBig -> g_pTexture
+
+	guiSaveSelect
 */
 class MyGuiTexture
 {
@@ -54,8 +58,12 @@ public:
 
 	void onDestroy();
 
+	MyTexture btnVerySmall;
 	MyTexture btnSmall;
+	MyTexture btnMedium;
 	MyTexture btnBig;
+
+	MyTexture guiSaveSelect;
 };
 
 
@@ -69,8 +77,6 @@ public:
 	MyPlayerTexture playerTexture;
 	MyGuiTexture guiTexture;
 
-	//test
-	MyTexture test1, test2;
 };
 
 #endif

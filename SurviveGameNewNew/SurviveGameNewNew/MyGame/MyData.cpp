@@ -43,12 +43,20 @@ void MyPlayerTexture::onDestroy() {
 
 
 void MyGuiTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
+	//按钮
+	myCreateTexture(g_pDevice, path + "\\btnVerySmall.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnVerySmall.info, &btnVerySmall.g_pTexture);
 	myCreateTexture(g_pDevice, path + "\\btnSmall.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnSmall.info, &btnSmall.g_pTexture);
+	myCreateTexture(g_pDevice, path + "\\btnMedium.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnMedium.info, &btnMedium.g_pTexture);
 	myCreateTexture(g_pDevice, path + "\\btnBig.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnBig.info, &btnBig.g_pTexture);
+	//存档选择界面
+	myCreateTexture(g_pDevice, path + "\\guiSaveSelect.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &guiSaveSelect.info, &guiSaveSelect.g_pTexture);
 }
 void MyGuiTexture::onDestroy() {
+	safeRelease(btnVerySmall.g_pTexture);
 	safeRelease(btnSmall.g_pTexture);
+	safeRelease(btnMedium.g_pTexture);
 	safeRelease(btnBig.g_pTexture);
+	safeRelease(guiSaveSelect.g_pTexture);
 }
 
 
@@ -57,11 +65,9 @@ void MyData::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
 	blockTexture.onInit(path + "\\blocks", g_pDevice);
 	playerTexture.onInit(path + "\\player", g_pDevice);
 	guiTexture.onInit(path + "\\gui", g_pDevice);
-	myCreateTexture(g_pDevice, path + "\\2.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test1.info, &test1.g_pTexture);
-	myCreateTexture(g_pDevice, path + "\\3.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &test2.info, &test2.g_pTexture);
 }
 void MyData::onDestroy() {
 	blockTexture.onDestroy();
 	playerTexture.onDestroy();
-	safeRelease(test1.g_pTexture);
+	guiTexture.onDestroy();
 }

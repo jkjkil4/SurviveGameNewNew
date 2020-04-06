@@ -24,7 +24,8 @@ public:
 	virtual void _onRender(LPD3DXSPRITE g_pSprite);
 	void onDestroy();
 
-	virtual bool mouseEvent(int type, int mouse, int x, int y);
+	void mouseEvent(int type, int mouse, int x, int y);
+	virtual void _mouseEvent(int type, int mouse, int x, int y);
 
 	//-----------------------------------------------
 	MyEngine* e = nullptr;
@@ -42,7 +43,8 @@ public:
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 	D3DXIMAGE_INFO* pTextureInfo;
 	//是否可见
-	bool* visible = nullptr;
+	int* pVisible = nullptr;
+	int visible = 0;
 	//子控件
 	std::vector<MyWidget*> childs;
 };
