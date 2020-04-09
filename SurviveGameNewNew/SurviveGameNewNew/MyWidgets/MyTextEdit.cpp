@@ -18,5 +18,23 @@ inline void MyTextEdit::_mouseEvent(MyMouseEvent ev) {
 }
 
 inline void MyTextEdit::_keyboardEvent(wstring wstr) {
-	text += wstr;
+	wstring result = TEXT("");
+	for (int i = 0; i < (int)wstr.length(); i++) {
+		WCHAR ch = wstr[i];
+		if (ch < 0x0021) {	//³ýÈ¥¿ØÖÆ×Ö·û
+			if (ch == 0x0008) {	//ÍË¸ñ¼ü
+				if (i == 0) {
+					if (text.length() != 0)
+						text.pop_back();
+				}
+				else {
+					if (result.length() != 0)
+						result.pop_back();
+				}
+			}
+			continue;
+		}
+		result += ch;
+	}
+	text += result;
 }

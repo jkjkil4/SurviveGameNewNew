@@ -182,8 +182,6 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	}
 	case WM_CHAR: {
-		if (wParam == 0x08)
-			break;
 		WCHAR inputWChar = wParam;
 		inputWString += inputWChar;
 		break;
