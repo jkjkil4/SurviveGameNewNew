@@ -4,6 +4,7 @@
 #include "../MyEngine.h"
 #include "../MyWidgets/MyWidget.h"
 #include "../MyWidgets/MyPushButton.h"
+#include "../MyWidgets/MyTextEdit.h"
 
 class MyRoom
 {
@@ -24,6 +25,8 @@ public:
 	MyEngine* e = nullptr;
 
 	std::vector<MyWidget*> widgets;
+
+	MyWidget* focusWidget = nullptr;
 };
 
 #endif //_MYROOM_H

@@ -47,7 +47,7 @@ void MyEngine::onInit() {
 
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
-		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 2,
+		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
 		D3DUSAGE_RENDERTARGET, D3DFMT_R5G6B5, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL
 		);
 	//得到纹理的Surface
@@ -182,8 +182,10 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	}
 	case WM_CHAR: {
-		TCHAR code = wParam;
-		OutputDebugString((code + stringToWstring("\n")).c_str());
+		if (wParam == 0x08)
+			break;
+		WCHAR inputWChar = wParam;
+		inputWString += inputWChar;
 		break;
 	}
 	case WM_CLOSE:

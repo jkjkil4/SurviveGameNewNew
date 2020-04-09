@@ -1,5 +1,7 @@
 #include "MyWidget.h"
 
+using namespace std;
+
 MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget* parent) {
 	this->e = e;
 	this->parent = parent;
@@ -84,7 +86,7 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b) {
 	}
 	_onRender(g_pSprite);
 }
-void MyWidget::_onRender(LPD3DXSPRITE g_pSprite){}
+inline void MyWidget::_onRender(LPD3DXSPRITE g_pSprite){}
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
@@ -93,20 +95,26 @@ void MyWidget::onDestroy() {
 	}
 }
 
-void MyWidget::mouseEvent(int type, int mouse, int x, int y) {
+void MyWidget::mouseEvent(MyMouseEvent ev) {
 	if (childs.size() > 0) {
 		for (auto it = childs.rbegin(); it < childs.rend(); it++) {
 			MyWidget* child = *it;
 			if (!child->isVisible())
 				continue;
-			int localX = x - child->realX;
-			int localY = y - child->realY;
+			int localX = ev.x - child->realX;
+			int localY = ev.y - child->realY;
 			if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
-				child->mouseEvent(type, mouse, localX, localY);
+				child->mouseEvent(MyMouseEvent(ev.type, ev.mouse, localX, localY, ev.focusWidget));
 				return;
 			}
 		}
 	}
-	_mouseEvent(type, mouse, x, y);
+	*ev.focusWidget = this;
+	_mouseEvent(ev);
 }
-void MyWidget::_mouseEvent(int type, int mouse, int x, int y) {}
+inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}
+
+void MyWidget::keyboardEvent(wstring wstr) {
+	_keyboardEvent(wstr);
+}
+inline void MyWidget::_keyboardEvent(wstring wstr) {}

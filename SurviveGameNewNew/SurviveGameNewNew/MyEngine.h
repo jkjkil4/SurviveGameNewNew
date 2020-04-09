@@ -76,6 +76,9 @@ public:
 	int mouseX = -1;
 	int mouseY = -1;
 
+	//ÊäÈëµÄ×Ö·û
+	std::wstring inputWString = TEXT("");
+
 	//×ÖÌå
 	LPD3DXFONT g_pFont = nullptr;
 	LPD3DXFONT g_pFontSmall = nullptr;

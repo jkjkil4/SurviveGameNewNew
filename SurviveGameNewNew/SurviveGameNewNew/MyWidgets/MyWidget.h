@@ -7,6 +7,25 @@
 #include "../MyEngine.h"
 #include "../MyNameSpace.h"
 
+class MyWidget;
+
+class MyMouseEvent
+{
+public:
+	explicit MyMouseEvent(int type, int mouse, int x, int y, MyWidget** focusWidget) {
+		this->type = type;
+		this->mouse = mouse;
+		this->x = x;
+		this->y = y;
+		this->focusWidget = focusWidget;
+	}
+	int type = 0;
+	int mouse = 0;
+	int x = 0;
+	int y = 0;
+	MyWidget** focusWidget = nullptr;
+};
+
 class MyWidget
 {
 public:
@@ -21,11 +40,14 @@ public:
 	bool isVisible();
 
 	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
-	virtual void _onRender(LPD3DXSPRITE g_pSprite);
+	virtual inline void _onRender(LPD3DXSPRITE g_pSprite);
 	void onDestroy();
 
-	void mouseEvent(int type, int mouse, int x, int y);
-	virtual void _mouseEvent(int type, int mouse, int x, int y);
+	void mouseEvent(MyMouseEvent ev);
+	virtual inline void _mouseEvent(MyMouseEvent ev);
+
+	void keyboardEvent(std::wstring wstr);
+	virtual inline void _keyboardEvent(std::wstring wstr);
 
 	//-----------------------------------------------
 	MyEngine* e = nullptr;

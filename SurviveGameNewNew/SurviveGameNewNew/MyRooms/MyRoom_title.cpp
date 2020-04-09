@@ -4,42 +4,42 @@ using namespace std;
 
 MyRoom_title* slotWidget = nullptr;
 
-void btnSiglePressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSiglePressed(mouse);
+void btnSiglePressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSiglePressed(ev);
 }
-void btnMultiPressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnMultiPressed(mouse);
+void btnMultiPressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnMultiPressed(ev);
 }
-void btnSettingsPressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSettingsPressed(mouse);
+void btnSettingsPressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSettingsPressed(ev);
 }
-void btnExitPressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnExitPressed(mouse);
+void btnExitPressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnExitPressed(ev);
 }
 
-void btnSigleJoinPressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSigleJoinPressed(mouse);
+void btnSigleJoinPressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSigleJoinPressed(ev);
 }
-void btnSigleRenamePressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSigleRenamePressed(mouse);
+void btnSigleRenamePressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSigleRenamePressed(ev);
 }
-void btnSigleDeletePressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSigleDeletePressed(mouse);
+void btnSigleDeletePressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSigleDeletePressed(ev);
 }
-void btnSigleCreatePressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSigleCreatePressed(mouse);
+void btnSigleCreatePressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSigleCreatePressed(ev);
 }
-void btnSigleBackPressed(int mouse) {
-	if (slotWidget)
-		slotWidget->_btnSigleBackPressed(mouse);
+void btnSigleBackPressed(MyMouseEvent ev) {
+	if (slotWidget && ev.type == MouseFlags::Press)
+		slotWidget->_btnSigleBackPressed(ev);
 }
 
 MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
@@ -52,7 +52,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 	MyTexture* textureBtnMedium = &guiTexture->btnMedium;
 	MyTexture* textureBtnBig = &guiTexture->btnBig;
 	MyTexture* textureSaveSelect = &guiTexture->guiSaveSelect;
-
+	
 	//标题界面
 	{
 		int offY = 40;
@@ -121,6 +121,8 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnSigleBack->setAlign(AlignFlags::Left | AlignFlags::Bottom);
 		btnSigleBack->move(5, 5);
 		btnSigleBack->text = stringToWstring("返回");
+
+		MyTextEdit* textEdit = new MyTextEdit(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont, widgetSaveSelect);
 	}
 
 }
@@ -137,52 +139,52 @@ void MyRoom_title::_onDebug() {
 }
 
 void MyRoom_title::_onDestroy() {
-
+	
 }
 
-void MyRoom_title::_btnSiglePressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSiglePressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		visibleFlags = 1;
 	}
 }
-void MyRoom_title::_btnMultiPressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnMultiPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		//visibleFlags = 2;
 	}
 }
-void MyRoom_title::_btnSettingsPressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSettingsPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		//visibleFlags = 3;
 	}
 }
-void MyRoom_title::_btnExitPressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnExitPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		SendMessage(e->g_hWnd, WM_CLOSE, 0, 0);
 	}
 }
 
-void MyRoom_title::_btnSigleJoinPressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSigleJoinPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		
 	}
 }
-void MyRoom_title::_btnSigleRenamePressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSigleRenamePressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 
 	}
 }
-void MyRoom_title::_btnSigleDeletePressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSigleDeletePressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 
 	}
 }
-void MyRoom_title::_btnSigleCreatePressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
-
+void MyRoom_title::_btnSigleCreatePressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
+		
 	}
 }
-void MyRoom_title::_btnSigleBackPressed(int mouse) {
-	if (mouse == VK_LBUTTON) {
+void MyRoom_title::_btnSigleBackPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
 		visibleFlags = 0;
 	}
 }

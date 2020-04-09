@@ -1,17 +1,25 @@
 #include "MyRoom.h"
 
+using namespace std;
+
 MyRoom::MyRoom(MyEngine* e) {
 	this->e = e;
 }
 MyRoom::~MyRoom(){}
 
 void MyRoom::onLogic() {
+	//响应输入字符
+	wstring wstr = e->inputWString;
+	e->inputWString = TEXT("");
+	if (focusWidget && wstr != TEXT("")) {
+		focusWidget->keyboardEvent(wstr);
+	}
 	//控件事件
 	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
-	bool flag = false;
 	for (int i = 0; i < 3; i++) {
 		int mouse = mouseArray[i];
 		if (e->keyPressFlag(mouse)) {
+			bool flag = false;
 			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 				MyWidget* w = *it;
 				if (!w->isVisible())
@@ -19,13 +27,17 @@ void MyRoom::onLogic() {
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MouseFlags::Press, mouse, localX, localY);
+					w->mouseEvent(MyMouseEvent(MouseFlags::Press, mouse, localX, localY, &focusWidget));
 					e->setKeyPressFlag(mouse, false);
+					flag = true;
 					break;
 				}
 			}
+			if (!flag)
+				focusWidget = nullptr;
 		}
 		if (e->keyReleaseFlag(mouse)) {
+			bool flag = false;
 			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 				MyWidget* w = *it;
 				if (!w->isVisible())
@@ -33,13 +45,17 @@ void MyRoom::onLogic() {
 				int localX = e->mouseX - w->realX;
 				int localY = e->mouseY - w->realY;
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MouseFlags::Release, mouse, localX, localY);
+					w->mouseEvent(MyMouseEvent(MouseFlags::Release, mouse, localX, localY, &focusWidget));
 					e->setKeyReleaseFlag(mouse, false);
+					flag = true;
 					break;
 				}
 			}
+			if (!flag)
+				focusWidget = nullptr;
 		}
 	}
+
 	//继承类中的逻辑处理
 	_onLogic();
 }

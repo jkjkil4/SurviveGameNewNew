@@ -43,6 +43,7 @@ std::wstring stringToWstring(std::string orig);
 void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files);
 
 //------别的东西-------
+#define MyMsgBox(str) MessageBox(nullptr, stringToWstring(str).c_str(), TEXT("1"), MB_OK)
 #define cDebug(str) OutputDebugString( stringToWstring(str).c_str() )
 inline RECT rect(int x, int y, int w, int h) {
     RECT rect;

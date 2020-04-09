@@ -12,28 +12,27 @@ public:
 	void _onDebug() override;
 	void _onDestroy() override;
 
-	void _btnSiglePressed(int mouse);
-	void _btnMultiPressed(int mouse);
-	void _btnSettingsPressed(int mouse);
-	void _btnExitPressed(int mouse);
+	void _btnSiglePressed(MyMouseEvent ev);
+	void _btnMultiPressed(MyMouseEvent ev);
+	void _btnSettingsPressed(MyMouseEvent ev);
+	void _btnExitPressed(MyMouseEvent ev);
 
-	void _btnSigleJoinPressed(int mouse);
-	void _btnSigleRenamePressed(int mouse);
-	void _btnSigleDeletePressed(int mouse);
-	void _btnSigleCreatePressed(int mouse);
-	void _btnSigleBackPressed(int mouse);
+	void _btnSigleJoinPressed(MyMouseEvent ev);
+	void _btnSigleRenamePressed(MyMouseEvent ev);
+	void _btnSigleDeletePressed(MyMouseEvent ev);
+	void _btnSigleCreatePressed(MyMouseEvent ev);
+	void _btnSigleBackPressed(MyMouseEvent ev);
 
 	MyEngine* e = nullptr;
 
 	/*
 		0 -> 标题界面
-
 		1 -> 存档选择界面
-
+			4 -> 新建存档界面
 		2 -> 多人游戏界面
-
 		3 -> 设置界面
 	*/
 	int visibleFlags = 0;
+
 };
 
