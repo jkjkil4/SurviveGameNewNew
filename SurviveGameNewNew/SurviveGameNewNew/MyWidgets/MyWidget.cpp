@@ -116,7 +116,12 @@ void MyWidget::mouseEvent(MyMouseEvent ev) {
 }
 inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}
 
-void MyWidget::keyboardEvent(wstring wstr) {
-	_keyboardEvent(wstr);
+void MyWidget::charEvent(wstring wstr) {
+	_charEvent(wstr);
 }
-inline void MyWidget::_keyboardEvent(wstring wstr) {}
+inline void MyWidget::_charEvent(wstring wstr) {}
+
+void MyWidget::keyboardEvent(int key) {
+	_keyboardEvent(key);
+}
+inline void MyWidget::_keyboardEvent(int key) {}

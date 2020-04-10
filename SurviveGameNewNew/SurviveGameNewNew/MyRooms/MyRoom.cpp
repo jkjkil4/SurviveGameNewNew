@@ -7,12 +7,23 @@ MyRoom::MyRoom(MyEngine* e) {
 }
 MyRoom::~MyRoom(){}
 
+void MyRoom::onBeforeKeyCheck() {
+	if (focusWidget) {
+		for (auto it = e->vec_keyBuffer.begin(); it < e->vec_keyBuffer.end(); it++) {
+			MyKey* key = *it;
+			if (key->flag) {	//按下按键
+				focusWidget->keyboardEvent(key->key);
+			}
+		}
+	}
+}
+
 void MyRoom::onLogic() {
 	//响应输入字符
 	wstring wstr = e->inputWString;
 	e->inputWString = TEXT("");
 	if (focusWidget && wstr != TEXT("")) {
-		focusWidget->keyboardEvent(wstr);
+		focusWidget->charEvent(wstr);
 	}
 	//控件事件
 	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};

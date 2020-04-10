@@ -12,6 +12,8 @@ public:
 	explicit MyRoom(MyEngine* e);
 	virtual ~MyRoom() = 0;
 	
+	void onBeforeKeyCheck();
+
 	void onLogic();
 	virtual void _onLogic() = 0;
 	void onRender();

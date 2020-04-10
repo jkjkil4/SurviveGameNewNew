@@ -46,8 +46,11 @@ public:
 	void mouseEvent(MyMouseEvent ev);
 	virtual inline void _mouseEvent(MyMouseEvent ev);
 
-	void keyboardEvent(std::wstring wstr);
-	virtual inline void _keyboardEvent(std::wstring wstr);
+	void charEvent(std::wstring wstr);
+	virtual inline void _charEvent(std::wstring wstr);
+
+	void keyboardEvent(int key);
+	virtual inline void _keyboardEvent(int key);
 
 	//-----------------------------------------------
 	MyEngine* e = nullptr;

@@ -3,6 +3,7 @@
 
 #include "utility.h"
 #include "MyGame/MyData.h"
+#include "MyNameSpace.h"
 /*
 	需要释放的对象：
 	g_pD3D, g_pDevice, 
@@ -13,12 +14,6 @@
 */
 class MyEngine
 {
-private:
-	struct MyKey {
-		bool flag;
-		int key;
-	};
-
 public:
 	explicit MyEngine(void (*signalScaled)(), int* fps);
 

@@ -71,6 +71,8 @@ void MyEngine::onKeyCheck() {
 	}
 	for (auto it = vec_keyBuffer.begin(); it < vec_keyBuffer.end(); it++) {
 		MyKey* key = *it;
+		if (key->isForWidget)
+			continue;
 		key->flag ? setKeyPressFlag(key->key, true) : setKeyReleaseFlag(key->key, true);
 	}
 	vec_keyBuffer.clear();
@@ -144,40 +146,39 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_LBUTTONDOWN:	//1
 		setKeyFlag(1, true);
-		vec_keyBuffer.push_back(new MyKey{ true, 1 });
+		vec_keyBuffer.push_back(new MyKey{ false, true, 1 });
 		break;
 	case WM_LBUTTONUP:
 		setKeyFlag(1, false);
-		vec_keyBuffer.push_back(new MyKey{ false, 1 });
+		vec_keyBuffer.push_back(new MyKey{ false, false, 1 });
 		break;
 	case WM_MBUTTONDOWN:	//4
 		setKeyFlag(4, true);
-		vec_keyBuffer.push_back(new MyKey{ true, 4 });
+		vec_keyBuffer.push_back(new MyKey{ false, true, 4 });
 		break;
 	case WM_MBUTTONUP:
 		setKeyFlag(4, false);
-		vec_keyBuffer.push_back(new MyKey{ false, 4 });
+		vec_keyBuffer.push_back(new MyKey{ false, false, 4 });
 		break;
 	case WM_RBUTTONDOWN:	//2
 		setKeyFlag(2, true);
-		vec_keyBuffer.push_back(new MyKey{ true, 2 });
+		vec_keyBuffer.push_back(new MyKey{ false, true, 2 });
 		break;
 	case WM_RBUTTONUP:
 		setKeyFlag(2, false);
-		vec_keyBuffer.push_back(new MyKey{ false, 2 });
+		vec_keyBuffer.push_back(new MyKey{ false, false, 2 });
 		break;
 	case WM_KEYUP:{
 		int keyNum = wParam;
 		setKeyFlag(keyNum, false);
-		vec_keyBuffer.push_back(new MyKey{ false, keyNum });
+		vec_keyBuffer.push_back(new MyKey{ false, false, keyNum });
 		break;
 	}
 	case WM_KEYDOWN:{
 		int keyNum = wParam;
 		if (keyFlag(keyNum))
-			break;
-		setKeyFlag(keyNum, true);
-		MyKey* key = new MyKey{ true, keyNum };
+			setKeyFlag(keyNum, true);
+		MyKey* key = new MyKey{ keyFlag(keyNum), true, keyNum };
 		vec_keyBuffer.push_back(key);
 		break;
 	}

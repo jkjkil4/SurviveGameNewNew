@@ -10,4 +10,10 @@ enum AlignFlags {
 
 enum MouseFlags { Press, Release };
 
+struct MyKey {
+	bool isForWidget;
+	bool flag;
+	int key;
+};
+
 #endif

@@ -30,6 +30,8 @@ void mainLoop() {
 		if (needQuit)
 			break;
 		int currentTime = timeGetTime();
+		if (currentRoom)
+			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
 			currentRoom->onLogic();
