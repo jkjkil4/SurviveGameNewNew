@@ -75,7 +75,7 @@ inline void MyTextEdit::_charEvent(wstring wstr) {
 			continue;
 		}
 		if (maxLength != -1)
-			if ((int)(text.length() + result.length()) > maxLength)
+			if ((int)(text.length() + result.length()) >= maxLength)
 				continue;
 		result += ch;
 	}
@@ -98,7 +98,7 @@ inline void MyTextEdit::_keyboardEvent(int key) {
 		index = myBound<int>(0, index, text.length());
 		break;
 	case VK_DELETE:
-		if (index < text.length())
+		if (index < (int)text.length())
 			text.erase(index, 1);
 		break;
 	}
