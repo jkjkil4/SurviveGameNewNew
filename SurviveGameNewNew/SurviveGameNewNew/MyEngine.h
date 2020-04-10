@@ -83,6 +83,9 @@ public:
 	LPD3DXFONT g_pFont = nullptr;
 	LPD3DXFONT g_pFontSmall = nullptr;
 
+	//»æÖÆ
+	void drawRect(int x, int y, int w, int h);
+
 	//pointer
 	int* fps = nullptr;
 };

@@ -235,3 +235,44 @@ void MyEngine::setKeyReleaseFlag(int num, bool flag) {
 		keyReleased[index] = flag;
 	}
 }
+
+void MyEngine::drawRect(int x, int y, int w, int h) {
+	g_pSprite->End();
+	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+	LPDIRECT3DVERTEXBUFFER9 vb;
+	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZ, D3DPOOL_MANAGED, &vb, nullptr);
+	LPDIRECT3DINDEXBUFFER9 ib;
+	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &ib, 0);
+
+	Vertex* vertexs;
+	vb->Lock(0, 0, (void**)&vertexs, 0);
+	
+	vertexs[0] = Vertex((float)x, (float)y, 0.0f);
+	vertexs[1] = Vertex((float)(x + w), (float)y, 0.0f);
+	vertexs[2] = Vertex((float)(x + w), (float)(y + h), 0.0f);
+	vertexs[3] = Vertex((float)x, (float)(y + h), 0.0f);
+
+	vb->Unlock();
+
+	WORD* index = nullptr;
+	ib->Lock(0, 0, (void**)&index, 0);
+	index[0] = 0;
+	index[1] = 1;
+	index[2] = 2;
+	
+	index[3] = 0;
+	index[4] = 2;
+	index[5] = 3;
+	ib->Unlock();
+	
+	g_pDevice->SetFVF(D3DFVF_XYZ);
+	g_pDevice->SetStreamSource(0, vb, 0, sizeof(Vertex));
+	g_pDevice->SetIndices(ib);
+
+	g_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+
+	vb->Release();
+	ib->Release();
+}

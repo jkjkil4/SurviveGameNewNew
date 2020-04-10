@@ -29,7 +29,7 @@ public:
 class MyWidget
 {
 public:
-	explicit MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget* parent = nullptr);
+	explicit MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
 	virtual ~MyWidget();
 
 	void move(int x, int y);
@@ -69,6 +69,8 @@ public:
 	int visible = 0;
 	//子控件
 	std::vector<MyWidget*> childs;
+	//焦点控件
+	MyWidget** focusWidget = nullptr;
 };
 
 #endif //_MYWIDGET_H

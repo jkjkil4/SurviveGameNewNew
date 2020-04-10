@@ -2,11 +2,12 @@
 
 using namespace std;
 
-MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget* parent) {
+MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget** focusWidget, MyWidget* parent) {
 	this->e = e;
 	this->parent = parent;
 	this->g_pTexture = g_pTexture;
 	this->pTextureInfo = pTextureInfo;
+	this->focusWidget = focusWidget;
 	w = pTextureInfo->Width;
 	h = pTextureInfo->Height;
 	if (parent) {
@@ -109,7 +110,8 @@ void MyWidget::mouseEvent(MyMouseEvent ev) {
 			}
 		}
 	}
-	*ev.focusWidget = this;
+	if (ev.mouse == VK_LBUTTON && ev.type == MouseFlags::Press)
+		*ev.focusWidget = this;
 	_mouseEvent(ev);
 }
 inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}

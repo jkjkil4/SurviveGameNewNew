@@ -29,7 +29,8 @@ void MyRoom::onLogic() {
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
 					w->mouseEvent(MyMouseEvent(MouseFlags::Press, mouse, localX, localY, &focusWidget));
 					e->setKeyPressFlag(mouse, false);
-					flag = true;
+					if (mouse == VK_LBUTTON)
+						flag = true;
 					break;
 				}
 			}
@@ -47,7 +48,8 @@ void MyRoom::onLogic() {
 				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
 					w->mouseEvent(MyMouseEvent(MouseFlags::Release, mouse, localX, localY, &focusWidget));
 					e->setKeyReleaseFlag(mouse, false);
-					flag = true;
+					if (mouse == VK_LBUTTON)
+						flag = true;
 					break;
 				}
 			}

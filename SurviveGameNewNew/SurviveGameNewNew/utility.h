@@ -23,6 +23,15 @@ template<typename T>inline void safeRelease(T*& p) {
 
 //------D3DÏà¹Ø²Ù×÷----
 #include <string>
+struct Vertex
+{
+    float x, y, z;
+    Vertex(float a, float b, float c) {
+        x = a;
+        y = b;
+        z = c;
+    }
+};
 void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT h, D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture);
 void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScale, float yScale, 
     float rotPosX = 0, float rotPosY = 0, float rot = 0);

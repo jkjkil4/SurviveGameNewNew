@@ -122,7 +122,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnSigleBack->move(5, 5);
 		btnSigleBack->text = stringToWstring("·µ»Ø");
 
-		MyTextEdit* textEdit = new MyTextEdit(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont, widgetSaveSelect);
+		MyTextEdit* textEdit = new MyTextEdit(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont, &focusWidget, widgetSaveSelect);
 	}
 
 }

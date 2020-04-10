@@ -4,7 +4,7 @@ using namespace std;
 
 MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, LPD3DXFONT g_pFont, 
 	void (*signalPress)(MyMouseEvent ev), void (*signalRelease)(MyMouseEvent ev), MyWidget* parent)
-	: MyWidget(e, g_pTexture, pTextureInfo, parent) 
+	: MyWidget(e, g_pTexture, pTextureInfo, nullptr, parent) 
 {
 	this->g_pFont = g_pFont;
 	this->signalPress = signalPress;
