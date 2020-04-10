@@ -237,23 +237,23 @@ void MyEngine::setKeyReleaseFlag(int num, bool flag) {
 	}
 }
 
-void MyEngine::drawRect(int x, int y, int w, int h) {
+void MyEngine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
 	g_pSprite->End();
 	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
 	LPDIRECT3DVERTEXBUFFER9 vb;
-	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZ, D3DPOOL_MANAGED, &vb, nullptr);
+	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &vb, nullptr);
 	LPDIRECT3DINDEXBUFFER9 ib;
 	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
-		D3DFMT_INDEX16, D3DPOOL_MANAGED, &ib, 0);
+		D3DFMT_INDEX16, D3DPOOL_DEFAULT, &ib, 0);
 
 	Vertex* vertexs;
 	vb->Lock(0, 0, (void**)&vertexs, 0);
 	
-	vertexs[0] = Vertex((float)x, (float)y, 0.0f);
-	vertexs[1] = Vertex((float)(x + w), (float)y, 0.0f);
-	vertexs[2] = Vertex((float)(x + w), (float)(y + h), 0.0f);
-	vertexs[3] = Vertex((float)x, (float)(y + h), 0.0f);
+	vertexs[0] = Vertex{(float)x, (float)y, 0.0f, 1.0f, col1};
+	vertexs[1] = Vertex{(float)(x + w), (float)y, 0.0f, 1.0f, col2};
+	vertexs[2] = Vertex{(float)(x + w), (float)(y + h), 0.0f, 1.0f, col3};
+	vertexs[3] = Vertex{(float)x, (float)(y + h), 0.0f, 1.0f, col4};
 
 	vb->Unlock();
 
@@ -268,7 +268,8 @@ void MyEngine::drawRect(int x, int y, int w, int h) {
 	index[5] = 3;
 	ib->Unlock();
 	
-	g_pDevice->SetFVF(D3DFVF_XYZ);
+	g_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
+	g_pDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
 	g_pDevice->SetStreamSource(0, vb, 0, sizeof(Vertex));
 	g_pDevice->SetIndices(ib);
 

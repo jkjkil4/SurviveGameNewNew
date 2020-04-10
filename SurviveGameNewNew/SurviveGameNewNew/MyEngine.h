@@ -79,7 +79,7 @@ public:
 	LPD3DXFONT g_pFontSmall = nullptr;
 
 	//»æÖÆ
-	void drawRect(int x, int y, int w, int h);
+	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
 
 	//pointer
 	int* fps = nullptr;

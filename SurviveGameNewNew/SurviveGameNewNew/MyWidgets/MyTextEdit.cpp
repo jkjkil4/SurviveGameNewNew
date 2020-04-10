@@ -31,9 +31,12 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 		focusTimer = 0;
 	}
 	if (this == *focusWidget && focusVisible) {
+		//得到字符串宽度
 		int textWidth = textRect.right - textRect.left;
+		//得到字符串左侧的位置
 		int textLeft = (w - textWidth) / 2;
 
+		//得到光标偏移
 		if (index > 0) {
 			WCHAR& ch = *(tempStr.begin() + (index - 1));
 			if (ch == TEXT(' '))
@@ -43,9 +46,16 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 			DT_CENTER | DT_VCENTER | DT_CALCRECT, 0xffffffff);
 		int textOffset = textRect.right - textRect.left;
 
+		//得到字符高度
+		TEXTMETRIC met;
+		g_pFont->GetTextMetrics(&met);
+		int textHeight = met.tmHeight;
+
+		//得到光标的位置
 		int pos = textLeft + textOffset;
+		//绘制
 		if (pos > 0 && pos + 2 < w)
-			e->drawRect(wndX + pos - 1, wndY + 12, 2, h - 24);
+			e->drawRect(wndX + pos - 1, wndY + (h - textHeight) / 2, 2, textHeight);
 	}
 }
 
