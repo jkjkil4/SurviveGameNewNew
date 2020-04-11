@@ -68,7 +68,8 @@ void MyRoom::onLogic() {
 				focusWidget = nullptr;
 		}
 	}
-
+	if (changeRoomStr != "")
+		return;
 	//继承类中的逻辑处理
 	_onLogic();
 }

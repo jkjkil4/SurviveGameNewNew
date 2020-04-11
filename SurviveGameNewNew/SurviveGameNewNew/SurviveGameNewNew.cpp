@@ -17,6 +17,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return e.ProcWndMessage(hWnd, uMsg, wParam, lParam);
 }
 
+void changeRoom(MyRoom* room) {
+	if (currentRoom) {
+		currentRoom->onDestroy();
+		safeDelete(currentRoom);
+	}
+	currentRoom = room;
+}
+void changeRoomByStr(std::string room) {
+	if (room == "title") {
+		changeRoom(new MyRoom_title(&e));
+	}
+	else if (room == "game") {
+		changeRoom(new MyRoom_game(&e));
+	}
+}
+
 void updateWidgetsPos() {
 	if (currentRoom) {
 		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++) {
@@ -35,6 +51,10 @@ void mainLoop() {
 		e.onKeyCheck();
 		if (currentRoom) {
 			currentRoom->onLogic();
+			if (currentRoom->changeRoomStr != "") {
+				changeRoomByStr(currentRoom->changeRoomStr);
+				continue;
+			}
 			if (e.g_hWnd) {
 				if (!IsIconic(e.g_hWnd)) {
 					e.renderStart();
@@ -64,14 +84,6 @@ void mainLoop() {
 		safeDelete(currentRoom);
 	}
 	needQuit = false;
-}
-
-void changeRoom(MyRoom* room) {
-	if (currentRoom) {
-		currentRoom->onDestroy();
-		safeDelete(currentRoom);
-	}
-	currentRoom = room;
 }
 
 INT WINAPI WinMain(__in HINSTANCE hInstance,

@@ -176,10 +176,10 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_KEYDOWN:{
 		int keyNum = wParam;
-		if (keyFlag(keyNum))
-			setKeyFlag(keyNum, true);
 		MyKey* key = new MyKey{ keyFlag(keyNum), true, keyNum };
 		vec_keyBuffer.push_back(key);
+		if (!keyFlag(keyNum))
+			setKeyFlag(keyNum, true);
 		break;
 	}
 	case WM_CHAR: {

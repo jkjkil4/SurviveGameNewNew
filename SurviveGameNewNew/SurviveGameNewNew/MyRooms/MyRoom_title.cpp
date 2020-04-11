@@ -254,6 +254,6 @@ void MyRoom_title::_btnCreateBackPressed(MyMouseEvent ev) {
 }
 void MyRoom_title::_btnCreateAcceptPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-
+		changeRoomStr = "game";
 	}
 }

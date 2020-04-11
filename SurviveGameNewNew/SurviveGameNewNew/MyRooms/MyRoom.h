@@ -30,6 +30,8 @@ public:
 	std::vector<MyWidget*> widgets;
 
 	MyWidget* focusWidget = nullptr;
+
+	std::string changeRoomStr = "";
 };
 
 #endif //_MYROOM_H
