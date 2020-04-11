@@ -24,6 +24,7 @@ public:
 	void _btnSigleBackPressed(MyMouseEvent ev);
 
 	void _btnCreateBackPressed(MyMouseEvent ev);
+	void _btnCreateAcceptPressed(MyMouseEvent ev);
 
 	MyEngine* e = nullptr;
 
@@ -36,5 +37,7 @@ public:
 	*/
 	int visibleFlags = 0;
 
+	//需要保留变量的控件
+	MyTextEdit* editSaveName = nullptr;
 };
 

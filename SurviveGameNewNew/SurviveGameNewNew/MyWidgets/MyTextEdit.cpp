@@ -2,34 +2,45 @@
 
 using namespace std;
 
-MyTextEdit::MyTextEdit(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo,
-	LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent)
-	: MyWidget(e, g_pTexture, pTextureInfo, focusWidget, parent)
+MyTextEdit::MyTextEdit(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent)
+	: MyWidget(e, w, h, focusWidget, parent)
 {
 	this->g_pFont = g_pFont;
 }
 
-inline void MyTextEdit::resetFocus() {
+inline void MyTextEdit::resetFocusTimer() {
 	focusTimer = 0;
 	focusVisible = true;
 }
+void MyTextEdit::clear() {
+	text = TEXT("");
+	index = 0;
+}
 
 inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
-	RECT textRect = rect(wndX, wndY, w, h);
+	//绘制
+	e->drawRestart();
+	e->drawBorder(wndX, wndY, w, h, 1, bdColor, bdColor, bdColor, bdColor);
+	e->drawRect(wndX + 1, wndY + 1, w - 2, h - 2, bgColor, bgColor, bgColor, bgColor);
+
+	//绘制文字
+	RECT textRect = rect(wndX + 1, wndY + 1, w - 2, h - 2);
 	wstring tempStr = text;
 	WCHAR& endChar = *tempStr.rbegin();
 	if (endChar == TEXT(' '))
 		endChar = TEXT('_');
 	g_pFont->DrawText(g_pSprite, tempStr.c_str(), -1, &textRect,
-		DT_CENTER | DT_VCENTER, 0xffffffff);
+		DT_CENTER | DT_VCENTER, textColor);
 	g_pFont->DrawText(g_pSprite, tempStr.c_str(), -1, &textRect,
-		DT_CENTER | DT_VCENTER | DT_CALCRECT, 0xffffffff);
+		DT_CENTER | DT_VCENTER | DT_CALCRECT, textColor);
 
+	//和光标相关的某个东西
 	focusTimer++;
 	if (focusTimer % 30 == 0) {
 		focusVisible = !focusVisible;
 		focusTimer = 0;
 	}
+	//绘制光标
 	if (this == *focusWidget && focusVisible) {
 		//得到字符串宽度
 		int textWidth = textRect.right - textRect.left;
@@ -43,7 +54,7 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 				ch = TEXT('_');
 		}
 		g_pFont->DrawText(g_pSprite, tempStr.c_str(), index, &textRect,
-			DT_CENTER | DT_VCENTER | DT_CALCRECT, 0xffffffff);
+			DT_CENTER | DT_VCENTER | DT_CALCRECT, textColor);
 		int textOffset = textRect.right - textRect.left;
 
 		//得到字符高度
@@ -56,13 +67,13 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 		//绘制
 		if (pos > 0 && pos + 2 < w) {
 			e->drawRestart();
-			e->drawRect(wndX + pos - 1, wndY + (h - textHeight) / 2, 2, textHeight);
+			e->drawRect(wndX + pos - 1, wndY + (h - textHeight) / 2, 1, textHeight, textColor, textColor, textColor, textColor);
 		}
 	}
 }
 
 inline void MyTextEdit::_mouseEvent(MyMouseEvent) {
-	resetFocus();
+	resetFocusTimer();
 }
 
 inline void MyTextEdit::_charEvent(wstring wstr) {
@@ -94,24 +105,25 @@ inline void MyTextEdit::_charEvent(wstring wstr) {
 	text.insert(index, result.c_str());
 	index += result.length();
 
-	resetFocus();
+	resetFocusTimer();
 }
 
 inline void MyTextEdit::_keyboardEvent(int key) {
 	switch (key) {
 	case VK_LEFT:
 		index--;
-		resetFocus();
+		resetFocusTimer();
 		index = myBound<int>(0, index, text.length());
 		break;
 	case VK_RIGHT:
 		index++;
-		resetFocus();
+		resetFocusTimer();
 		index = myBound<int>(0, index, text.length());
 		break;
 	case VK_DELETE:
 		if (index < (int)text.length())
 			text.erase(index, 1);
+		resetFocusTimer();
 		break;
 	}
 }

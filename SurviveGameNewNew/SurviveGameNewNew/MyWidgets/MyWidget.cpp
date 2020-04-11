@@ -96,12 +96,12 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b) {
 	if (g_pTexture)
 		g_pSprite->Draw(g_pTexture, nullptr, &D3DXVECTOR3(0, 0, 0),
 			&D3DXVECTOR3((float)(wndX), (float)(wndY), 0), D3DCOLOR_XRGB(r, g, b));
+	_onRender(g_pSprite);
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
 		if(w->isVisible())
 			w->onRender(g_pSprite, a, r, g, b);
 	}
-	_onRender(g_pSprite);
 }
 inline void MyWidget::_onRender(LPD3DXSPRITE g_pSprite){}
 void MyWidget::onDestroy() {

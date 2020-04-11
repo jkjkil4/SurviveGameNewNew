@@ -6,10 +6,10 @@
 class MyTextEdit : public MyWidget
 {
 public:
-	explicit MyTextEdit(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, 
-		LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent = nullptr);
+	explicit MyTextEdit(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent = nullptr);
 
-	inline void resetFocus();
+	inline void resetFocusTimer();
+	void clear();
 
 	inline void _onRender(LPD3DXSPRITE g_pSprite) override;
 
@@ -18,6 +18,10 @@ public:
 	inline void _keyboardEvent(int key) override;
 
 	LPD3DXFONT g_pFont = nullptr;
+
+	D3DCOLOR textColor = 0xffffffff;
+	D3DCOLOR bgColor = 0xff000000;
+	D3DCOLOR bdColor = 0xffcccccc;
 
 	std::wstring text = TEXT("");
 	int index = 0;
