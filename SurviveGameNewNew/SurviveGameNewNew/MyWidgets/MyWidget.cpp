@@ -18,6 +18,22 @@ MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* p
 		updatePos(e->viewW, e->viewH);
 	}
 }
+MyWidget::MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget, MyWidget* parent) {
+	this->e = e;
+	this->w = w;
+	this->h = h;
+	this->focusWidget = focusWidget;
+	this->parent = parent;
+	if (parent) {
+		parent->childs.push_back(this);
+		updatePos(parent->w, parent->h);
+	}
+	else {
+		updatePos(e->viewW, e->viewH);
+	}
+}
+
+
 MyWidget::~MyWidget(){}
 
 void MyWidget::move(int x, int y) {

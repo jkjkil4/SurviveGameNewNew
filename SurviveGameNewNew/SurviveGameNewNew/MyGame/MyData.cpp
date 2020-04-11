@@ -50,13 +50,17 @@ void MyGuiTexture::onInit(string path, LPDIRECT3DDEVICE9 g_pDevice) {
 	myCreateTexture(g_pDevice, path + "\\btnBig.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &btnBig.info, &btnBig.g_pTexture);
 	//存档选择界面
 	myCreateTexture(g_pDevice, path + "\\guiSaveSelect.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &guiSaveSelect.info, &guiSaveSelect.g_pTexture);
+	//新建存档界面
+	myCreateTexture(g_pDevice, path + "\\guiSaveCreate.png", D3DX_FROM_FILE, D3DX_FROM_FILE, &guiSaveCreate.info, &guiSaveCreate.g_pTexture);
 }
 void MyGuiTexture::onDestroy() {
 	safeRelease(btnVerySmall.g_pTexture);
 	safeRelease(btnSmall.g_pTexture);
 	safeRelease(btnMedium.g_pTexture);
 	safeRelease(btnBig.g_pTexture);
+
 	safeRelease(guiSaveSelect.g_pTexture);
+	safeRelease(guiSaveCreate.g_pTexture);
 }
 
 

@@ -42,7 +42,7 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 			if (ch == TEXT(' '))
 				ch = TEXT('_');
 		}
-		g_pFont->DrawText(g_pSprite, tempStr.c_str(), index, &textRect, 
+		g_pFont->DrawText(g_pSprite, tempStr.c_str(), index, &textRect,
 			DT_CENTER | DT_VCENTER | DT_CALCRECT, 0xffffffff);
 		int textOffset = textRect.right - textRect.left;
 
@@ -54,8 +54,10 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 		//得到光标的位置
 		int pos = textLeft + textOffset;
 		//绘制
-		if (pos > 0 && pos + 2 < w)
+		if (pos > 0 && pos + 2 < w) {
+			e->drawRestart();
 			e->drawRect(wndX + pos - 1, wndY + (h - textHeight) / 2, 2, textHeight);
+		}
 	}
 }
 

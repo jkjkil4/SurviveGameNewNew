@@ -159,6 +159,7 @@
     <ClInclude Include="MyRooms\MyRoom_game.h" />
     <ClInclude Include="MyNameSpace.h" />
     <ClInclude Include="MyRooms\MyRoom_title.h" />
+    <ClInclude Include="MyWidgets\MyTextWidget.h" />
     <ClInclude Include="MyWidgets\MyTextEdit.h" />
     <ClInclude Include="MyWidgets\MyPushButton.h" />
     <ClInclude Include="MyWidgets\MyWidget.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="MyRooms\MyRoom.cpp" />
     <ClCompile Include="MyRooms\MyRoom_game.cpp" />
     <ClCompile Include="MyRooms\MyRoom_title.cpp" />
+    <ClCompile Include="MyWidgets\MyTextWidget.cpp" />
     <ClCompile Include="MyWidgets\MyTextEdit.cpp" />
     <ClCompile Include="MyWidgets\MyPushButton.cpp" />
     <ClCompile Include="MyWidgets\MyWidget.cpp" />

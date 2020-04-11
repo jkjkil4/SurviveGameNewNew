@@ -237,15 +237,18 @@ void MyEngine::setKeyReleaseFlag(int num, bool flag) {
 	}
 }
 
-void MyEngine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
+void MyEngine::drawRestart() {
 	g_pSprite->End();
 	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
 
+void MyEngine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
 	LPDIRECT3DVERTEXBUFFER9 vb;
-	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &vb, nullptr);
+	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, 
+		D3DPOOL_MANAGED, &vb, nullptr);
 	LPDIRECT3DINDEXBUFFER9 ib;
 	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
-		D3DFMT_INDEX16, D3DPOOL_DEFAULT, &ib, 0);
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &ib, 0);
 
 	Vertex* vertexs;
 	vb->Lock(0, 0, (void**)&vertexs, 0);
@@ -277,4 +280,15 @@ void MyEngine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWOR
 
 	vb->Release();
 	ib->Release();
+}
+
+void MyEngine::drawBorder(int x, int y, int w, int h, int size, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
+	//×ó²à
+	drawRect(x, y, size, h, col1, col1, col4, col4);
+	//ÓÒ²à
+	drawRect(x + w - size, y, size, h, col2, col2, col3, col3);
+	//¶¥²¿
+	drawRect(x + size, y, w - 2 * size, size, col1, col2, col2, col1);
+	//µ×²¿
+	drawRect(x + size, y + h - size, w - 2 * size, size, col4, col3, col3, col4);
 }

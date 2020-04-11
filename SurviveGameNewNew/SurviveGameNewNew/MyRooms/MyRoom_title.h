@@ -23,6 +23,8 @@ public:
 	void _btnSigleCreatePressed(MyMouseEvent ev);
 	void _btnSigleBackPressed(MyMouseEvent ev);
 
+	void _btnCreateBackPressed(MyMouseEvent ev);
+
 	MyEngine* e = nullptr;
 
 	/*

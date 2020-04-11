@@ -30,6 +30,7 @@ class MyWidget
 {
 public:
 	explicit MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
+	explicit MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
 	virtual ~MyWidget();
 
 	void move(int x, int y);
@@ -66,7 +67,7 @@ public:
 	int wndX = 0, wndY = 0;
 	//ÌùÍ¼
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
-	D3DXIMAGE_INFO* pTextureInfo;
+	D3DXIMAGE_INFO* pTextureInfo = nullptr;
 	//ÊÇ·ñ¿É¼û
 	int* pVisible = nullptr;
 	int visible = 0;

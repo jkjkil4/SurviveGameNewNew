@@ -5,6 +5,7 @@
 #include "../MyWidgets/MyWidget.h"
 #include "../MyWidgets/MyPushButton.h"
 #include "../MyWidgets/MyTextEdit.h"
+#include "../MyWidgets/MyTextWidget.h"
 
 class MyRoom
 {

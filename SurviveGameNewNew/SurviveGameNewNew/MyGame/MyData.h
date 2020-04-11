@@ -49,7 +49,8 @@ public:
 	btnMedium -> g_pTexture
 	btnBig -> g_pTexture
 
-	guiSaveSelect
+	guiSaveSelect -> g_pTexture
+		guiSaveCreate -> g_pTexture
 */
 class MyGuiTexture
 {
@@ -64,6 +65,7 @@ public:
 	MyTexture btnBig;
 
 	MyTexture guiSaveSelect;
+	MyTexture guiSaveCreate;
 };
 
 
