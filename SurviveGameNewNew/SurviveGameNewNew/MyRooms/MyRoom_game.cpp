@@ -7,7 +7,7 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	this->roomWidth = roomWidth;
 	this->roomHeight = roomHeight;
 	this->blockCount = roomWidth * roomHeight;
-	blocks = new int[blockCount];
+	blocks = new short[blockCount];
 	//Моід
 	for (int j = 16; j < roomHeight; j++) {
 		for (int i = 0; i < roomWidth; i++) {
@@ -113,5 +113,5 @@ void MyRoom_game::_onDebug() {
 }
 
 void MyRoom_game::_onDestroy() {
-	delete[] blocks;
+	safeDeleteArray(blocks);
 }

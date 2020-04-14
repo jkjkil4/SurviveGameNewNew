@@ -92,7 +92,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -159,6 +159,8 @@
     <ClInclude Include="MyRooms\MyRoom_game.h" />
     <ClInclude Include="MyNameSpace.h" />
     <ClInclude Include="MyRooms\MyRoom_title.h" />
+    <ClInclude Include="MyRooms\MyRoom_createSave.h" />
+    <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
     <ClInclude Include="MyWidgets\MyTextWidget.h" />
     <ClInclude Include="MyWidgets\MyTextEdit.h" />
     <ClInclude Include="MyWidgets\MyPushButton.h" />
@@ -175,6 +177,8 @@
     <ClCompile Include="MyRooms\MyRoom.cpp" />
     <ClCompile Include="MyRooms\MyRoom_game.cpp" />
     <ClCompile Include="MyRooms\MyRoom_title.cpp" />
+    <ClCompile Include="MyRooms\MyRoom_createSave.cpp" />
+    <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
     <ClCompile Include="MyWidgets\MyTextWidget.cpp" />
     <ClCompile Include="MyWidgets\MyTextEdit.cpp" />
     <ClCompile Include="MyWidgets\MyPushButton.cpp" />

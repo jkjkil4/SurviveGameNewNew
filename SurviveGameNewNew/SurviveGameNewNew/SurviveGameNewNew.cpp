@@ -31,6 +31,12 @@ void changeRoomByStr(std::string room) {
 	else if (room == "game") {
 		changeRoom(new MyRoom_game(&e));
 	}
+	else if (room == "createSave") {
+		changeRoom(new MyRoom_createSave(&e));
+	}
+	else if (room == "loadSave") {
+		changeRoom(new MyRoom_loadSave(&e));
+	}
 }
 
 void updateWidgetsPos() {
@@ -92,7 +98,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in int nShowCmd)
 {
 	HWND& g_hWnd = e.g_hWnd;
-
+	cDebug(std::to_string(sizeof(char)) + " " + std::to_string(sizeof(WCHAR)) + " " + std::to_string(sizeof(short)) + "\n");
 	//创建窗口
 	WNDCLASS wc;
 	ZeroMemory(&wc, sizeof(wc));

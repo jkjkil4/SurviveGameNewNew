@@ -29,13 +29,13 @@ public:
 	MyEngine* e = nullptr;
 
 	/*
+	visibleFlags
 		0 -> 标题界面
 		1 -> 存档选择界面
 			4 -> 新建存档界面
 		2 -> 多人游戏界面
 		3 -> 设置界面
 	*/
-	int visibleFlags = 0;
 
 	//需要保留变量的控件
 	MyTextEdit* editSaveName = nullptr;

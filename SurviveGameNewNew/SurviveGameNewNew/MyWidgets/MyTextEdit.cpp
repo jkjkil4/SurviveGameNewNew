@@ -100,6 +100,9 @@ inline void MyTextEdit::_charEvent(wstring wstr) {
 		if (maxLength != -1)
 			if ((int)(text.length() + result.length()) >= maxLength)
 				continue;
+		if (!expr.isNull)
+			if (!expr.checkAccept(ch))
+				continue;
 		result += ch;
 	}
 	text.insert(index, result.c_str());

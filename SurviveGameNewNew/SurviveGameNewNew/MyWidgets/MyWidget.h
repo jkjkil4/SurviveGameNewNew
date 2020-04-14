@@ -42,6 +42,7 @@ public:
 
 	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
 	virtual inline void _onRender(LPD3DXSPRITE g_pSprite);
+
 	void onDestroy();
 
 	void mouseEvent(MyMouseEvent ev);

@@ -63,6 +63,12 @@
     <ClInclude Include="MyWidgets\MyTextWidget.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyRooms\MyRoom_createSave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyRooms\MyRoom_loadSave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">
@@ -99,6 +105,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyWidgets\MyTextWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom_createSave.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom_loadSave.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

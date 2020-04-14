@@ -44,7 +44,7 @@ void MyEngine::onInit() {
 	//创建精灵指针
 	D3DXCreateSprite(g_pDevice, &g_pSprite);
 	D3DXCreateSprite(g_pDevice, &g_pSpriteRender);
-
+	
 	//"渲染到纹理"
 	g_pDevice->CreateTexture(
 		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,

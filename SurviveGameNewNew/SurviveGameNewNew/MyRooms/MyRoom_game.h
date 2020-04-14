@@ -23,7 +23,7 @@ public:
 
 	void _onDestroy() override;
 
-	int* blocks;	//方块
+	short* blocks;	//方块
 
 	int roomWidth = 400;	//横向的方块数量
 	int roomHeight = 400;	//纵向的方块数量

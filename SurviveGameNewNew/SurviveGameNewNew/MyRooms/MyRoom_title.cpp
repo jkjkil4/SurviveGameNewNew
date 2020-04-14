@@ -167,6 +167,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		editSaveName->setAlign(AlignFlags::Top);
 		editSaveName->move(0, 50);
 		editSaveName->maxLength = 20;
+		editSaveName->expr.setExpr(TEXT("\\/:*?\"<>|."), false);
 
 		MyPushButton* btnBack = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info,
 			e->g_pFont, btnCreateBackPressed, nullptr, widget);
@@ -254,6 +255,15 @@ void MyRoom_title::_btnCreateBackPressed(MyMouseEvent ev) {
 }
 void MyRoom_title::_btnCreateAcceptPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-		changeRoomStr = "game";
+		wstring saveName = editSaveName->text;
+		wstring_trimmed(saveName);
+		if (saveName != TEXT("")) {
+			MyGlobal* global = &e->global;
+			global->createSaveName = saveName;
+			global->createSaveWidth = 6300;
+			global->createSaveHeight = 1800;
+			global->createSaveSeed = 114514;
+			changeRoomStr = "createSave";
+		}
 	}
 }

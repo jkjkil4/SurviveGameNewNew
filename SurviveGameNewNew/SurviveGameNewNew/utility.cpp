@@ -1,7 +1,9 @@
 #include "utility.h"
 
-std::wstring stringToWstring(std::string orig) {
-	std::wstring result;
+using namespace std;
+
+wstring stringToWstring(string orig) {
+	wstring result;
 	int slength = (int)orig.length() + 1;
 	wchar_t* m_wchar;
 	int len = MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, NULL, 0);
@@ -12,8 +14,17 @@ std::wstring stringToWstring(std::string orig) {
 	delete[] m_wchar;
 	return result;
 }
+std::string wstringToString(const std::wstring str) {// wstring转string
+	unsigned len = str.size() * 4;
+	setlocale(LC_CTYPE, "");
+	char* p = new char[len];
+	wcstombs(p, str.c_str(), len);
+	std::string str1(p);
+	delete[] p;
+	return str1;
+}
 
-void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, std::string path, UINT w, UINT h,
+void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, string path, UINT w, UINT h,
 	D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture) {
 	D3DXCreateTextureFromFileEx(
 		g_pDevice,	//设备指针
@@ -49,17 +60,17 @@ void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScal
 }
 
 
-void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files){
+void getFiles(string path, string exd, vector<wstring>* files){
 	files->clear();
 	//文件句柄
 	HANDLE hFile = 0;
 	//文件信息
 	WIN32_FIND_DATAW data;
 
-	std::string file = path + "\\*" + (exd == "" ? "" : "." + exd);
+	string file = path + "\\*" + (exd == "" ? "" : "." + exd);
 	
-	std::wstring wfile = stringToWstring(file);
-	std::wstring dot = stringToWstring("."), dotdot = stringToWstring("..");
+	wstring wfile = stringToWstring(file);
+	wstring dot = stringToWstring("."), dotdot = stringToWstring("..");
 
 	hFile = FindFirstFile(wfile.c_str(), &data);
 	if ((int)hFile != -1) {
@@ -72,5 +83,28 @@ void getFiles(std::string path, std::string exd, std::vector<std::wstring>* file
 			}
 		} while (FindNextFile(hFile, &data));
 		FindClose(hFile);
+	}
+}
+
+void wstring_trimmed(wstring& wstr) {
+	//末尾
+	int length = wstr.length();
+	for (int i = length - 1; i >= 0; i--) {
+		if (wstr[i] != TEXT(' ')) {
+			if (i != length - 1)
+				wstr.erase(i + 1);
+			break;
+		}
+		if (i == 0)
+			wstr.clear();
+	}
+	//开头
+	length = wstr.length();
+	for (int i = 0; i < length; i++) {
+		if (wstr[i] != TEXT(' ')) {
+			if (i != 0)
+				wstr.erase(0, i);
+			break;
+		}
 	}
 }

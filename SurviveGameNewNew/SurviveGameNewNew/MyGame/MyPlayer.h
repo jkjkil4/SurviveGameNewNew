@@ -6,7 +6,7 @@
 class MyPlayer
 {
 public:
-	void updatePos(int* arrayBlock, int width, int height, MyEngine* e);
+	void updatePos(short* arrayBlock, int width, int height, MyEngine* e);
 
 	//Íæ¼Ò¿í¸ß
 	static constexpr int plW = 24;

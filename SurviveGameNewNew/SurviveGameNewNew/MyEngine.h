@@ -25,6 +25,9 @@ public:
 	LRESULT ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	//------------------------------------------------------------------------------------//
+	//全局变量
+	MyGlobal global;
+	//窗口、视野宽高
 	int defWidth = 800, defHeight = 608;
 	int viewW = 800, viewH = 608;
 	//windows的一些东西

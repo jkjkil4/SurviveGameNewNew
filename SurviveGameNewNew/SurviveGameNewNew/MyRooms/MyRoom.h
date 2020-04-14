@@ -27,6 +27,8 @@ public:
 
 	MyEngine* e = nullptr;
 
+	int visibleFlags = 0;
+
 	std::vector<MyWidget*> widgets;
 
 	MyWidget* focusWidget = nullptr;

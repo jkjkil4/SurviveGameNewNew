@@ -1,6 +1,6 @@
 #include "MyPlayer.h"
 
-void MyPlayer::updatePos(int* arrayBlock, int width, int height, MyEngine* e) {
+void MyPlayer::updatePos(short* arrayBlock, int width, int height, MyEngine* e) {
 	/*
 		注: 我在向左和向上的判断中有使用如下写法
 			XXX = (XX + 16) / 16 - 1;

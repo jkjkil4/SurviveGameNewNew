@@ -4,6 +4,7 @@ using namespace std;
 
 MyRoom::MyRoom(MyEngine* e) {
 	this->e = e;
+	visibleFlags = e->global.visibleFlag;
 }
 MyRoom::~MyRoom(){}
 

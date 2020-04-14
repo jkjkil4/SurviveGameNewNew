@@ -17,6 +17,9 @@
 template<typename T>inline void safeDelete(T*& p) {
     if (p) { delete p; p = nullptr; }
 }
+template<typename T>inline void safeDeleteArray(T*& p) {
+    if (p) { delete[] p; p = nullptr; }
+}
 template<typename T>inline void safeRelease(T*& p) {
     if (p) { p->Release(); p = nullptr; }
 }
@@ -34,6 +37,7 @@ void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScal
 
 //------类型转换-------
 std::wstring stringToWstring(std::string orig);
+std::string wstringToString(const std::wstring str);
 
 //------多线程---------
 #include <thread>
@@ -45,11 +49,13 @@ std::wstring stringToWstring(std::string orig);
 //------文件操作-------
 #include <vector>
 #include <fstream>
+#include <sys/stat.h>
 void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files);
 
 //------别的东西-------
 #define MyMsgBox(str) MessageBox(nullptr, stringToWstring(str).c_str(), TEXT("1"), MB_OK)
 #define cDebug(str) OutputDebugString( stringToWstring(str).c_str() )
+void wstring_trimmed(std::wstring& wstr);
 inline RECT rect(int x, int y, int w, int h) {
     RECT rect;
     rect.left = x;
