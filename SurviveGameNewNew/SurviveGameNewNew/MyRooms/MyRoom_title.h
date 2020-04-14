@@ -3,6 +3,9 @@
 
 class MyRoom_title : public MyRoom
 {
+private:
+
+
 public:
 	MyRoom_title(MyEngine* e);
 	~MyRoom_title() override;

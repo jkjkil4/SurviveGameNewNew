@@ -2,6 +2,7 @@
 #define _MYROOM_CREATESAVE_H
 
 #include "MyRoom.h"
+#include "../MyGame/MySave.h"
 
 class MyRoom_createSave : public MyRoom
 {
@@ -14,15 +15,12 @@ public:
 
 	void _onDestroy() override;
 
-	int findBlockBy2d(int x, int y);
-	void setBlockBy2d(int x, int y, int id);
-	short* blocks = nullptr;
-
 	std::wstring saveName = TEXT("NULL");
 	int saveWidth = 400;
 	int saveHeight = 400;
 	UINT saveCount = 160000;
 	int seed = 114514;
+
 	bool needUpdate = false;
 	UINT proc = 0;
 

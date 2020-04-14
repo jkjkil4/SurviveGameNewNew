@@ -1,6 +1,8 @@
 #ifndef _MYNAMESPACE_H
 #define _MYNAMESPACE_H
 
+#define VERSION_SAVE 0
+
 enum AlignFlags {
 	Left	=	1,
 	Right	=	2,

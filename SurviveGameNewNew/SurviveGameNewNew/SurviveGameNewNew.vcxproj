@@ -161,6 +161,7 @@
     <ClInclude Include="MyRooms\MyRoom_title.h" />
     <ClInclude Include="MyRooms\MyRoom_createSave.h" />
     <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
+    <ClInclude Include="MyGame\MySave.h" />
     <ClInclude Include="MyWidgets\MyTextWidget.h" />
     <ClInclude Include="MyWidgets\MyTextEdit.h" />
     <ClInclude Include="MyWidgets\MyPushButton.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="MyRooms\MyRoom_title.cpp" />
     <ClCompile Include="MyRooms\MyRoom_createSave.cpp" />
     <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
+    <ClCompile Include="MyGame\MySave.cpp" />
     <ClCompile Include="MyWidgets\MyTextWidget.cpp" />
     <ClCompile Include="MyWidgets\MyTextEdit.cpp" />
     <ClCompile Include="MyWidgets\MyPushButton.cpp" />

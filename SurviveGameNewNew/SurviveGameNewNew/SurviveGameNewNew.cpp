@@ -1,5 +1,4 @@
-﻿
-#include "utility.h"
+﻿#include "utility.h"
 #include "MyEngine.h"
 #include "MyRooms/include_rooms.h"
 
