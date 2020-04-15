@@ -53,6 +53,7 @@ public:
 	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr);
 	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr);
 	bool load(UINT* proc = nullptr, bool* needUpdate = nullptr);
+	bool loadInfo(std::string path);
 
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);

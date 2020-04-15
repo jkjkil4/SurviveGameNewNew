@@ -223,7 +223,7 @@ void MyRoom_title::_btnExitPressed(MyMouseEvent ev) {
 
 void MyRoom_title::_btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-
+		
 	}
 }
 void MyRoom_title::_btnSigleRenamePressed(MyMouseEvent ev) {
@@ -260,8 +260,8 @@ void MyRoom_title::_btnCreateAcceptPressed(MyMouseEvent ev) {
 		if (saveName != TEXT("")) {
 			MyGlobal* global = &e->global;
 			global->createSaveName = saveName;
-			global->createSaveWidth = 8400;
-			global->createSaveHeight = 2400;
+			global->createSaveWidth = 400;
+			global->createSaveHeight = 400;
 			global->createSaveSeed = 114514;
 			changeRoomStr = "createSave";
 		}

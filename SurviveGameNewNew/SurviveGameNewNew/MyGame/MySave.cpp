@@ -65,15 +65,24 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
 		if (out.fail())
 			return false;
-		string saveNameStr = wstringToString(saveName);
-		out.write((char*)saveNameStr.c_str(), saveNameStr.size());	//名称
+		//存档版本
+		UINT ver = VERSION_SAVE;
+		out.write((char*)&ver, sizeof(UINT));
+		//名称
+		size_t strLen = saveName.length();
+		cDebug("长度: " + to_string(strLen) + "\tWCHAR大小: " + to_string(sizeof(WCHAR)) + "\n");
+		out.write((char*)&strLen, sizeof(size_t));
+		out.write((char*)saveName.c_str(), (streamsize)strLen * sizeof(WCHAR));
+		//时间
 		time_t now = time(nullptr);
-		out.write((char*)&now, 8);			//时间
-		UCHAR ch = VERSION_SAVE;
-		out.write((char*)&ch, 1);			//存档版本
-		out.write((char*)&info->seed, 2);	//种子
-		out.write((char*)&info->width, 2);	//横向方块数量
-		out.write((char*)&info->height, 2);	//纵向方块数量
+		out.write((char*)&now, sizeof(time_t));
+		//种子
+		out.write((char*)&info->seed, sizeof(int));
+		//横向方块数量
+		out.write((char*)&info->width, sizeof(int));
+		//纵向方块数量
+		out.write((char*)&info->height, sizeof(int));
+
 		out.close();
 	}
 	//玩家
@@ -98,11 +107,46 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 		}
 		out.close();
 	}
+
 	return true;
 }
 
 
 bool MySave::load(UINT* proc, bool* needUpdate) {
+	return true;
+}
+
+bool MySave::loadInfo(string path) {
+	ifstream in(path, ios::in | ios::binary);
+	if (in.fail())
+		return false;
+	//存档版本
+	UINT ver = VERSION_SAVE;
+	in.read((char*)&ver, sizeof(UINT));
+	//名称的大小
+	size_t strLen = 0;
+	in.read((char*)&strLen, sizeof(size_t));
+	//名称
+	WCHAR* name = new WCHAR[strLen + 1];
+	name[strLen] = TEXT('\0');
+	in.read((char*)name, (streamsize)strLen * sizeof(WCHAR));
+	wstring nameStr(name);
+	delete[] name;
+	//时间
+	time_t time = 0;
+	in.read((char*)&time, sizeof(time_t));
+	//种子
+	int seed = 114514;
+	in.read((char*)&seed, sizeof(int));
+	//横向方块数量
+	int width = 400;
+	in.read((char*)&width, sizeof(int));
+	//纵向方块数量
+	int height = 400;
+	in.read((char*)&height, sizeof(int));
+
+	in.close();
+	info = new Info(nameStr, time, ver, seed, width, height);
 	return true;
 }
 

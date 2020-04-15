@@ -2,7 +2,6 @@
 #define _MYROOM_CREATESAVE_H
 
 #include "MyRoom.h"
-#include "../MyGame/MySave.h"
 
 class MyRoom_createSave : public MyRoom
 {
