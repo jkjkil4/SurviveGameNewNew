@@ -57,6 +57,8 @@ public:
 	void mouseEvent(MyMouseEvent ev);
 	virtual inline void _mouseEvent(MyMouseEvent ev);
 
+	bool mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget);
+
 	void charEvent(std::wstring wstr);
 	virtual inline void _charEvent(std::wstring wstr);
 
@@ -66,24 +68,31 @@ public:
 	//-----------------------------------------------
 	MyEngine* e = nullptr;
 	MyWidget* parent = nullptr;
+
 	//对齐方向
 	int alignFlags = 0;
 	//对于对齐方向来说的坐标和宽度
 	int x = 0, y = 0;
 	int w = 10, h = 10;
+
 	//真正的坐标
 	int realX = 0, realY = 0;
 	//相对于窗口的坐标
 	int wndX = 0, wndY = 0;
+
 	//贴图
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 	D3DXIMAGE_INFO* pTextureInfo = nullptr;
 	//纹理和对应的表面(用来限制区域
 	LPDIRECT3DTEXTURE9 g_pRenderTexture = nullptr;
 	LPDIRECT3DSURFACE9 g_pRenderSurface = nullptr;
+
 	//是否可见
 	int* pVisible = nullptr;
 	int visible = 0;
+	//鼠标是否在该控件中
+	bool isMouseAt = false;
+
 	//子控件
 	std::vector<MyWidget*> childs;
 	//焦点控件

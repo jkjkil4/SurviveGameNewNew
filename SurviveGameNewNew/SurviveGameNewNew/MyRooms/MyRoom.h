@@ -35,6 +35,7 @@ public:
 	std::vector<MyWidget*> widgets;
 
 	MyWidget* focusWidget = nullptr;
+	MyWidget* mouseWidget = nullptr;
 
 	std::string changeRoomStr = "";
 };

@@ -26,6 +26,7 @@ void MyRoom::onLogic() {
 	if (focusWidget && wstr != TEXT("")) {
 		focusWidget->charEvent(wstr);
 	}
+
 	//控件事件
 	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
 	for (int i = 0; i < 3; i++) {
@@ -69,6 +70,23 @@ void MyRoom::onLogic() {
 				focusWidget = nullptr;
 		}
 	}
+
+	//检测鼠标所在控件
+	if (mouseWidget)
+		mouseWidget->isMouseAt = false;
+	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
+		MyWidget* w = *it;
+		if (!w->isVisible())
+			continue;
+		int localX = e->mouseX - w->realX;
+		int localY = e->mouseY - w->realY;
+		if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
+			if (w->mouseCheckAtEvent(localX, localY, &mouseWidget))
+				break;
+		}
+	}
+
+	//房间切换
 	if (changeRoomStr != "")
 		return;
 	//继承类中的逻辑处理

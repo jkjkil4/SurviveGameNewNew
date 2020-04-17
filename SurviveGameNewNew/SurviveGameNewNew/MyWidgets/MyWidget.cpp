@@ -144,6 +144,7 @@ void MyWidget::onDestroy() {
 		w->onDestroy();
 		safeDelete(w);
 	}
+	safeRelease(g_pRenderTexture);
 	safeRelease(g_pRenderSurface);
 }
 
@@ -166,6 +167,23 @@ void MyWidget::mouseEvent(MyMouseEvent ev) {
 	_mouseEvent(ev);
 }
 inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}
+
+bool MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
+	for (auto it = childs.rbegin(); it < childs.rend(); it++) {
+		MyWidget* child = *it;
+		if (!child->isVisible())
+			continue;
+		int localX = mouseX - child->realX;
+		int localY = mouseY - child->realY;
+		if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
+			if (child->mouseCheckAtEvent(localX, localY, mouseWidget))
+				return true;
+		}
+	}
+	*mouseWidget = this;
+	isMouseAt = true;
+	return true;
+}
 
 void MyWidget::charEvent(wstring wstr) {
 	_charEvent(wstr);
