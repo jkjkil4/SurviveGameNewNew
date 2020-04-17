@@ -15,6 +15,9 @@ public:
 	void _onDebug() override;
 	void _onDestroy() override;
 
+	void loadSavesList();
+	std::vector<MySave*> saves;
+
 	void _btnSiglePressed(MyMouseEvent ev);
 	void _btnMultiPressed(MyMouseEvent ev);
 	void _btnSettingsPressed(MyMouseEvent ev);

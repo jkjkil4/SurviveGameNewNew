@@ -3,6 +3,7 @@
 
 #include "../utility.h"
 #include "../MyNameSpace.h"
+#include "../MyDir.h"
 
 class MySave
 {
@@ -52,8 +53,8 @@ public:
 
 	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr);
 	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr);
-	bool load(UINT* proc = nullptr, bool* needUpdate = nullptr);
-	bool loadInfo(std::string path);
+	bool load(std::wstring path, UINT* proc = nullptr, bool* needUpdate = nullptr);
+	bool loadInfo(std::wstring path);
 
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);

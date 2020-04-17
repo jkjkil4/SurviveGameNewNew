@@ -20,16 +20,16 @@ void MyRoom_createSave::thFunc() {
 	if (!save.create(info, &proc, &needUpdate)) {
 		//如果创建失败
 		MessageBox(nullptr, TEXT("创建失败"), TEXT("错误"), MB_OK);
-		return;
 	}
-	flag = true;
-	//写入
-	if (!save.save(&proc, &needUpdate)) {
-		//如果写入失败
-		MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
-		return;
+	else {
+		flag = true;
+		//写入
+		if (!save.save(&proc, &needUpdate)) {
+			//如果写入失败
+			MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
+		}
 	}
-
+	
 	MyGlobal* global = &e->global;
 	global->visibleFlag = 1;
 	changeRoomStr = "title";

@@ -55,6 +55,8 @@ void btnCreateAcceptPressed(MyMouseEvent ev) {
 MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 	slotWidget = this;
 	this->e = e;
+	if (visibleFlags == 1)
+		loadSavesList();
 	//窗口控件
 	MyGuiTexture* guiTexture = &e->data.guiTexture;
 	MyTexture* textureBtnVerySmall = &guiTexture->btnVerySmall;
@@ -197,11 +199,44 @@ void MyRoom_title::_onDebug() {
 }
 
 void MyRoom_title::_onDestroy() {
-	
+	for (auto it = saves.begin(); it < saves.end(); it++)
+		safeDelete(*it);
 }
+
+
+void MyRoom_title::loadSavesList() {
+	//销毁
+	for (auto it = saves.begin(); it < saves.end(); it++)
+		safeDelete(*it);
+	saves.clear();
+	//读取
+	vector<wstring> files;
+	MyDir::entryList(TEXT("data\\saves\\"), &files, MyDir::Dir);
+	for (auto it = files.begin(); it < files.end(); it++) {
+		MySave* save = new MySave;
+		wstring path = TEXT("data\\saves\\") + *it + TEXT("\\saveInfo");
+		if (!save->loadInfo(path)) {
+			safeDelete(save);
+			continue;
+		}
+		bool isAccepted = false;
+		for (auto it = saves.begin(); it < saves.end(); it++) {
+			time_t timeCheck = (*it)->info->time;
+			if (save->info->time > timeCheck) {
+				saves.insert(it, save);
+				isAccepted = true;
+				break;
+			}
+		}
+		if (!isAccepted)
+			saves.push_back(save);
+	}
+}
+
 
 void MyRoom_title::_btnSiglePressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
+		loadSavesList();
 		visibleFlags = 1;
 	}
 }
@@ -223,7 +258,7 @@ void MyRoom_title::_btnExitPressed(MyMouseEvent ev) {
 
 void MyRoom_title::_btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-		
+		MyDir::removeDirectory(TEXT("data\\saves"));
 	}
 }
 void MyRoom_title::_btnSigleRenamePressed(MyMouseEvent ev) {

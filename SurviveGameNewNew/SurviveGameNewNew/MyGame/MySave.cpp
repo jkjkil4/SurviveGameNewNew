@@ -48,8 +48,7 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 	bool dirFlag = true;
 	string fileName = wstringToString(saveName);
 	while (dirFlag) {
-		struct stat buffer;
-		dirFlag = stat(("data\\saves\\" + fileName).c_str(), &buffer) == 0;
+		dirFlag = MyDir::isExists("data\\saves\\" + fileName);
 		if (!dirFlag)
 			break;
 		fileName += "_";
@@ -61,62 +60,84 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 		*proc = 0;
 	//存档
 	wstring path = TEXT("data\\saves\\") + info->name;
+	bool isAccept = true;
 	{
 		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
-		if (out.fail())
-			return false;
-		//存档版本
-		UINT ver = VERSION_SAVE;
-		out.write((char*)&ver, sizeof(UINT));
-		//名称
-		size_t strLen = saveName.length();
-		cDebug("长度: " + to_string(strLen) + "\tWCHAR大小: " + to_string(sizeof(WCHAR)) + "\n");
-		out.write((char*)&strLen, sizeof(size_t));
-		out.write((char*)saveName.c_str(), (streamsize)strLen * sizeof(WCHAR));
-		//时间
-		time_t now = time(nullptr);
-		out.write((char*)&now, sizeof(time_t));
-		//种子
-		out.write((char*)&info->seed, sizeof(int));
-		//横向方块数量
-		out.write((char*)&info->width, sizeof(int));
-		//纵向方块数量
-		out.write((char*)&info->height, sizeof(int));
+		if (!out.fail()) {
+			//存档版本
+			UINT ver = VERSION_SAVE;
+			out.write((char*)&ver, sizeof(UINT));
+			//名称
+			size_t strLen = saveName.length();
+			out.write((char*)&strLen, sizeof(size_t));
+			out.write((char*)saveName.c_str(), (streamsize)strLen * sizeof(WCHAR));
+			//时间
+			time_t now = time(nullptr);
+			out.write((char*)&now, sizeof(time_t));
+			//种子
+			out.write((char*)&info->seed, sizeof(int));
+			//横向方块数量
+			out.write((char*)&info->width, sizeof(int));
+			//纵向方块数量
+			out.write((char*)&info->height, sizeof(int));
 
-		out.close();
+			out.close();
+		}
+		else {
+			isAccept = false;
+		}
 	}
 	//玩家
 	{
 		ofstream out(path + TEXT("\\player"), ios::out | ios::binary);
-		if (out.fail())
-			return false;
-		out.write((char*)&playerState->x, 2);	//玩家横坐标
-		out.write((char*)&playerState->y, 2);	//玩家纵坐标
-		out.close();
+		if (!out.fail()) {
+			out.write((char*)&playerState->x, sizeof(int));	//玩家横坐标
+			out.write((char*)&playerState->y, sizeof(int));	//玩家纵坐标
+			out.close();
+		}
+		else {
+			isAccept = false;
+		}
 	}
 	//方块
 	{
 		ofstream out(path + TEXT("\\world\\blocks"), ios::out | ios::binary);
-		if (out.fail())
-			return false;
-		for (int i = 0; i < info->height; i++) {
-			out.write((char*)(blocks->blocks + (i * info->width)), (streamsize)(info->width) * 2);
-			if (proc && needUpdate)
-				if (*needUpdate)
-					*proc = i * info->width;
+		if (!out.fail()) {
+			for (int i = 0; i < info->height; i++) {
+				out.write((char*)(blocks->blocks + (i * info->width)), (streamsize)(info->width) * 2);
+				if (proc && needUpdate)
+					if (*needUpdate)
+						*proc = i * info->width;
+			}
+			out.close();
 		}
-		out.close();
+		else {
+			isAccept = false;
+		}
 	}
-
-	return true;
+	return isAccept;
 }
 
 
-bool MySave::load(UINT* proc, bool* needUpdate) {
+bool MySave::load(wstring path, UINT* proc, bool* needUpdate) {
+	//读取信息
+	if (!loadInfo(path + TEXT("\\saveInfo")))
+		return false;
+	//读取玩家数据
+	{
+		ifstream in(path + TEXT("\\player"));
+		if (in.fail())
+			return false;
+		int playerX = 1000, playerY = 100;
+		in.read((char*)&playerX, sizeof(int));	//玩家横坐标
+		in.read((char*)&playerY, sizeof(int));	//玩家纵坐标
+		in.close();
+	}
+	
 	return true;
 }
 
-bool MySave::loadInfo(string path) {
+bool MySave::loadInfo(wstring path) {
 	ifstream in(path, ios::in | ios::binary);
 	if (in.fail())
 		return false;
@@ -146,6 +167,7 @@ bool MySave::loadInfo(string path) {
 	in.read((char*)&height, sizeof(int));
 
 	in.close();
+	safeDelete(info);
 	info = new Info(nameStr, time, ver, seed, width, height);
 	return true;
 }
@@ -168,8 +190,8 @@ void MySave::setBlockBy2d(int x, int y, int id) {
 
 void MySave::createDirectory() {
 	std::wstring path = TEXT("data\\saves\\") + info->name;
-	CreateDirectory(TEXT("data"), nullptr);
-	CreateDirectory(TEXT("data\\saves"), nullptr);
-	CreateDirectory(path.c_str(), nullptr);
-	CreateDirectory((path + TEXT("\\world")).c_str(), nullptr);		//存档目录下的world文件夹
+	MyDir::createDirectory(TEXT("data"));
+	MyDir::createDirectory(TEXT("data\\saves"));
+	MyDir::createDirectory(path);
+	MyDir::createDirectory(path + TEXT("\\world"));
 }
