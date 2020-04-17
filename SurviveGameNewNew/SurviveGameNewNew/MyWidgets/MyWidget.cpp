@@ -137,7 +137,7 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a,
 			&D3DXVECTOR3((float)(childTargetX - targetX), (float)(childTargetY - targetY), 0), 0xffffffff);
 	}
 }
-inline void MyWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY){}
+inline void MyWidget::_onRender(LPD3DXSPRITE, int, int){}
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
@@ -149,24 +149,11 @@ void MyWidget::onDestroy() {
 }
 
 void MyWidget::mouseEvent(MyMouseEvent ev) {
-	if (childs.size() > 0) {
-		for (auto it = childs.rbegin(); it < childs.rend(); it++) {
-			MyWidget* child = *it;
-			if (!child->isVisible())
-				continue;
-			int localX = ev.x - child->realX;
-			int localY = ev.y - child->realY;
-			if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
-				child->mouseEvent(MyMouseEvent(ev.type, ev.mouse, localX, localY, ev.focusWidget));
-				return;
-			}
-		}
-	}
-	if (ev.mouse == VK_LBUTTON && ev.type == MouseFlags::Press)
-		*ev.focusWidget = this;
+	if (ev.type == Press && focusWidget)
+		*focusWidget = this;
 	_mouseEvent(ev);
 }
-inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}
+inline void MyWidget::_mouseEvent(MyMouseEvent) {}
 
 void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {
@@ -187,9 +174,9 @@ void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget)
 void MyWidget::charEvent(wstring wstr) {
 	_charEvent(wstr);
 }
-inline void MyWidget::_charEvent(wstring wstr) {}
+inline void MyWidget::_charEvent(wstring) {}
 
 void MyWidget::keyboardEvent(int key) {
 	_keyboardEvent(key);
 }
-inline void MyWidget::_keyboardEvent(int key) {}
+inline void MyWidget::_keyboardEvent(int) {}

@@ -69,6 +69,7 @@ public:
 	bool key[123];
 	bool keyPressed[123];
 	bool keyReleased[123];
+	int mice[3]{ VK_LBUTTON, VK_MBUTTON, VK_RBUTTON };
 
 	// Û±ÍŒª÷√
 	int mouseX = -1;

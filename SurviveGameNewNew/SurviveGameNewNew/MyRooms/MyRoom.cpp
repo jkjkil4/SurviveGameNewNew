@@ -28,52 +28,35 @@ void MyRoom::onLogic() {
 	}
 
 	//控件事件
-	int mouseArray[3]{VK_LBUTTON, VK_MBUTTON, VK_RBUTTON};
+	int* mice = e->mice;
 	for (int i = 0; i < 3; i++) {
-		int mouse = mouseArray[i];
+		int mouse = mice[i];
 		if (e->keyPressFlag(mouse)) {
-			bool flag = false;
-			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
-				MyWidget* w = *it;
-				if (!w->isVisible())
-					continue;
-				int localX = e->mouseX - w->realX;
-				int localY = e->mouseY - w->realY;
-				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MyMouseEvent(MouseFlags::Press, mouse, localX, localY, &focusWidget));
-					e->setKeyPressFlag(mouse, false);
-					if (mouse == VK_LBUTTON)
-						flag = true;
-					break;
-				}
+			if (mouseWidget) {
+				mouseWidget->mouseEvent(MyMouseEvent(Press, mouse, e->mouseX - mouseWidget->wndX, e->mouseY - mouseWidget->wndY));
+				e->setKeyPressFlag(mouse, false);
+				if (mouse == VK_LBUTTON)
+					focusWidget = mouseWidget;
 			}
-			if (!flag)
-				focusWidget = nullptr;
+			else {
+				if (mouse == VK_LBUTTON)
+					focusWidget = nullptr;
+			}
 		}
 		if (e->keyReleaseFlag(mouse)) {
-			bool flag = false;
-			for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
-				MyWidget* w = *it;
-				if (!w->isVisible())
-					continue;
-				int localX = e->mouseX - w->realX;
-				int localY = e->mouseY - w->realY;
-				if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-					w->mouseEvent(MyMouseEvent(MouseFlags::Release, mouse, localX, localY, &focusWidget));
-					e->setKeyReleaseFlag(mouse, false);
-					if (mouse == VK_LBUTTON)
-						flag = true;
-					break;
-				}
+			if (mouseWidget) {
+				mouseWidget->mouseEvent(MyMouseEvent(Release, mouse, e->mouseX - mouseWidget->wndX, e->mouseY - mouseWidget->wndY));
+				e->setKeyReleaseFlag(mouse, false);
 			}
-			if (!flag)
-				focusWidget = nullptr;
 		}
 	}
 
-	//检测鼠标所在控件
-	if (mouseWidget)
+	//清除
+	if (mouseWidget) {
 		mouseWidget->isMouseAt = false;
+		mouseWidget = nullptr;
+	}
+	//检测鼠标所在控件
 	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 		MyWidget* w = *it;
 		if (!w->isVisible())
