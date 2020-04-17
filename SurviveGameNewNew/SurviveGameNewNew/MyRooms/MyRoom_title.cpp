@@ -133,6 +133,13 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnCreate->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnCreate->move(175, 5);
 		btnCreate->text = TEXT("新建");
+		btnCreate->useRenderTarget();
+
+		MyPushButton* btnVerySmall = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info,
+			e->g_pFontSmall, nullptr, nullptr, btnCreate);
+		btnVerySmall->setAlign(AlignFlags::Left | AlignFlags::Top);
+		btnVerySmall->move(20, -5);
+		btnVerySmall->text = TEXT("这是个测试按钮");
 
 		MyPushButton* btnBack = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info,
 			e->g_pFont, btnSigleBackPressed, nullptr, widget);
@@ -258,7 +265,7 @@ void MyRoom_title::_btnExitPressed(MyMouseEvent ev) {
 
 void MyRoom_title::_btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-		MyDir::removeDirectory(TEXT("data\\saves"));
+		
 	}
 }
 void MyRoom_title::_btnSigleRenamePressed(MyMouseEvent ev) {

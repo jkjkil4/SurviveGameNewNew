@@ -17,14 +17,14 @@ void MyTextEdit::clear() {
 	index = 0;
 }
 
-inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
+inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) {
 	//绘制
 	e->drawRestart();
-	e->drawBorder(wndX, wndY, w, h, 1, bdColor, bdColor, bdColor, bdColor);
-	e->drawRect(wndX + 1, wndY + 1, w - 2, h - 2, bgColor, bgColor, bgColor, bgColor);
+	e->drawBorder(renderX, renderY, w, h, 1, bdColor, bdColor, bdColor, bdColor);
+	e->drawRect(renderX + 1, renderY + 1, w - 2, h - 2, bgColor, bgColor, bgColor, bgColor);
 
 	//绘制文字
-	RECT textRect = rect(wndX + 1, wndY + 1, w - 2, h - 2);
+	RECT textRect = rect(renderX + 1, renderY + 1, w - 2, h - 2);
 	wstring tempStr = text;
 	WCHAR& endChar = *tempStr.rbegin();
 	if (endChar == TEXT(' '))
@@ -67,7 +67,7 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite) {
 		//绘制
 		if (pos > 0 && pos + 2 < w) {
 			e->drawRestart();
-			e->drawRect(wndX + pos - 1, wndY + (h - textHeight) / 2, 1, textHeight, textColor, textColor, textColor, textColor);
+			e->drawRect(renderX + pos - 1, renderY + (h - textHeight) / 2, 1, textHeight, textColor, textColor, textColor, textColor);
 		}
 	}
 }

@@ -11,7 +11,7 @@ public:
 	inline void resetFocusTimer();
 	void clear();
 
-	inline void _onRender(LPD3DXSPRITE g_pSprite) override;
+	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 
 	inline void _mouseEvent(MyMouseEvent) override;
 	inline void _charEvent(std::wstring wstr) override;

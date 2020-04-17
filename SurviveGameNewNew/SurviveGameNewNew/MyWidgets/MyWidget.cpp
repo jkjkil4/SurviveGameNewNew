@@ -52,6 +52,13 @@ void MyWidget::setAlign(int flags) {
 	alignFlags = flags;
 	parent ? updatePos(parent->w, parent->h) : updatePos(e->viewW, e->viewH);
 }
+void MyWidget::useRenderTarget() {
+	safeRelease(g_pRenderTexture);
+	safeRelease(g_pRenderSurface);
+	e->g_pDevice->CreateTexture(w, h, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL);
+	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
+}
+
 void MyWidget::updatePos(int alignW, int alignH) {
 	bool isLeft = alignFlags & AlignFlags::Left;
 	bool isRight = alignFlags & AlignFlags::Right;
@@ -92,24 +99,52 @@ bool MyWidget::isVisible() {
 	return true;
 }
 
-void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int a, int r, int g, int b) {
+void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a, int r, int g, int b) {
+	//绘制控件的贴图
+	int renderX = wndX - targetX, renderY = wndY - targetY;
 	if (g_pTexture)
 		g_pSprite->Draw(g_pTexture, nullptr, &D3DXVECTOR3(0, 0, 0),
-			&D3DXVECTOR3((float)(wndX), (float)(wndY), 0), D3DCOLOR_XRGB(r, g, b));
-	_onRender(g_pSprite);
+			&D3DXVECTOR3((float)(renderX), (float)(renderY), 0), D3DCOLOR_XRGB(r, g, b));
+
+	//继承类中的绘制
+	_onRender(g_pSprite, renderX, renderY);
+
+	//如果有Target的话，则设置
+	LPDIRECT3DSURFACE9 g_pOldTarget = nullptr;
+	if (g_pRenderSurface) {
+		g_pSprite->End();
+		e->g_pDevice->GetRenderTarget(0, &g_pOldTarget);
+		e->g_pDevice->SetRenderTarget(0, g_pRenderSurface);
+		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+		e->g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+	}
+
+	//子控件的绘制
+	int childTargetX = g_pRenderSurface ? wndX : targetX;
+	int childTargetY = g_pRenderSurface ? wndY : targetY;
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
-		if(w->isVisible())
-			w->onRender(g_pSprite, a, r, g, b);
+		if (w->isVisible())
+			w->onRender(g_pSprite, childTargetX, childTargetY, a, r, g, b);
+	}
+
+	//还原Target
+	if (g_pOldTarget) {
+		g_pSprite->End();
+		e->g_pDevice->SetRenderTarget(0, g_pOldTarget);
+		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+		g_pSprite->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), 
+			&D3DXVECTOR3((float)(childTargetX - targetX), (float)(childTargetY - targetY), 0), 0xffffffff);
 	}
 }
-inline void MyWidget::_onRender(LPD3DXSPRITE g_pSprite){}
+inline void MyWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY){}
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
 		w->onDestroy();
 		safeDelete(w);
 	}
+	safeRelease(g_pRenderSurface);
 }
 
 void MyWidget::mouseEvent(MyMouseEvent ev) {

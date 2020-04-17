@@ -7,7 +7,7 @@ MyTextWidget::MyTextWidget(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, std::w
 	this->text = text;
 }
 
-inline void MyTextWidget::_onRender(LPD3DXSPRITE g_pSprite) {
-	g_pFont->DrawText(g_pSprite, text.c_str(), -1, &rect(wndX, wndY, w, h), format, textColor);
+inline void MyTextWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) {
+	g_pFont->DrawText(g_pSprite, text.c_str(), -1, &rect(renderX, renderY, w, h), format, textColor);
 }
 

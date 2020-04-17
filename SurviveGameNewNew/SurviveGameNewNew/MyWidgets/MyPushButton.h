@@ -12,7 +12,7 @@ public:
 
 	inline void _mouseEvent(MyMouseEvent ev) override;
 
-	inline void _onRender(LPD3DXSPRITE g_pSprite) override;
+	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 
 	LPD3DXFONT g_pFont = nullptr;
 	D3DCOLOR textColor1 = D3DCOLOR_XRGB(255, 255, 255), textColor2 = D3DCOLOR_XRGB(255, 255, 0);

@@ -26,6 +26,11 @@ public:
 	MyWidget** focusWidget = nullptr;
 };
 
+/*
+	需要释放的对象：
+	g_pRenderTexture
+	g_pRenderSurface
+*/
 class MyWidget
 {
 public:
@@ -35,13 +40,17 @@ public:
 
 	void move(int x, int y);
 	void resize(int w, int h);
+
 	void setAlign(int flags);
+
+	void useRenderTarget();
+
 	void updatePos(int alignW, int alignH);
 
 	bool isVisible();
 
-	void onRender(LPD3DXSPRITE g_pSprite, int a = 255, int r = 255, int g = 255, int b = 255);
-	virtual inline void _onRender(LPD3DXSPRITE g_pSprite);
+	void onRender(LPD3DXSPRITE g_pSprite, int targetX = 0, int targetY = 0, int a = 255, int r = 255, int g = 255, int b = 255);
+	virtual inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY);
 
 	void onDestroy();
 
@@ -69,6 +78,9 @@ public:
 	//贴图
 	LPDIRECT3DTEXTURE9 g_pTexture = nullptr;
 	D3DXIMAGE_INFO* pTextureInfo = nullptr;
+	//纹理和对应的表面(用来限制区域
+	LPDIRECT3DTEXTURE9 g_pRenderTexture = nullptr;
+	LPDIRECT3DSURFACE9 g_pRenderSurface = nullptr;
 	//是否可见
 	int* pVisible = nullptr;
 	int visible = 0;
