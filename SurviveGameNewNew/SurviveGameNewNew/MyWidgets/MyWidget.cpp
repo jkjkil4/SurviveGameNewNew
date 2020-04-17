@@ -168,7 +168,7 @@ void MyWidget::mouseEvent(MyMouseEvent ev) {
 }
 inline void MyWidget::_mouseEvent(MyMouseEvent ev) {}
 
-bool MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
+void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {
 		MyWidget* child = *it;
 		if (!child->isVisible())
@@ -176,13 +176,12 @@ bool MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget)
 		int localX = mouseX - child->realX;
 		int localY = mouseY - child->realY;
 		if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
-			if (child->mouseCheckAtEvent(localX, localY, mouseWidget))
-				return true;
+			child->mouseCheckAtEvent(localX, localY, mouseWidget);
+			return;
 		}
 	}
 	*mouseWidget = this;
 	isMouseAt = true;
-	return true;
 }
 
 void MyWidget::charEvent(wstring wstr) {

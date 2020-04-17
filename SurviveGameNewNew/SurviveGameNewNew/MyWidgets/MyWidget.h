@@ -57,7 +57,7 @@ public:
 	void mouseEvent(MyMouseEvent ev);
 	virtual inline void _mouseEvent(MyMouseEvent ev);
 
-	bool mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget);
+	void mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget);
 
 	void charEvent(std::wstring wstr);
 	virtual inline void _charEvent(std::wstring wstr);

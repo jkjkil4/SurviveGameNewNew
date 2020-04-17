@@ -81,8 +81,8 @@ void MyRoom::onLogic() {
 		int localX = e->mouseX - w->realX;
 		int localY = e->mouseY - w->realY;
 		if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-			if (w->mouseCheckAtEvent(localX, localY, &mouseWidget))
-				break;
+			w->mouseCheckAtEvent(localX, localY, &mouseWidget);
+			break;
 		}
 	}
 
