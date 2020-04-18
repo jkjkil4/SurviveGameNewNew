@@ -5,7 +5,7 @@ using namespace std;
 MyEngine::MyEngine(void (*signalScaled)(), int* fps) {
 	this->fps = fps;
 	this->signalScaled = signalScaled;
-	for (int i = 0; i < 123; i++) {
+	for (int i = 0; i < keyNumber; i++) {
 		keyPressed[i] = false;
 		keyReleased[i] = false;
 		key[i] = false;
@@ -65,7 +65,8 @@ void MyEngine::onInit() {
 	doneTime = timeGetTime();
 }
 void MyEngine::onKeyCheck() {
-	for (int i = 0; i < 123; i++) {
+	//键盘按键和鼠标按键
+	for (int i = 0; i < keyNumber; i++) {
 		keyPressed[i] = false;
 		keyReleased[i] = false;
 	}
@@ -182,6 +183,11 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			setKeyFlag(keyNum, true);
 		break;
 	}
+	case WM_MOUSEWHEEL: {
+		short delta = (short)HIWORD(wParam);
+		wheelDelta += delta;
+		break;
+	}
 	case WM_CHAR: {
 		WCHAR inputWChar = wParam;
 		inputWString += inputWChar;
@@ -199,40 +205,40 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 bool MyEngine::keyFlag(int num) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		return key[index];
 	}
 	return false;
 }
 void MyEngine::setKeyFlag(int num, bool flag) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		key[index] = flag;
 	}
 }
 bool MyEngine::keyPressFlag(int num) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		return keyPressed[index];
 	}
 	return false;
 }
 void MyEngine::setKeyPressFlag(int num, bool flag) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		keyPressed[index] = flag;
 	}
 }
 bool MyEngine::keyReleaseFlag(int num) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		return keyReleased[index];
 	}
 	return false;
 }
 void MyEngine::setKeyReleaseFlag(int num, bool flag) {
 	int index = num - 1;
-	if (index >= 0 && index < 123) {
+	if (index >= 0 && index < keyNumber) {
 		keyReleased[index] = flag;
 	}
 }

@@ -2,13 +2,11 @@
 #define _MYROOM_H
 
 #include "../MyEngine.h"
+#include "../MyObject.h"
 
 #include "../MyGame/MySave.h"
 
 #include "../MyWidgets/MyWidget.h"
-#include "../MyWidgets/MyPushButton.h"
-#include "../MyWidgets/MyTextEdit.h"
-#include "../MyWidgets/MyTextWidget.h"
 
 class MyRoom
 {

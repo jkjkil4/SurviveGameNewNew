@@ -116,7 +116,7 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a,
 		e->g_pDevice->GetRenderTarget(0, &g_pOldTarget);
 		e->g_pDevice->SetRenderTarget(0, g_pRenderSurface);
 		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-		e->g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+		e->g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(70, 0, 0, 0), 1.0f, 0);
 	}
 
 	//子控件的绘制
@@ -149,11 +149,26 @@ void MyWidget::onDestroy() {
 }
 
 void MyWidget::mouseEvent(MyMouseEvent ev) {
-	if (ev.type == Press && focusWidget)
-		*focusWidget = this;
 	_mouseEvent(ev);
 }
 inline void MyWidget::_mouseEvent(MyMouseEvent) {}
+
+void MyWidget::wheelEvent(int mouseX, int mouseY, int delta) {
+	if (isAcceptWheelEvent)
+		_wheelEvent(mouseX, mouseY, delta);
+	for (auto it = childs.rbegin(); it < childs.rend(); it++) {
+		MyWidget* child = *it;
+		if (!child->isVisible())
+			continue;
+		int localX = mouseX - child->realX;
+		int localY = mouseY - child->realY;
+		if (localX >= 0 && localX <= child->w && localY >= 0 && localY <= child->h) {
+			child->wheelEvent(localX, localY, delta);
+			return;
+		}
+	}
+}
+inline void MyWidget::_wheelEvent(int, int, int) {}
 
 void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {

@@ -6,6 +6,7 @@
 #include "../utility.h"
 #include "../MyEngine.h"
 #include "../MyNameSpace.h"
+#include "../MyObject.h"
 
 class MyMouseEvent
 {
@@ -53,6 +54,9 @@ public:
 	void mouseEvent(MyMouseEvent ev);
 	virtual inline void _mouseEvent(MyMouseEvent);
 
+	void wheelEvent(int mouseX, int mouseY, int delta);
+	virtual inline void _wheelEvent(int, int, int);
+
 	void mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget);
 
 	void charEvent(std::wstring wstr);
@@ -88,6 +92,9 @@ public:
 	int visible = 0;
 	//鼠标是否在该控件中
 	bool isMouseAt = false;
+
+	//是否接收wheelEvent
+	bool isAcceptWheelEvent = false;
 
 	//子控件
 	std::vector<MyWidget*> childs;

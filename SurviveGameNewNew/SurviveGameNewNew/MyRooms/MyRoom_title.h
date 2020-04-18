@@ -1,6 +1,11 @@
 #pragma once
 #include "MyRoom.h"
 
+#include "../MyWidgets/MyPushButton.h"
+#include "../MyWidgets/MyTextEdit.h"
+#include "../MyWidgets/MyTextWidget.h"
+#include "../MyWidgets/MyScrollView.h"
+
 class MyRoom_title : public MyRoom
 {
 private:
@@ -18,19 +23,19 @@ public:
 	void loadSavesList();
 	std::vector<MySave*> saves;
 
-	void _btnSiglePressed(MyMouseEvent ev);
-	void _btnMultiPressed(MyMouseEvent ev);
-	void _btnSettingsPressed(MyMouseEvent ev);
-	void _btnExitPressed(MyMouseEvent ev);
+	void btnSiglePressed(MyMouseEvent ev);
+	void btnMultiPressed(MyMouseEvent ev);
+	void btnSettingsPressed(MyMouseEvent ev);
+	void btnExitPressed(MyMouseEvent ev);
 
-	void _btnSigleJoinPressed(MyMouseEvent ev);
-	void _btnSigleRenamePressed(MyMouseEvent ev);
-	void _btnSigleDeletePressed(MyMouseEvent ev);
-	void _btnSigleCreatePressed(MyMouseEvent ev);
-	void _btnSigleBackPressed(MyMouseEvent ev);
+	void btnSigleJoinPressed(MyMouseEvent ev);
+	void btnSigleRenamePressed(MyMouseEvent ev);
+	void btnSigleDeletePressed(MyMouseEvent ev);
+	void btnSigleCreatePressed(MyMouseEvent ev);
+	void btnSigleBackPressed(MyMouseEvent ev);
 
-	void _btnCreateBackPressed(MyMouseEvent ev);
-	void _btnCreateAcceptPressed(MyMouseEvent ev);
+	void btnCreateBackPressed(MyMouseEvent ev);
+	void btnCreateAcceptPressed(MyMouseEvent ev);
 
 	MyEngine* e = nullptr;
 

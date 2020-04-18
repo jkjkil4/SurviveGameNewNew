@@ -26,6 +26,8 @@ public:
 	void thFunc();
 	std::thread* th = new std::thread(&MyRoom_createSave::thFunc, this);
 	bool flag = false;
+
+
 };
 
 #endif

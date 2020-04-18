@@ -66,10 +66,14 @@ public:
 	bool keyReleaseFlag(int num);
 	void setKeyReleaseFlag(int num, bool flag);
 	std::vector<MyKey*> vec_keyBuffer;
-	bool key[123];
-	bool keyPressed[123];
-	bool keyReleased[123];
+	static constexpr int keyNumber = 0x88;
+	bool key[keyNumber];
+	bool keyPressed[keyNumber];
+	bool keyReleased[keyNumber];
 	int mice[3]{ VK_LBUTTON, VK_MBUTTON, VK_RBUTTON };
+
+	//¹öÂÖdelta
+	int wheelDelta = 0;
 
 	//Êó±êÎ»ÖÃ
 	int mouseX = -1;

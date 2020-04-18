@@ -2,23 +2,30 @@
 
 using namespace std;
 
-MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, LPD3DXFONT g_pFont, 
-	void (*signalPress)(MyMouseEvent ev), void (*signalRelease)(MyMouseEvent ev), MyWidget* parent)
+MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, LPD3DXFONT g_pFont, MyWidget* parent)
 	: MyWidget(e, g_pTexture, pTextureInfo, nullptr, parent) 
 {
 	this->g_pFont = g_pFont;
-	this->signalPress = signalPress;
-	this->signalRelease = signalRelease;
 }
 
 MyPushButton::~MyPushButton(){}
 
+void MyPushButton::setPressSlot(void(MyRoom::* pressSlotFunc)(MyMouseEvent), MyRoom* pressSlot) {
+	this->pressSlotFunc = (void(MyRoom::*)(MyMouseEvent))pressSlotFunc;
+	this->pressSlot = pressSlot;
+}
+
+void MyPushButton::setReleaseSlot(void(MyRoom::* releaseSlotFunc)(MyMouseEvent), MyRoom* releaseSlot) {
+	this->releaseSlotFunc = (void(MyRoom::*)(MyMouseEvent))releaseSlotFunc;
+	this->releaseSlot = releaseSlot;
+}
+
 inline void MyPushButton::_mouseEvent(MyMouseEvent ev) {
-	if (ev.type == MouseFlags::Press && signalPress) {
-		signalPress(ev);
+	if (ev.type == MouseFlags::Press && pressSlot && pressSlotFunc) {
+		(pressSlot->*pressSlotFunc)(ev);
 	}
-	else if (ev.type == MouseFlags::Release && signalRelease) {
-		signalRelease(ev);
+	else if (ev.type == MouseFlags::Release && releaseSlot && releaseSlotFunc) {
+		(releaseSlot->*releaseSlotFunc)(ev);
 	}
 }
 

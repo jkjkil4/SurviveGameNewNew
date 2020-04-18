@@ -26,6 +26,22 @@ void MyRoom::onLogic() {
 	if (focusWidget && wstr != TEXT("")) {
 		focusWidget->charEvent(wstr);
 	}
+	
+	//鼠标滚轮
+	if (e->wheelDelta != 0) {
+		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
+			MyWidget* w = *it;
+			if (!w->isVisible())
+				continue;
+			int localX = e->mouseX - w->realX;
+			int localY = e->mouseY - w->realY;
+			if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
+				w->wheelEvent(localX, localY, e->wheelDelta);
+				break;
+			}
+		}
+		e->wheelDelta = 0;
+	}
 
 	//控件事件
 	int* mice = e->mice;
@@ -57,15 +73,17 @@ void MyRoom::onLogic() {
 		mouseWidget = nullptr;
 	}
 	//检测鼠标所在控件
-	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
-		MyWidget* w = *it;
-		if (!w->isVisible())
-			continue;
-		int localX = e->mouseX - w->realX;
-		int localY = e->mouseY - w->realY;
-		if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-			w->mouseCheckAtEvent(localX, localY, &mouseWidget);
-			break;
+	if (e->hasFocus) {
+		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
+			MyWidget* w = *it;
+			if (!w->isVisible())
+				continue;
+			int localX = e->mouseX - w->realX;
+			int localY = e->mouseY - w->realY;
+			if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
+				w->mouseCheckAtEvent(localX, localY, &mouseWidget);
+				break;
+			}
 		}
 	}
 
