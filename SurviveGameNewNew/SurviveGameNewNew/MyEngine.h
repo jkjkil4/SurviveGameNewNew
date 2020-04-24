@@ -4,6 +4,11 @@
 #include "utility.h"
 #include "MyGame/MyData.h"
 #include "MyNameSpace.h"
+
+#include <mutex>
+
+#define Mutex(m) std::lock_guard<mutex> guard(m)
+
 /*
 	需要释放的对象：
 	g_pD3D, g_pDevice, 
@@ -24,12 +29,19 @@ public:
 
 	LRESULT ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+	//绘制
+	void drawRestart();
+	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
+	void drawBorder(int x, int y, int w, int h, int size, DWORD col1 = 0xff000000, DWORD col2 = 0xff000000, DWORD col3 = 0xff000000, DWORD col4 = 0xff000000);
+
 	//------------------------------------------------------------------------------------//
+	std::mutex m;
 	//全局变量
 	MyGlobal global;
 	//窗口、视野宽高
 	int defWidth = 800, defHeight = 608;
 	int viewW = 800, viewH = 608;
+
 	//windows的一些东西
 	HWND g_hWnd = 0;
 	HINSTANCE g_hInstance = 0;
@@ -85,11 +97,6 @@ public:
 	//字体
 	LPD3DXFONT g_pFont = nullptr;
 	LPD3DXFONT g_pFontSmall = nullptr;
-
-	//绘制
-	void drawRestart();
-	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
-	void drawBorder(int x, int y, int w, int h, int size, DWORD col1 = 0xff000000, DWORD col2 = 0xff000000, DWORD col3 = 0xff000000, DWORD col4 = 0xff000000);
 
 	//pointer
 	int* fps = nullptr;

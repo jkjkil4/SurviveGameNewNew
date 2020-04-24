@@ -2,11 +2,14 @@
 #include "MyEngine.h"
 #include "MyRooms/include_rooms.h"
 
+using namespace std;
+
 void updateWidgetsPos();
 
 int fpsCount = 0;
 int startGetFps = 0;
 int fps = 0;
+
 
 MyEngine e(updateWidgetsPos, &fps);
 bool needQuit = false;
@@ -23,7 +26,7 @@ void changeRoom(MyRoom* room) {
 	}
 	currentRoom = room;
 }
-void changeRoomByStr(std::string room) {
+void changeRoomByStr(string room) {
 	if (room == "title") {
 		changeRoom(new MyRoom_title(&e));
 	}
@@ -55,6 +58,7 @@ void mainLoop() {
 			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
+			Mutex(e.m);
 			currentRoom->onLogic();
 			if (currentRoom->changeRoomStr != "") {
 				changeRoomByStr(currentRoom->changeRoomStr);
@@ -97,7 +101,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in int nShowCmd)
 {
 	HWND& g_hWnd = e.g_hWnd;
-	cDebug(std::to_string(sizeof(char)) + " " + std::to_string(sizeof(WCHAR)) + " " + std::to_string(sizeof(short)) + "\n");
+
 	//创建窗口
 	WNDCLASS wc;
 	ZeroMemory(&wc, sizeof(wc));
@@ -139,7 +143,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	}
 
 	//多线程
-	std::thread thMainLoop(mainLoop);
+	thread thMainLoop(mainLoop);
 	thMainLoop.detach();
 
 	//消息循环
@@ -149,13 +153,18 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		if (msg.message == WM_QUIT)
 			break;
 		if (GetMessage(&msg, NULL, 0, 0)) {
+			Mutex(e.m);
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 	}
 	needQuit = true;
-	while (needQuit)
+	int _needQuit = true;
+	while (_needQuit) {
+		Mutex(e.m);
+		_needQuit = needQuit;
 		Sleep(10);
+	}
 	e.onDestroy();
 	UnregisterClass(wc.lpszClassName, hInstance);
 	return 0;

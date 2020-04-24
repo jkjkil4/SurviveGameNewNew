@@ -123,12 +123,14 @@ void MyEngine::onDestroy() {
 LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 		//------焦点检测------
-	case WM_KILLFOCUS:
+	case WM_KILLFOCUS: {
 		hasFocus = false;
 		break;
-	case WM_SETFOCUS:
+	}
+	case WM_SETFOCUS: {
 		hasFocus = true;
 		break;
+	}
 		//------大小被改变----
 	case WM_SIZE: {
 		if (isInited) {
@@ -145,37 +147,43 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		}
 		break;
 	}
-	case WM_LBUTTONDOWN:	//1
+	case WM_LBUTTONDOWN: {	//1
 		setKeyFlag(1, true);
 		vec_keyBuffer.push_back(new MyKey{ false, true, 1 });
 		break;
-	case WM_LBUTTONUP:
+	}
+	case WM_LBUTTONUP: {
 		setKeyFlag(1, false);
 		vec_keyBuffer.push_back(new MyKey{ false, false, 1 });
 		break;
-	case WM_MBUTTONDOWN:	//4
+	}
+	case WM_MBUTTONDOWN: {	//4
 		setKeyFlag(4, true);
 		vec_keyBuffer.push_back(new MyKey{ false, true, 4 });
 		break;
-	case WM_MBUTTONUP:
+	}
+	case WM_MBUTTONUP: {
 		setKeyFlag(4, false);
 		vec_keyBuffer.push_back(new MyKey{ false, false, 4 });
 		break;
-	case WM_RBUTTONDOWN:	//2
+	}
+	case WM_RBUTTONDOWN: {	//2
 		setKeyFlag(2, true);
 		vec_keyBuffer.push_back(new MyKey{ false, true, 2 });
 		break;
-	case WM_RBUTTONUP:
+	}
+	case WM_RBUTTONUP: {
 		setKeyFlag(2, false);
 		vec_keyBuffer.push_back(new MyKey{ false, false, 2 });
 		break;
-	case WM_KEYUP:{
+	}
+	case WM_KEYUP: {
 		int keyNum = wParam;
 		setKeyFlag(keyNum, false);
 		vec_keyBuffer.push_back(new MyKey{ false, false, keyNum });
 		break;
 	}
-	case WM_KEYDOWN:{
+	case WM_KEYDOWN: {
 		int keyNum = wParam;
 		MyKey* key = new MyKey{ keyFlag(keyNum), true, keyNum };
 		vec_keyBuffer.push_back(key);
@@ -193,12 +201,14 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		inputWString += inputWChar;
 		break;
 	}
-	case WM_CLOSE:
+	case WM_CLOSE: {
 		DestroyWindow(hWnd);
 		break;
-	case WM_DESTROY:
+	}
+	case WM_DESTROY: {
 		PostQuitMessage(0);
 		break;
+	}
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
