@@ -36,6 +36,7 @@ public:
 	MyWidget* mouseWidget = nullptr;
 
 	std::string changeRoomStr = "";
+	int sendMessage = 0;
 };
 
 #endif //_MYROOM_H

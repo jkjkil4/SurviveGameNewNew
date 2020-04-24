@@ -153,7 +153,8 @@ void MyRoom_title::_onRender() {
 	
 }
 void MyRoom_title::_onDebug() {
-	string str = "visibleFlags: " + to_string(visibleFlags);
+	string str = "visibleFlags: " + to_string(visibleFlags) +
+		"\nFPS: " + to_string(*e->fps);
 	wstring wstr = stringToWstring(str);
 	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, nullptr, DT_LEFT | DT_TOP, 0xff000000);
 }
@@ -212,7 +213,7 @@ void MyRoom_title::btnSettingsPressed(MyMouseEvent ev) {
 }
 void MyRoom_title::btnExitPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-		SendMessage(e->g_hWnd, WM_CLOSE, 0, 0);
+		sendMessage = WM_CLOSE;
 	}
 }
 

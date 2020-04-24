@@ -38,7 +38,7 @@ public:
 	void btnCreateAcceptPressed(MyMouseEvent ev);
 
 	MyEngine* e = nullptr;
-
+	int gg = 0;
 	/*
 	visibleFlags
 		0 -> 标题界面
