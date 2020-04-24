@@ -12,19 +12,19 @@ class MyRoom
 {
 public:
 	explicit MyRoom(MyEngine* e);
-	virtual ~MyRoom() = 0;
+	virtual ~MyRoom() = default;
 	
 	void onBeforeKeyCheck();
 
 	void onLogic();
-	virtual void _onLogic() = 0;
+	virtual void _onLogic(){}
 	void onRender();
-	virtual void _onRender() = 0;
+	virtual void _onRender(){}
 	void onDebug();
-	virtual void _onDebug() = 0;
+	virtual void _onDebug(){}
 
 	void onDestroy();
-	virtual void _onDestroy() = 0;
+	virtual void _onDestroy(){}
 
 	MyEngine* e = nullptr;
 

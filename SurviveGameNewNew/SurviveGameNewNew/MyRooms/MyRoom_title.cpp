@@ -145,7 +145,6 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnAccept->text = TEXT("´´½¨");
 	}
 }
-MyRoom_title::~MyRoom_title() {}
 
 void MyRoom_title::_onLogic() {
 	

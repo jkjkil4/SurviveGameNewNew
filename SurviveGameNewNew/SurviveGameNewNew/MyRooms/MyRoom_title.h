@@ -13,7 +13,7 @@ private:
 
 public:
 	MyRoom_title(MyEngine* e);
-	~MyRoom_title() override;
+	~MyRoom_title() override = default;
 
 	void _onLogic() override;
 	void _onRender() override;

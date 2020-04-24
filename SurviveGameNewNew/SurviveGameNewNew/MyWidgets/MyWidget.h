@@ -33,7 +33,7 @@ class MyWidget
 public:
 	explicit MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
 	explicit MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
-	virtual ~MyWidget();
+	virtual ~MyWidget() = default;
 
 	void move(int x, int y);
 	void resize(int w, int h);
@@ -47,23 +47,23 @@ public:
 	bool isVisible();
 
 	void onRender(LPD3DXSPRITE g_pSprite, int targetX = 0, int targetY = 0, int a = 255, int r = 255, int g = 255, int b = 255);
-	virtual inline void _onRender(LPD3DXSPRITE, int, int);
+	virtual inline void _onRender(LPD3DXSPRITE, int, int) {}
 
 	void onDestroy();
 
 	void mouseEvent(MyMouseEvent ev);
-	virtual inline void _mouseEvent(MyMouseEvent);
+	virtual inline void _mouseEvent(MyMouseEvent) {}
 
 	void wheelEvent(int mouseX, int mouseY, int delta);
-	virtual inline void _wheelEvent(int, int, int);
+	virtual inline void _wheelEvent(int, int, int) {}
 
 	void mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget);
 
 	void charEvent(std::wstring wstr);
-	virtual inline void _charEvent(std::wstring);
+	virtual inline void _charEvent(std::wstring) {}
 
 	void keyboardEvent(int key);
-	virtual inline void _keyboardEvent(int);
+	virtual inline void _keyboardEvent(int) {}
 
 	//-----------------------------------------------
 	MyEngine* e = nullptr;

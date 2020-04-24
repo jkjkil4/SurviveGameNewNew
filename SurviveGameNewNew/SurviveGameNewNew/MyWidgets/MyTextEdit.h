@@ -7,6 +7,7 @@ class MyTextEdit : public MyWidget
 {
 public:
 	explicit MyTextEdit(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent = nullptr);
+	~MyTextEdit() override = default;
 
 	inline void resetFocusTimer();
 	void clear();

@@ -8,7 +8,6 @@ MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE
 	this->g_pFont = g_pFont;
 }
 
-MyPushButton::~MyPushButton(){}
 
 void MyPushButton::setPressSlot(void(MyRoom::* pressSlotFunc)(MyMouseEvent), MyRoom* pressSlot) {
 	this->pressSlotFunc = (void(MyRoom::*)(MyMouseEvent))pressSlotFunc;

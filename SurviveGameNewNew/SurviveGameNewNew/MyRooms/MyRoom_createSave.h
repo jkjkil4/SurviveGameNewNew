@@ -7,10 +7,10 @@ class MyRoom_createSave : public MyRoom
 {
 public:
 	explicit MyRoom_createSave(MyEngine* e);
+	~MyRoom_createSave() override = default;
 
 	void _onLogic() override;
 	void _onRender() override;
-	void _onDebug() override;
 
 	void _onDestroy() override;
 

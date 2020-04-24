@@ -7,6 +7,7 @@ class MyTextWidget : public MyWidget
 {
 public:
 	explicit MyTextWidget(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, std::wstring text, MyWidget** focusWidget = nullptr, MyWidget* parent = nullptr);
+	~MyTextWidget() override = default;
 
 	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 

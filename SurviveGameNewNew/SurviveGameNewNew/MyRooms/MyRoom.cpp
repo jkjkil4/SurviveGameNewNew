@@ -6,7 +6,6 @@ MyRoom::MyRoom(MyEngine* e) {
 	this->e = e;
 	visibleFlags = e->global.visibleFlag;
 }
-MyRoom::~MyRoom(){}
 
 void MyRoom::onBeforeKeyCheck() {
 	if (focusWidget) {

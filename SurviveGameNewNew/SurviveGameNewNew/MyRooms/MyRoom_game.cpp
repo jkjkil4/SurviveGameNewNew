@@ -28,7 +28,6 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	//´°¿Ú¿Ø¼þ
 
 }
-MyRoom_game::~MyRoom_game() {}
 
 int MyRoom_game::findBlockBy2d(int x, int y) {
 	return (x >= 0 && y >= 0 && x < roomWidth && y < roomHeight ? blocks[x + roomWidth * y] : -1);

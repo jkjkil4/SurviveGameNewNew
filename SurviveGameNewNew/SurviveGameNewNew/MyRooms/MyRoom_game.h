@@ -12,7 +12,7 @@ class MyRoom_game : public MyRoom
 {
 public:
 	explicit MyRoom_game(MyEngine* e);
-	~MyRoom_game() override;
+	~MyRoom_game() override = default;
 
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);

@@ -11,7 +11,7 @@ class MyPushButton : public MyWidget
 {
 public:
 	explicit MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, LPD3DXFONT g_pFont, MyWidget* parent = nullptr);
-	~MyPushButton() override;
+	~MyPushButton() override = default;
 
 	void setPressSlot(void(MyRoom::* pressSignal)(MyMouseEvent), MyRoom* pressSlot);
 

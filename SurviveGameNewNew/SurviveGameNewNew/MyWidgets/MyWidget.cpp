@@ -34,7 +34,6 @@ MyWidget::MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget, MyWidget* 
 }
 
 
-MyWidget::~MyWidget(){}
 
 void MyWidget::move(int x, int y) {
 	this->x = x;
@@ -137,7 +136,6 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a,
 			&D3DXVECTOR3((float)(childTargetX - targetX), (float)(childTargetY - targetY), 0), 0xffffffff);
 	}
 }
-inline void MyWidget::_onRender(LPD3DXSPRITE, int, int){}
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
@@ -151,7 +149,6 @@ void MyWidget::onDestroy() {
 void MyWidget::mouseEvent(MyMouseEvent ev) {
 	_mouseEvent(ev);
 }
-inline void MyWidget::_mouseEvent(MyMouseEvent) {}
 
 void MyWidget::wheelEvent(int mouseX, int mouseY, int delta) {
 	if (isAcceptWheelEvent)
@@ -168,7 +165,6 @@ void MyWidget::wheelEvent(int mouseX, int mouseY, int delta) {
 		}
 	}
 }
-inline void MyWidget::_wheelEvent(int, int, int) {}
 
 void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {
@@ -189,9 +185,7 @@ void MyWidget::mouseCheckAtEvent(int mouseX, int mouseY, MyWidget** mouseWidget)
 void MyWidget::charEvent(wstring wstr) {
 	_charEvent(wstr);
 }
-inline void MyWidget::_charEvent(wstring) {}
 
 void MyWidget::keyboardEvent(int key) {
 	_keyboardEvent(key);
 }
-inline void MyWidget::_keyboardEvent(int) {}
