@@ -5,6 +5,7 @@
 #include "../MyWidgets/MyTextEdit.h"
 #include "../MyWidgets/MyTextWidget.h"
 #include "../MyWidgets/MyScrollView.h"
+#include "../MyWidgets/MySaveWidget.h"
 
 class MyRoom_title : public MyRoom
 {
@@ -38,7 +39,7 @@ public:
 	void btnCreateAcceptPressed(MyMouseEvent ev);
 
 	MyEngine* e = nullptr;
-	int gg = 0;
+
 	/*
 	visibleFlags
 		0 -> 标题界面
@@ -50,5 +51,9 @@ public:
 
 	//需要保留变量的控件
 	MyTextEdit* editSaveName = nullptr;
+
+	//存档选择的列表
+	MyScrollView* scrView = nullptr;
+	static constexpr int saveWidgetHeight = 40;
 };
 

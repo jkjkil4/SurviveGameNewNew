@@ -75,7 +75,7 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 			time_t now = time(nullptr);
 			out.write((char*)&now, sizeof(time_t));
 			//种子
-			out.write((char*)&info->seed, sizeof(int));
+			out.write((char*)&info->seed, sizeof(UINT));
 			//横向方块数量
 			out.write((char*)&info->width, sizeof(int));
 			//纵向方块数量
@@ -157,8 +157,8 @@ bool MySave::loadInfo(wstring path) {
 	time_t time = 0;
 	in.read((char*)&time, sizeof(time_t));
 	//种子
-	int seed = 114514;
-	in.read((char*)&seed, sizeof(int));
+	UINT seed = 114514;
+	in.read((char*)&seed, sizeof(UINT));
 	//横向方块数量
 	int width = 400;
 	in.read((char*)&width, sizeof(int));
@@ -169,6 +169,8 @@ bool MySave::loadInfo(wstring path) {
 	in.close();
 	safeDelete(info);
 	info = new Info(nameStr, time, ver, seed, width, height);
+	/*OutputDebugString((L"\n名称: " + nameStr + L"\n时间: " + to_wstring(time) + L"\n版本: " + to_wstring(ver) +
+		L"\n种子: " + to_wstring(seed) + L"\n宽度: " + to_wstring(width) + L"\n高度: " + to_wstring(height) + L"\n").c_str());*/
 	return true;
 }
 

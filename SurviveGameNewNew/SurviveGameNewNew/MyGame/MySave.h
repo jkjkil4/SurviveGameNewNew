@@ -11,7 +11,7 @@ public:
 	class Info
 	{
 	public:
-		Info(std::wstring name, time_t time, UCHAR version, int seed, int width, int height) {
+		Info(std::wstring name, time_t time, UCHAR version, UINT seed, int width, int height) {
 			this->name = name;
 			this->time = time;
 			this->version = version;
@@ -23,7 +23,8 @@ public:
 		std::wstring name = TEXT("NULL");
 		time_t time = 0;
 		UCHAR version = 0;
-		int seed = 114514, width = 400, height = 400;
+		UINT seed = 114514;
+		int width = 400, height = 400;
 	};
 	class PlayerState
 	{

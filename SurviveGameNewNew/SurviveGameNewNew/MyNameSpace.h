@@ -69,7 +69,7 @@ public:
 	std::wstring createSaveName = TEXT("NULL");
 	int createSaveWidth = 400;
 	int createSaveHeight = 400;
-	int createSaveSeed = 114514;
+	UINT createSaveSeed = 114514;
 };
 
 #endif

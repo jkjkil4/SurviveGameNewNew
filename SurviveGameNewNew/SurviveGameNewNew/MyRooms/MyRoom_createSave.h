@@ -18,7 +18,7 @@ public:
 	int saveWidth = 400;
 	int saveHeight = 400;
 	UINT saveCount = 160000;
-	int seed = 114514;
+	UINT seed = 114514;
 
 	bool needUpdate = false;
 	UINT proc = 0;

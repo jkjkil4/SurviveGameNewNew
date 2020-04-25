@@ -11,7 +11,7 @@ void MyScrollView::updateChildPos() {
 	int index = 0;
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
-		w->move(0, 2 + index * (childH + 2) + offset);
+		w->move(0, index * (childH + borderWidth) + offset);
 		index++;
 	}
 }
@@ -28,6 +28,18 @@ void MyScrollView::sumSpdToOffset() {
 		if (spd > 0)
 			spd = 0;
 	}
+}
+
+void MyScrollView::clear() {
+	for (auto it = childs.begin(); it < childs.end(); it++) {
+		MyWidget* child = *it;
+		child->onDestroy();
+		safeDelete(child);
+	}
+	childs.clear();
+
+	spd = 0;
+	offset = 0;
 }
 
 inline void MyScrollView::_onRender(LPD3DXSPRITE, int, int) {

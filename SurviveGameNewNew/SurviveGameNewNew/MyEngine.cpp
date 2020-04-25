@@ -5,11 +5,9 @@ using namespace std;
 MyEngine::MyEngine(void (*signalScaled)(), int* fps) {
 	this->fps = fps;
 	this->signalScaled = signalScaled;
-	for (int i = 0; i < keyNumber; i++) {
-		keyPressed[i] = false;
-		keyReleased[i] = false;
-		key[i] = false;
-	}
+	ZeroMemory(keyPressed, sizeof(bool) * keyNumber);
+	ZeroMemory(keyReleased, sizeof(bool) * keyNumber);
+	ZeroMemory(key, sizeof(bool) * keyNumber);
 }
 
 void MyEngine::onInit() {
@@ -58,7 +56,8 @@ void MyEngine::onInit() {
 
 	//初始化字体
 	D3DXCreateFont(g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
-	D3DXCreateFont(g_pDevice, 12, 6, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontSmall);
+	D3DXCreateFont(g_pDevice, 12, 6, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontVerySmall);
+	D3DXCreateFont(g_pDevice, 16, 8, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontSmall);
 
 	//其他操作
 	data.onInit("data\\texture", g_pDevice);
@@ -135,7 +134,7 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		m.unlock();
 		break;
 	}
-					//------大小被改变----
+		//------大小被改变----
 	case WM_SIZE: {
 		if (isInited) {
 			resizeTime = timeGetTime();
@@ -213,12 +212,10 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_CLOSE: {
 		DestroyWindow(hWnd);
-		cDebug("WM_CLOSE!\n");
 		break;
 	}
 	case WM_DESTROY: {
 		PostQuitMessage(0);
-		cDebug("WM_DESTROY!\n");
 		break;
 	}
 	}

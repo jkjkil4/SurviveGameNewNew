@@ -115,9 +115,9 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a,
 		e->g_pDevice->GetRenderTarget(0, &g_pOldTarget);
 		e->g_pDevice->SetRenderTarget(0, g_pRenderSurface);
 		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-		e->g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(70, 0, 0, 0), 1.0f, 0);
+		e->g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 	}
-
+	
 	//子控件的绘制
 	int childTargetX = g_pRenderSurface ? wndX : targetX;
 	int childTargetY = g_pRenderSurface ? wndY : targetY;

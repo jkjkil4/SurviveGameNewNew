@@ -5,8 +5,6 @@ using namespace std;
 
 MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 	this->e = e;
-	if (visibleFlags == 1)
-		loadSavesList();
 	//窗口控件
 	MyGuiTexture* guiTexture = &e->data.guiTexture;
 	MyTexture* textureBtnVerySmall = &guiTexture->btnVerySmall;
@@ -59,25 +57,23 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		widget->pVisible = &visibleFlags;
 		widgets.push_back(widget);
 
-		MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontSmall, TEXT("选择存档"), nullptr, widget);
+		MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontVerySmall, TEXT("选择存档"), nullptr, widget);
 		title->format = DT_CENTER | DT_VCENTER;
 		title->textColor = 0xffcccccc;
 		title->setAlign(AlignFlags::Top);
 
-		MyScrollView* scrView = new MyScrollView(e, 420, 450, widget);
+		scrView = new MyScrollView(e, 412, 440, widget);
 		scrView->setAlign(AlignFlags::Left | AlignFlags::Top);
-		scrView->move(5, 25);
-		MyPushButton* a = new MyPushButton(e, textureBtnMedium->g_pTexture, &textureBtnMedium->info, e->g_pFont, scrView);
-		a->setAlign(AlignFlags::Top);
-		scrView->updateChildPos();
+		scrView->move(9, 30);
+		scrView->childH = saveWidgetHeight;
 
-		MyPushButton* btnRename = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontSmall, widget);
+		MyPushButton* btnRename = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontVerySmall, widget);
 		btnRename->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleRenamePressed), this);
 		btnRename->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnRename->move(88, 46);
 		btnRename->text = TEXT("重命名(没做)");
 
-		MyPushButton* btnDelete = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontSmall, widget);
+		MyPushButton* btnDelete = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontVerySmall, widget);
 		btnDelete->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleDeletePressed), this);
 		btnDelete->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnDelete->move(5, 46);
@@ -109,18 +105,18 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		widget->pVisible = &visibleFlags;
 		widgets.push_back(widget);
 
-		MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontSmall, TEXT("新建存档"), nullptr, widget);
+		MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontVerySmall, TEXT("新建存档"), nullptr, widget);
 		title->format = DT_CENTER | DT_VCENTER;
 		title->textColor = 0xffcccccc;
 		title->setAlign(AlignFlags::Top);
 		//24 22
-		MyTextWidget* saveNameLeft = new MyTextWidget(e, 220, 22, e->g_pFontSmall, TEXT("存档名称"), nullptr, widget);
+		MyTextWidget* saveNameLeft = new MyTextWidget(e, 220, 22, e->g_pFontVerySmall, TEXT("存档名称"), nullptr, widget);
 		saveNameLeft->format = DT_LEFT | DT_BOTTOM;
 		saveNameLeft->textColor = 0xffffffff;
 		saveNameLeft->setAlign(AlignFlags::Top);
 		saveNameLeft->move(-110, 24);
 
-		MyTextWidget* saveNameRight = new MyTextWidget(e, 220, 22, e->g_pFontSmall, TEXT("限制:20个字符"), nullptr, widget);
+		MyTextWidget* saveNameRight = new MyTextWidget(e, 220, 22, e->g_pFontVerySmall, TEXT("限制:20个字符"), nullptr, widget);
 		saveNameRight->format = DT_RIGHT | DT_BOTTOM;
 		saveNameRight->textColor = 0xffffffff;
 		saveNameRight->setAlign(AlignFlags::Top);
@@ -144,6 +140,9 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnAccept->move(5, 5);
 		btnAccept->text = TEXT("创建");
 	}
+
+	if (visibleFlags == 1)
+		loadSavesList();
 }
 
 void MyRoom_title::_onLogic() {
@@ -170,6 +169,7 @@ void MyRoom_title::loadSavesList() {
 	for (auto it = saves.begin(); it < saves.end(); it++)
 		safeDelete(*it);
 	saves.clear();
+	scrView->clear();
 	//读取
 	vector<wstring> files;
 	MyDir::entryList(TEXT("data\\saves\\"), &files, MyDir::Dir);
@@ -192,6 +192,14 @@ void MyRoom_title::loadSavesList() {
 		if (!isAccepted)
 			saves.push_back(save);
 	}
+	//创建控件     412 438
+	for (auto it = saves.begin(); it < saves.end(); it++) {
+		MySaveWidget* saveWidget = new MySaveWidget(e, 412, saveWidgetHeight, *it, e->g_pFontSmall, e->g_pFontVerySmall, scrView);
+		saveWidget->setAlign(AlignFlags::Top | AlignFlags::Left);
+		saveWidget->color = D3DCOLOR_XRGB(66, 66, 128);
+		saveWidget->textColor = 0xffffffff;
+	}
+	scrView->updateChildPos();
 }
 
 

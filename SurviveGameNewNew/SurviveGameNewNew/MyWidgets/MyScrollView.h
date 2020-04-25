@@ -13,6 +13,8 @@ public:
 
 	void sumSpdToOffset();
 
+	void clear();
+
 	inline void _onRender(LPD3DXSPRITE, int, int) override;
 
 	inline void _wheelEvent(int, int, int delta) override;
@@ -21,6 +23,8 @@ public:
 	int spd = 0;
 
 	int childH = 20;
+
+	int borderWidth = 4;
 };
 
 #endif
