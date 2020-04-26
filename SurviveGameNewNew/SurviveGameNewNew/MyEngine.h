@@ -99,6 +99,10 @@ public:
 	LPD3DXFONT g_pFontSmall = nullptr;
 	LPD3DXFONT g_pFontVerySmall = nullptr;
 
+	//绘制矩形的顶点Buffer
+	LPDIRECT3DVERTEXBUFFER9 vbRectangle;
+	LPDIRECT3DINDEXBUFFER9 ibRectangle;
+
 	//pointer
 	int* fps = nullptr;
 };

@@ -59,6 +59,21 @@ void MyEngine::onInit() {
 	D3DXCreateFont(g_pDevice, 12, 6, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontVerySmall);
 	D3DXCreateFont(g_pDevice, 16, 8, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFontSmall);
 
+	//初始化顶点
+	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE,
+		D3DPOOL_DEFAULT, &vbRectangle, nullptr);
+	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16, D3DPOOL_DEFAULT, &ibRectangle, 0);
+	WORD* index = nullptr;
+	ibRectangle->Lock(0, 0, (void**)&index, 0);
+	index[0] = 0;
+	index[1] = 1;
+	index[2] = 2;
+	index[3] = 0;
+	index[4] = 2;
+	index[5] = 3;
+	ibRectangle->Unlock();
+
 	//其他操作
 	data.onInit("data\\texture", g_pDevice);
 	doneTime = timeGetTime();
@@ -268,43 +283,20 @@ void MyEngine::drawRestart() {
 }
 
 void MyEngine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
-	LPDIRECT3DVERTEXBUFFER9 vb;
-	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE, 
-		D3DPOOL_MANAGED, &vb, nullptr);
-	LPDIRECT3DINDEXBUFFER9 ib;
-	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
-		D3DFMT_INDEX16, D3DPOOL_MANAGED, &ib, 0);
-
 	Vertex* vertexs;
-	vb->Lock(0, 0, (void**)&vertexs, 0);
-	
-	vertexs[0] = Vertex{(float)x, (float)y, 0.0f, 1.0f, col1};
-	vertexs[1] = Vertex{(float)(x + w), (float)y, 0.0f, 1.0f, col2};
-	vertexs[2] = Vertex{(float)(x + w), (float)(y + h), 0.0f, 1.0f, col3};
-	vertexs[3] = Vertex{(float)x, (float)(y + h), 0.0f, 1.0f, col4};
+	vbRectangle->Lock(0, 0, (void**)&vertexs, 0);
+	vertexs[0] = Vertex{ (float)x, (float)y, 0.0f, 1.0f, col1 };
+	vertexs[1] = Vertex{ (float)(x + w), (float)y, 0.0f, 1.0f, col2 };
+	vertexs[2] = Vertex{ (float)(x + w), (float)(y + h), 0.0f, 1.0f, col3 };
+	vertexs[3] = Vertex{ (float)x, (float)(y + h), 0.0f, 1.0f, col4 };
+	vbRectangle->Unlock();
 
-	vb->Unlock();
-
-	WORD* index = nullptr;
-	ib->Lock(0, 0, (void**)&index, 0);
-	index[0] = 0;
-	index[1] = 1;
-	index[2] = 2;
-	
-	index[3] = 0;
-	index[4] = 2;
-	index[5] = 3;
-	ib->Unlock();
-	
 	g_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
 	g_pDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
-	g_pDevice->SetStreamSource(0, vb, 0, sizeof(Vertex));
-	g_pDevice->SetIndices(ib);
+	g_pDevice->SetStreamSource(0, vbRectangle, 0, sizeof(Vertex));
+	g_pDevice->SetIndices(ibRectangle);
 
 	g_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
-
-	vb->Release();
-	ib->Release();
 }
 
 void MyEngine::drawBorder(int x, int y, int w, int h, int size, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {

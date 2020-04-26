@@ -99,6 +99,12 @@ bool MyWidget::isVisible() {
 }
 
 void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a, int r, int g, int b) {
+	//如果该控件完全在父控件之外，则return
+	if (parent) {
+		if (wndX + w < parent->wndX || wndX > parent->wndX + parent->w || wndY + h < parent->wndY || wndY > parent->wndY + parent->h)
+			return;
+	}
+
 	//绘制控件的贴图
 	int renderX = wndX - targetX, renderY = wndY - targetY;
 	if (g_pTexture)

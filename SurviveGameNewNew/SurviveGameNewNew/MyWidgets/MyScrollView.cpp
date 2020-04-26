@@ -29,6 +29,22 @@ void MyScrollView::sumSpdToOffset() {
 			spd = 0;
 	}
 }
+void MyScrollView::limitOffset(int minOffset) {
+	
+	if (offset > 0) {
+		int limitSpd = 2 + (offset) / 4;
+		offset -= limitSpd;
+		if (offset < 0)
+			offset = 0;
+	}
+	else if (offset < minOffset) {
+		int limitSpd = 2 + (minOffset - offset) / 4;
+		offset += limitSpd;
+		if (offset > minOffset)
+			offset = minOffset;
+	}
+	updateChildPos();
+}
 
 void MyScrollView::clear() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
@@ -47,10 +63,14 @@ inline void MyScrollView::_onRender(LPD3DXSPRITE, int, int) {
 		sumSpdToOffset();
 		updateChildPos();
 	}
+
+	int min = myMin<int>(h - (childH + borderWidth) * childs.size() + borderWidth, 0);
+	if (offset > 0 || offset < min)
+		limitOffset(min);
 }
 
 inline void MyScrollView::_wheelEvent(int, int, int delta) {
-	int num = -delta / 20;
+	int num = delta / 20;
 	if ((spd < 0 && num > 0) || (spd > 0 && num < 0))
 		spd = 0;
 	spd += num;

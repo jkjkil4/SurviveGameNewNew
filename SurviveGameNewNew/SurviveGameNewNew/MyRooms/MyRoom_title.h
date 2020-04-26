@@ -54,6 +54,6 @@ public:
 
 	//存档选择的列表
 	MyScrollView* scrView = nullptr;
-	static constexpr int saveWidgetHeight = 40;
+	static constexpr int saveWidgetHeight = 42;
 };
 

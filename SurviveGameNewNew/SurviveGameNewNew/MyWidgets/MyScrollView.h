@@ -12,6 +12,7 @@ public:
 	void updateChildPos();
 
 	void sumSpdToOffset();
+	void limitOffset(int minOffset);
 
 	void clear();
 
