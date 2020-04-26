@@ -47,12 +47,14 @@ bool MySave::save(UINT* proc, bool* needUpdate) {
 	//检测是否已经存在
 	bool dirFlag = true;
 	string fileName = wstringToString(saveName);
-	while (dirFlag) {
-		dirFlag = MyDir::isExists("data\\saves\\" + fileName);
+	int count = 0;
+	while (true) {
+		dirFlag = MyDir::isExists("data\\saves\\" + fileName + (count == 0 ? "" : "_" + to_string(count)));
 		if (!dirFlag)
 			break;
-		fileName += "_";
+		count++;
 	}
+	fileName = fileName + (count == 0 ? "" : "_" + to_string(count));
 	saveName = stringToWstring(fileName);
 	//创建文件夹
 	createDirectory();
