@@ -1,12 +1,8 @@
 #include "MySaveWidget.h"
 
 MySaveWidget::MySaveWidget(MyEngine* e, int w, int h, MySave* save, LPD3DXFONT g_pFont, LPD3DXFONT g_pFontSmall, MyWidget* parent)
-	: MyWidget(e, w, h, nullptr, parent)
-{
-	this->save = save;
-	this->g_pFont = g_pFont;
-	this->g_pFontSmall = g_pFontSmall;
-}
+	: MyWidget(e, w, h, nullptr, parent),
+	save(save), g_pFont(g_pFont), g_pFontSmall(g_pFontSmall) {}
 
 inline void MySaveWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) {
 	e->drawRect(renderX, renderY, w, h, color, color, color, color);

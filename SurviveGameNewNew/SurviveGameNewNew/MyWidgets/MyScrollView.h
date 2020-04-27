@@ -9,7 +9,7 @@ public:
 	explicit MyScrollView(MyEngine* e, int w, int h, MyWidget* parent = nullptr);
 	~MyScrollView() override = default;
 
-	void updateChildPos();
+	void updateChildsPos();
 
 	void sumSpdToOffset();
 	void limitOffset(int minOffset);

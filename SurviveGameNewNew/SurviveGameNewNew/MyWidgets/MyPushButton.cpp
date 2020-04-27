@@ -3,10 +3,8 @@
 using namespace std;
 
 MyPushButton::MyPushButton(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* pTextureInfo, LPD3DXFONT g_pFont, MyWidget* parent)
-	: MyWidget(e, g_pTexture, pTextureInfo, nullptr, parent) 
-{
-	this->g_pFont = g_pFont;
-}
+	: MyWidget(e, g_pTexture, pTextureInfo, nullptr, parent), 
+	g_pFont(g_pFont) {}
 
 
 void MyPushButton::setPressSlot(void(MyRoom::* pressSlotFunc)(MyMouseEvent), MyRoom* pressSlot) {

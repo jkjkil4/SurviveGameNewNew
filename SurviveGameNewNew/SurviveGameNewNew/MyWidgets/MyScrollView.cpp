@@ -7,7 +7,7 @@ MyScrollView::MyScrollView(MyEngine* e, int w, int h, MyWidget* parent)
 	useRenderTarget();
 }
 
-void MyScrollView::updateChildPos() {
+void MyScrollView::updateChildsPos() {
 	int index = 0;
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;
@@ -43,7 +43,7 @@ void MyScrollView::limitOffset(int minOffset) {
 		if (offset > minOffset)
 			offset = minOffset;
 	}
-	updateChildPos();
+	updateChildsPos();
 }
 
 void MyScrollView::clear() {
@@ -61,7 +61,7 @@ void MyScrollView::clear() {
 inline void MyScrollView::_onRender(LPD3DXSPRITE, int, int) {
 	if (spd != 0) {
 		sumSpdToOffset();
-		updateChildPos();
+		updateChildsPos();
 	}
 
 	int min = myMin<int>(h - (childH + borderWidth) * childs.size() + borderWidth, 0);

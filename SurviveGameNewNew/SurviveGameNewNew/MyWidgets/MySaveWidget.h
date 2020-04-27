@@ -8,6 +8,7 @@ class MySaveWidget : public MyWidget
 {
 public:
 	explicit MySaveWidget(MyEngine* e, int w, int h, MySave* save, LPD3DXFONT g_pFont, LPD3DXFONT g_pFontSmall, MyWidget* parent = nullptr);
+	~MySaveWidget() override = default;
 
 	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 

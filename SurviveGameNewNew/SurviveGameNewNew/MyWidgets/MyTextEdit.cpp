@@ -3,10 +3,8 @@
 using namespace std;
 
 MyTextEdit::MyTextEdit(MyEngine* e, int w, int h, LPD3DXFONT g_pFont, MyWidget** focusWidget, MyWidget* parent)
-	: MyWidget(e, w, h, focusWidget, parent)
-{
-	this->g_pFont = g_pFont;
-}
+	: MyWidget(e, w, h, focusWidget, parent),
+	g_pFont(g_pFont) {}
 
 inline void MyTextEdit::resetFocusTimer() {
 	focusTimer = 0;

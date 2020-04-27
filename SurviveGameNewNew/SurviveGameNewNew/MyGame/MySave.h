@@ -11,14 +11,8 @@ public:
 	class Info
 	{
 	public:
-		Info(std::wstring name, time_t time, UCHAR version, UINT seed, int width, int height) {
-			this->name = name;
-			this->time = time;
-			this->version = version;
-			this->seed = seed;
-			this->width = width;
-			this->height = height;
-		}
+		Info(std::wstring name, time_t time, UCHAR version, UINT seed, int width, int height)
+			: name(name), time(time), version(version), seed(seed), width(width), height(height) {}
 
 		std::wstring name = TEXT("NULL");
 		time_t time = 0;
@@ -53,7 +47,7 @@ public:
 	~MySave();
 
 	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr);
-	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr);
+	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, bool checkName = false);
 	bool load(std::wstring path, UINT* proc = nullptr, bool* needUpdate = nullptr);
 	bool loadInfo(std::wstring path);
 

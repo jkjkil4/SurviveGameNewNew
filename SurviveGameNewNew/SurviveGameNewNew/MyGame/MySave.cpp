@@ -39,29 +39,33 @@ bool MySave::create(Info* info, UINT* proc, bool* needUpdate) {
 }
 
 
-bool MySave::save(UINT* proc, bool* needUpdate) {
+bool MySave::save(UINT* proc, bool* needUpdate, bool checkName) {
 	if (!info || !playerState || !blocks)
 		return false;
 
 	wstring& saveName = info->name;
-	//检测是否已经存在
+	
 	bool dirFlag = true;
 	string fileName = wstringToString(saveName);
-	int count = 0;
-	while (true) {
-		dirFlag = MyDir::isExists("data\\saves\\" + fileName + (count == 0 ? "" : "_" + to_string(count)));
-		if (!dirFlag)
-			break;
-		count++;
+	if (checkName) {
+		//检测是否已经存在
+		int count = 0;
+		while (true) {
+			dirFlag = MyDir::isExists("data\\saves\\" + fileName + (count == 0 ? "" : "_" + to_string(count)));
+			if (!dirFlag)
+				break;
+			count++;
+		}
+		fileName = fileName + (count == 0 ? "" : "_" + to_string(count));
+		saveName = stringToWstring(fileName);
 	}
-	fileName = fileName + (count == 0 ? "" : "_" + to_string(count));
-	saveName = stringToWstring(fileName);
 	//创建文件夹
 	createDirectory();
 	if (proc)
 		*proc = 0;
+
 	//存档
-	wstring path = TEXT("data\\saves\\") + info->name;
+	wstring path = TEXT("data\\saves\\") + saveName;
 	bool isAccept = true;
 	{
 		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
@@ -193,6 +197,8 @@ void MySave::setBlockBy2d(int x, int y, int id) {
 
 
 void MySave::createDirectory() {
+	if (!info)
+		return;
 	std::wstring path = TEXT("data\\saves\\") + info->name;
 	MyDir::createDirectory(TEXT("data"));
 	MyDir::createDirectory(TEXT("data\\saves"));

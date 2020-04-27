@@ -24,7 +24,7 @@ void MyRoom_createSave::thFunc() {
 	else {
 		flag = true;
 		//写入
-		if (!save.save(&proc, &needUpdate)) {
+		if (!save.save(&proc, &needUpdate, true)) {
 			//如果写入失败
 			MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
 		}

@@ -199,7 +199,7 @@ void MyRoom_title::loadSavesList() {
 		saveWidget->color = D3DCOLOR_XRGB(66, 66, 128);
 		saveWidget->textColor = 0xffffffff;
 	}
-	scrView->updateChildPos();
+	scrView->updateChildsPos();
 }
 
 
@@ -254,6 +254,7 @@ void MyRoom_title::btnSigleBackPressed(MyMouseEvent ev) {
 void MyRoom_title::btnCreateBackPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
 		editSaveName->clear();
+		loadSavesList();
 		visibleFlags = 1;
 	}
 }
