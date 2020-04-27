@@ -23,10 +23,13 @@ public:
 	int y = 0;
 };
 
+
+
 /*
 	需要释放的对象：
 	g_pRenderTexture
 	g_pRenderSurface
+	vbRectangle
 */
 class MyWidget
 {

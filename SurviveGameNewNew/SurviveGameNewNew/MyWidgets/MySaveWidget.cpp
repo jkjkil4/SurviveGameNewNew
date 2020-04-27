@@ -5,11 +5,24 @@ MySaveWidget::MySaveWidget(MyEngine* e, int w, int h, MySave* save, LPD3DXFONT g
 	save(save), g_pFont(g_pFont), g_pFontSmall(g_pFontSmall) {}
 
 inline void MySaveWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) {
-	e->drawRect(renderX, renderY, w, h, color, color, color, color);
+	//»æÖÆ±³¾°
+	D3DCOLOR bgColor = color;
+	if (shownSave) {
+		if (save == *shownSave)
+			bgColor = selColor;
+	}
+	e->drawRect(renderX, renderY, w, h, bgColor, bgColor, bgColor, bgColor);
+
+	//»æÖÆÎÄ×Ö
 	if (save->info) {
 		MySave::Info* info = save->info;
 		RECT allowedRect = rect(renderX + 3, renderY + 3, w - 6, h - 6);
 		g_pFont->DrawText(g_pSprite, info->name.c_str(), -1, &allowedRect, DT_LEFT | DT_TOP, textColor);
 	}
+}
+
+inline void MySaveWidget::_mouseEvent(MyMouseEvent) {
+	if (shownSave)
+		*shownSave = save;
 }
 

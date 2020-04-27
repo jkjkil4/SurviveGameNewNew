@@ -12,11 +12,15 @@ public:
 
 	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 
+	inline void _mouseEvent(MyMouseEvent) override;
+
 	MySave* save = nullptr;
+	MySave** shownSave = nullptr;
 
 	LPD3DXFONT g_pFont = nullptr, g_pFontSmall = nullptr;
 	D3DCOLOR color = 0xffffffff;
 	D3DCOLOR textColor = 0xff000000;
+	D3DCOLOR selColor = 0xff444444;
 };
 
 #endif

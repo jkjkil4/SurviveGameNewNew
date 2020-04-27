@@ -67,6 +67,12 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		scrView->move(9, 30);
 		scrView->childH = saveWidgetHeight;
 
+		saveInfoWidget = new MyTextWidget(e, 159, 276, e->g_pFontVerySmall, TEXT(""), nullptr, widget);
+		saveInfoWidget->setAlign(AlignFlags::Right | AlignFlags::Top);
+		saveInfoWidget->move(7, 168);
+		saveInfoWidget->format = DT_LEFT | DT_TOP;
+		saveInfoWidget->textColor = 0xffffffff;
+
 		MyPushButton* btnRename = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontVerySmall, widget);
 		btnRename->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleRenamePressed), this);
 		btnRename->setAlign(AlignFlags::Right | AlignFlags::Bottom);
@@ -146,7 +152,24 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 }
 
 void MyRoom_title::_onLogic() {
-	
+	if (tmpSave != shownSave) {
+		if (shownSave) {
+			MySave::Info* info = shownSave->info;
+			tm* ltm = localtime(&info->time);
+			wstring timeMinStr = to_wstring(ltm->tm_min);
+			if (timeMinStr.length() == 1)
+				timeMinStr.insert(timeMinStr.begin(), TEXT('0'));
+			wstring timeStr = to_wstring(1900 + ltm->tm_year) + TEXT("年") + to_wstring(1 + ltm->tm_mon) + TEXT("月")
+				+ to_wstring(ltm->tm_mday) + TEXT("日 ") + to_wstring(ltm->tm_hour) + TEXT(":") + timeMinStr;
+
+			saveInfoWidget->text = 
+				  TEXT("名称: ") + info->name	//存档名称
+				+ TEXT("\n\n时间: ") + timeStr	//存档时间
+				+ TEXT("\n种子: ") + to_wstring(info->seed)		//种子
+				+ TEXT("\n大小: ") + to_wstring(info->width) + TEXT("x") + to_wstring(info->height);		//大小
+		}
+		tmpSave = shownSave;
+	}
 }
 void MyRoom_title::_onRender() {
 	
@@ -170,6 +193,9 @@ void MyRoom_title::loadSavesList() {
 		safeDelete(*it);
 	saves.clear();
 	scrView->clear();
+	saveInfoWidget->text = TEXT("");
+	tmpSave = nullptr;
+	shownSave = nullptr;
 	//读取
 	vector<wstring> files;
 	MyDir::entryList(TEXT("data\\saves\\"), &files, MyDir::Dir);
@@ -196,7 +222,9 @@ void MyRoom_title::loadSavesList() {
 	for (auto it = saves.begin(); it < saves.end(); it++) {
 		MySaveWidget* saveWidget = new MySaveWidget(e, 412, saveWidgetHeight, *it, e->g_pFontSmall, e->g_pFontVerySmall, scrView);
 		saveWidget->setAlign(AlignFlags::Top | AlignFlags::Left);
+		saveWidget->shownSave = &shownSave;
 		saveWidget->color = D3DCOLOR_XRGB(66, 66, 128);
+		saveWidget->selColor = D3DCOLOR_XRGB(54, 54, 113);
 		saveWidget->textColor = 0xffffffff;
 	}
 	scrView->updateChildsPos();

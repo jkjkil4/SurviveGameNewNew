@@ -55,5 +55,10 @@ public:
 	//存档选择的列表
 	MyScrollView* scrView = nullptr;
 	static constexpr int saveWidgetHeight = 42;
+
+	//存档信息的显示
+	MyTextWidget* saveInfoWidget = nullptr;
+	MySave* tmpSave = nullptr;
+	MySave* shownSave = nullptr;
 };
 
