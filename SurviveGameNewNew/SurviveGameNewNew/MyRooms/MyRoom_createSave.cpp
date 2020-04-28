@@ -3,13 +3,13 @@
 using namespace std;
 
 MyRoom_createSave::MyRoom_createSave(MyEngine* e) : MyRoom(e) {
-	MyGlobal* global = &e->global;
-	saveName = global->createSaveName;
-	saveWidth = global->createSaveWidth;
-	saveHeight = global->createSaveHeight;
+	MyGlobal::CreateSave* createSave = e->global.createSave;
+	saveName = createSave->name;
+	saveWidth = createSave->width;
+	saveHeight = createSave->height;
 	saveCount = saveWidth * saveHeight;
-	seed = global->createSaveSeed;
-	global->resetCreateSave();
+	seed = createSave->seed;
+	e->global.reset();
 	th->detach();
 }
 

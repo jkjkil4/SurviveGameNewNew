@@ -12,7 +12,7 @@ public:
 
 	inline void _onRender(LPD3DXSPRITE g_pSprite, int renderX, int renderY) override;
 
-	inline void _mouseEvent(MyMouseEvent) override;
+	inline void _mouseEvent(MyMouseEvent ev) override;
 
 	MySave* save = nullptr;
 	MySave** shownSave = nullptr;

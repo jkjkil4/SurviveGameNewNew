@@ -21,8 +21,9 @@ inline void MySaveWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int ren
 	}
 }
 
-inline void MySaveWidget::_mouseEvent(MyMouseEvent) {
-	if (shownSave)
-		*shownSave = save;
+inline void MySaveWidget::_mouseEvent(MyMouseEvent ev) {
+	if (ev.type == Press && ev.mouse == VK_LBUTTON)
+		if (shownSave)
+			*shownSave = save;
 }
 

@@ -81,6 +81,12 @@
     <ClInclude Include="MyWidgets\MySaveWidget.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyGame\MyGlobal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyClasses\MyExpr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">

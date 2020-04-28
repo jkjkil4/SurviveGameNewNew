@@ -125,11 +125,17 @@ void MyEngine::onDestroy() {
 	safeRelease(g_pRenderTexture);
 	safeRelease(g_pRenderSurface);
 	safeRelease(g_pWindowSurface);
+
 	safeRelease(g_pFont);
+
+	safeRelease(vbRectangle);
+	safeRelease(ibRectangle);
+
 	//Ïú»Ù
 	for (auto it = vec_keyBuffer.begin(); it < vec_keyBuffer.end(); it++)
 		delete(*it);
 	vec_keyBuffer.clear();
+
 	//destroy
 	data.onDestroy();
 }

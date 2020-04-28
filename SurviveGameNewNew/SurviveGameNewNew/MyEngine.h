@@ -4,6 +4,8 @@
 #include "utility.h"
 #include "MyGame/MyData.h"
 #include "MyNameSpace.h"
+#include "MyClasses/MyExpr.h"
+#include "MyGame/MyGlobal.h"
 
 #include <mutex>
 
@@ -16,6 +18,9 @@
 	g_pRenderTexture, g_pRenderSurface, g_pWindowSurface,
 
 	g_pFont
+
+	vbRectangle
+	ibRectangle
 */
 class MyEngine
 {

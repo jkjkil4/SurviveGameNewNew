@@ -2,7 +2,6 @@
 #define _MYROOM_H
 
 #include "../MyEngine.h"
-#include "../MyObject.h"
 
 #include "../MyGame/MySave.h"
 

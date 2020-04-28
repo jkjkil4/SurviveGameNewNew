@@ -151,11 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MyClasses\MyExpr.h" />
     <ClInclude Include="MyDir.h" />
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="MyGame\MyData.h" />
     <ClInclude Include="MyGame\MyPlayer.h" />
     <ClInclude Include="MyGame\MySave.h" />
+    <ClInclude Include="MyGame\MyGlobal.h" />
     <ClInclude Include="MyRooms\include_rooms.h" />
     <ClInclude Include="MyRooms\MyRoom.h" />
     <ClInclude Include="MyRooms\MyRoom_game.h" />

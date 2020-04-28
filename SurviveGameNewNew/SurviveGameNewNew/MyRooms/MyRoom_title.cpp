@@ -89,7 +89,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnJoin->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleJoinPressed), this);
 		btnJoin->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnJoin->move(5, 5);
-		btnJoin->text = TEXT("进入(没做)");
+		btnJoin->text = TEXT("进入");
 
 		MyPushButton* btnCreate = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info, e->g_pFont, widget);
 		btnCreate->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleCreatePressed), this);
@@ -291,11 +291,7 @@ void MyRoom_title::btnCreateAcceptPressed(MyMouseEvent ev) {
 		wstring saveName = editSaveName->text;
 		wstring_trimmed(saveName);
 		if (saveName != TEXT("")) {
-			MyGlobal* global = &e->global;
-			global->createSaveName = saveName;
-			global->createSaveWidth = 400;
-			global->createSaveHeight = 400;
-			global->createSaveSeed = 114514;
+			e->global.createSave = new MyGlobal::CreateSave(saveName, 400, 400, 114514);
 			changeRoomStr = "createSave";
 		}
 	}
