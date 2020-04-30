@@ -3,30 +3,17 @@
 using namespace std;
 
 MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
-	//其他操作
-	this->roomWidth = roomWidth;
-	this->roomHeight = roomHeight;
-	this->blockCount = roomWidth * roomHeight;
-	blocks = new short[blockCount];
-	//填充
-	for (int j = 16; j < roomHeight; j++) {
-		for (int i = 0; i < roomWidth; i++) {
-			if (i == j || i == 2 * j || i == 3 * j || i == 4 * j || i == 5 * j || i == 6 * j) {
-				setBlockBy2d(i, j, 1);
-			}
-			else {
-				setBlockBy2d(i, j, 0);
-			}
-		}
-	}
-	for (int i = 0; i < roomWidth; i += 5) {
-		setBlockBy2d(i, 16, 3);
-	}
-	setBlockBy2d(roomWidth - 1, roomHeight - 1, 3);
-	player.x = 1020;
-	player.y = 100;
+	//初始化
+	e->global.game->getVarible(save);
+	roomWidth = save->info->width;
+	roomHeight = save->info->height;
+	blockCount = roomWidth * roomHeight;
+	blocks = save->blocks->blocks;
+	player.x = save->playerState->x;
+	player.y = save->playerState->y;
 	//窗口控件
 
+	//重置
 	e->global.reset();
 }
 

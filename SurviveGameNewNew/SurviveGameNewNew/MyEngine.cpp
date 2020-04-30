@@ -144,15 +144,15 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	switch (uMsg) {
 		//------焦点检测------
 	case WM_KILLFOCUS: {
-		mutex.lock();
+		m.lock();
 		hasFocus = false;
-		mutex.unlock();
+		m.unlock();
 		break;
 	}
 	case WM_SETFOCUS: {
-		mutex.lock();
+		m.lock();
 		hasFocus = true;
-		mutex.unlock();
+		m.unlock();
 		break;
 	}
 		//------大小被改变----
@@ -164,12 +164,12 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			GetClientRect(g_hWnd, &rect);
 			int w = rect.right - rect.left;
 			int h = rect.bottom - rect.top;
-			mutex.lock();
+			m.lock();
 			viewW = w;
 			viewH = h;
 			mySetScale(g_pSpriteRender, 0, 0, (float)defWidth / w, (float)defHeight / h);
 			signalScaled();
-			mutex.unlock();
+			m.unlock();
 		}
 		break;
 	}
@@ -219,16 +219,16 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_MOUSEWHEEL: {
 		short delta = (short)HIWORD(wParam);
-		mutex.lock();
+		m.lock();
 		wheelDelta += delta;
-		mutex.unlock();
+		m.unlock();
 		break;
 	}
 	case WM_CHAR: {
 		WCHAR inputWChar = wParam;
-		mutex.lock();
+		m.lock();
 		inputWString += inputWChar;
-		mutex.unlock();
+		m.unlock();
 		break;
 	}
 	case WM_CLOSE: {

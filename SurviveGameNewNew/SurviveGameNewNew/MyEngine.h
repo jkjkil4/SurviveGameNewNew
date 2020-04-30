@@ -7,10 +7,6 @@
 #include "MyClasses/MyExpr.h"
 #include "MyGame/MyGlobal.h"
 
-#include <mutex>
-
-#define Mutex(m) std::lock_guard<mutex> guard(m)
-
 /*
 	需要释放的对象：
 	g_pD3D, g_pDevice, 
@@ -40,7 +36,7 @@ public:
 	void drawBorder(int x, int y, int w, int h, int size, DWORD col1 = 0xff000000, DWORD col2 = 0xff000000, DWORD col3 = 0xff000000, DWORD col4 = 0xff000000);
 
 	//------------------------------------------------------------------------------------//
-	std::mutex mutex, changeRoomMutex;
+	std::mutex m, changeRoomMutex;
 	//全局变量
 	MyGlobal global;
 	//窗口、视野宽高

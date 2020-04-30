@@ -58,9 +58,9 @@ void mainLoop() {
 			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
-			e.mutex.lock();
+			e.m.lock();
 			currentRoom->onLogic();
-			e.mutex.unlock();
+			e.m.unlock();
 			int& sendMessage = currentRoom->sendMessage;
 			if (sendMessage != 0) {
 				SendMessage(e.g_hWnd, sendMessage, 0, 0);
@@ -101,7 +101,7 @@ void mainLoop() {
 		currentRoom->onDestroy();
 		safeDelete(currentRoom);
 	}
-	Mutex(e.mutex);
+	Mutex(e.m);
 	needQuit = false;
 }
 
@@ -171,7 +171,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	int _needQuit = true;
 	while (_needQuit) {
 		{
-			Mutex(e.mutex);
+			Mutex(e.m);
 			_needQuit = needQuit;
 		}
 		Sleep(10);

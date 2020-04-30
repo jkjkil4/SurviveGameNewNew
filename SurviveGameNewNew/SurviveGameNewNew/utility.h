@@ -53,6 +53,8 @@ std::string wstringToString(const std::wstring str);
 void getFiles(std::string path, std::string exd, std::vector<std::wstring>* files);
 
 //------别的东西-------
+#include <mutex>
+#define Mutex(m) std::lock_guard<std::mutex> guard(m)
 #define MyMsgBox(str) MessageBox(nullptr, stringToWstring(str).c_str(), TEXT("1"), MB_OK)
 #define cDebug(str) OutputDebugString( stringToWstring(str).c_str() )
 void wstring_trimmed(std::wstring& wstr);

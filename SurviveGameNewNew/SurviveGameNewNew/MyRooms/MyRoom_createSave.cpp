@@ -13,14 +13,14 @@ void MyRoom_createSave::thFunc() {
 	MySave save;
 	//创建
 	MySave::Info* info = new MySave::Info(saveName, time(nullptr), 0, seed, saveWidth, saveHeight);
-	if (!save.create(info, &proc, &needUpdate)) {
+	if (!save.create(info, &proc, &needUpdate, &m)) {
 		//如果创建失败
 		MessageBox(nullptr, TEXT("创建失败"), TEXT("错误"), MB_OK);
 	}
 	else {
 		flag = true;
 		//写入
-		if (!save.save(&proc, &needUpdate, true)) {
+		if (!save.save(&proc, &needUpdate, true, &m)) {
 			//如果写入失败
 			MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
 		}
@@ -32,15 +32,18 @@ void MyRoom_createSave::thFunc() {
 }
 
 void MyRoom_createSave::_onLogic() {
+	Mutex(m);
 	needUpdate = true;
 }
 
 void MyRoom_createSave::_onRender() {
-	string type = (flag ? "写入文件" : "生成世界");
-	string str = "当前进行的是: " + type
-		+ "\n宽度: " + to_string(saveWidth) + "    高度: " + to_string(saveHeight)
-		+ "\n进度: " + to_string((int)((proc / (double)saveCount * 100))) + "%";
-	wstring wstr = stringToWstring(str);
+	m.lock();
+	int _proc = proc;
+	m.unlock();
+	wstring type = (flag ? TEXT("写入文件") : TEXT("生成世界"));
+	wstring wstr = TEXT("当前进行的是: ") + type
+		+ TEXT("\n宽度: ") + to_wstring(saveWidth) + TEXT("    高度: ") + to_wstring(saveHeight)
+		+ TEXT("\n进度: ") + to_wstring((int)((_proc / (double)saveCount * 100))) + TEXT("%");
 	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, &rect(0, 0, e->viewW, e->viewH), DT_CENTER | DT_VCENTER, 0xff000000);
 }
 

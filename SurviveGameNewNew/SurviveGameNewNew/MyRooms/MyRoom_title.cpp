@@ -257,7 +257,7 @@ void MyRoom_title::btnExitPressed(MyMouseEvent ev) {
 void MyRoom_title::btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
 		if (shownSave) {
-			e->global.loadSave = new MyGlobal::LoadSave(shownSave->info->name);
+			e->global.loadSave = new MyGlobal::LoadSave(TEXT("data\\saves\\") + shownSave->info->name);
 			setChangeRoomStr("loadSave");
 		}
 	}

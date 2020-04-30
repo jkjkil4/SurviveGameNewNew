@@ -1,6 +1,8 @@
 #ifndef _MYGLOBAL_H
 #define _MYGLOBAL_H
 
+#include "MySave.h"
+
 class MyGlobal
 {
 public:
@@ -31,6 +33,16 @@ public:
 		}
 		std::wstring saveName = TEXT("");
 	};
+	class Game
+	{
+	public:
+		explicit Game(MySave* save)
+			: save(save) {}
+		void getVarible(MySave*& pSave) {
+			pSave = save;
+		}
+		MySave* save;
+	};
 #pragma endregion
 	void reset() {
 		visibleFlag = 0;
@@ -43,6 +55,7 @@ public:
 
 	CreateSave* createSave = nullptr;
 	LoadSave* loadSave = nullptr;
+	Game* game = nullptr;
 };
 
 #endif

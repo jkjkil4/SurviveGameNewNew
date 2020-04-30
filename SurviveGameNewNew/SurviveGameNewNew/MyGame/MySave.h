@@ -8,6 +8,7 @@
 class MySave
 {
 public:
+#pragma region MySaveÀàµÄÇ¶Ì×Àà
 	class Info
 	{
 	public:
@@ -43,12 +44,13 @@ public:
 
 		short* blocks = nullptr;
 	};
+#pragma endregion
 //--------------------------------------------------
 	~MySave();
 
-	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr);
-	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, bool checkName = false);
-	bool load(std::wstring path, UINT* proc = nullptr, bool* needUpdate = nullptr);
+	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
+	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, bool checkName = false, std::mutex* m = nullptr);
+	bool load(std::wstring path, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
 	bool loadInfo(std::wstring path);
 
 	int findBlockBy2d(int x, int y);

@@ -23,6 +23,8 @@ public:
 
 	void _onDestroy() override;
 
+	MySave* save = nullptr;
+
 	short* blocks;	//方块
 
 	int roomWidth = 400;	//横向的方块数量

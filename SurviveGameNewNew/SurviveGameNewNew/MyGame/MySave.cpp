@@ -12,7 +12,7 @@ MySave::~MySave() {
 }
 
 
-bool MySave::create(Info* info, UINT* proc, bool* needUpdate) {
+bool MySave::create(Info* info, UINT* proc, bool* needUpdate, std::mutex* m) {
 	this->info = info;
 	playerState = new PlayerState(1020, 100);
 	blocks = new Blocks(new short[info->width * info->height]);
@@ -26,9 +26,12 @@ bool MySave::create(Info* info, UINT* proc, bool* needUpdate) {
 				setBlockBy2d(i, j, 0);
 			}
 		}
-		if (proc && needUpdate)
+		if (proc && needUpdate) {
+			Mutex(*m);
 			if (*needUpdate)
 				*proc = j * info->width;
+			
+		}
 	}
 	for (int i = 0; i < info->width; i += 5) {
 		setBlockBy2d(i, 16, 3);
@@ -39,7 +42,7 @@ bool MySave::create(Info* info, UINT* proc, bool* needUpdate) {
 }
 
 
-bool MySave::save(UINT* proc, bool* needUpdate, bool checkName) {
+bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 	if (!info || !playerState || !blocks)
 		return false;
 
@@ -61,9 +64,10 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName) {
 	}
 	//创建文件夹
 	createDirectory();
+	m->lock();
 	if (proc)
 		*proc = 0;
-
+	m->unlock();
 	//存档
 	wstring path = TEXT("data\\saves\\") + saveName;
 	bool isAccept = true;
@@ -111,9 +115,11 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName) {
 		if (!out.fail()) {
 			for (int i = 0; i < info->height; i++) {
 				out.write((char*)(blocks->blocks + (i * info->width)), (streamsize)(info->width) * 2);
-				if (proc && needUpdate)
+				if (proc && needUpdate) {
+					Mutex(*m);
 					if (*needUpdate)
 						*proc = i * info->width;
+				}
 			}
 			out.close();
 		}
@@ -125,21 +131,41 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName) {
 }
 
 
-bool MySave::load(wstring path, UINT* proc, bool* needUpdate) {
+bool MySave::load(wstring path, UINT* proc, bool* needUpdate, std::mutex* m) {
 	//读取信息
 	if (!loadInfo(path + TEXT("\\saveInfo")))
 		return false;
 	//读取玩家数据
 	{
-		ifstream in(path + TEXT("\\player"));
+		ifstream in(path + TEXT("\\player"), ios::in | ios::binary);
 		if (in.fail())
 			return false;
 		int playerX = 1000, playerY = 100;
 		in.read((char*)&playerX, sizeof(int));	//玩家横坐标
 		in.read((char*)&playerY, sizeof(int));	//玩家纵坐标
 		in.close();
+		playerState = new PlayerState(playerX, playerY);
 	}
-	
+	//读取方块数据
+	{
+		ifstream in(path + TEXT("\\world\\blocks"), ios::in | ios::binary);
+		if (in.fail())
+			return false;
+		streamsize wSize = (streamsize)info->width * sizeof(short);
+		blocks = new Blocks(new short[info->width * info->height]);
+		short* pBlocks = blocks->blocks;
+		for (int i = 0; i < info->height; i++) {
+			int offset = info->width * i;
+			short* pOffset = pBlocks + offset;
+			in.read((char*)pOffset, wSize);
+			if (proc && needUpdate) {
+				Mutex(*m);
+				if (*needUpdate)
+					*proc = offset;
+			}
+		}
+		in.close();
+	}
 	return true;
 }
 
