@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MyClasses\MyStrExpr.h" />
     <ClInclude Include="MyClasses\MyExpr.h" />
     <ClInclude Include="MyDir.h" />
     <ClInclude Include="MyEngine.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
     <ClInclude Include="MyWidgets\MySaveWidget.h" />
     <ClInclude Include="MyWidgets\MyScrollView.h" />
+    <ClInclude Include="MyWidgets\MySolidColorWidget.h" />
     <ClInclude Include="MyWidgets\MyTextWidget.h" />
     <ClInclude Include="MyWidgets\MyTextEdit.h" />
     <ClInclude Include="MyWidgets\MyPushButton.h" />
@@ -189,6 +191,7 @@
     <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
     <ClCompile Include="MyWidgets\MySaveWidget.cpp" />
     <ClCompile Include="MyWidgets\MyScrollView.cpp" />
+    <ClCompile Include="MyWidgets\MySolidColorWidget.cpp" />
     <ClCompile Include="MyWidgets\MyTextWidget.cpp" />
     <ClCompile Include="MyWidgets\MyTextEdit.cpp" />
     <ClCompile Include="MyWidgets\MyPushButton.cpp" />

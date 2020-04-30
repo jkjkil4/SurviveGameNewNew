@@ -4,7 +4,7 @@
 #include "utility.h"
 #include "MyGame/MyData.h"
 #include "MyNameSpace.h"
-#include "MyClasses/MyExpr.h"
+#include "MyClasses/MyStrExpr.h"
 #include "MyGame/MyGlobal.h"
 
 /*
@@ -83,7 +83,7 @@ public:
 	bool key[keyNumber];
 	bool keyPressed[keyNumber];
 	bool keyReleased[keyNumber];
-	int mice[3]{ VK_LBUTTON, VK_MBUTTON, VK_RBUTTON };
+	static constexpr int mice[3]{ VK_LBUTTON, VK_MBUTTON, VK_RBUTTON };
 
 	//¹öÂÖdelta
 	int wheelDelta = 0;

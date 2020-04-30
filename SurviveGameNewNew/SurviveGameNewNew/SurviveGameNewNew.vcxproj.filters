@@ -84,6 +84,12 @@
     <ClInclude Include="MyGame\MyGlobal.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyWidgets\MySolidColorWidget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyClasses\MyStrExpr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="MyClasses\MyExpr.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -141,6 +147,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyWidgets\MySaveWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyWidgets\MySolidColorWidget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

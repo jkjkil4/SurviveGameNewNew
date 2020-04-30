@@ -17,6 +17,8 @@ MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* p
 	else {
 		updatePos(e->viewW, e->viewH);
 	}
+
+	expr.addExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And });
 }
 MyWidget::MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget, MyWidget* parent) {
 	this->e = e;
@@ -94,7 +96,7 @@ void MyWidget::updatePos(int alignW, int alignH) {
 
 bool MyWidget::isVisible() {
 	if (pVisible)
-		return visible == *pVisible;
+		return expr.checkNumber(*pVisible, visible);
 	return true;
 }
 

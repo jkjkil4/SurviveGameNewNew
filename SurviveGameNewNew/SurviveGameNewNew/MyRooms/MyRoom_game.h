@@ -4,6 +4,8 @@
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
 
+#include "../MyWidgets/MySolidColorWidget.h"
+
 /*
 	需要释放的对象
 	无
@@ -21,6 +23,8 @@ public:
 	void _onRender() override;
 	void _onDebug() override;
 
+	void _onResize() override;
+
 	void _onDestroy() override;
 
 	MySave* save = nullptr;
@@ -33,8 +37,9 @@ public:
 
 	MyPlayer player;
 
-	bool visibleFlag = false;
 
+	//
+	MySolidColorWidget* solidColorWidget = nullptr;
 };
 
 

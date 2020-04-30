@@ -25,6 +25,9 @@ public:
 	void onDebug();
 	virtual void _onDebug(){}
 
+	void onResize();
+	virtual void _onResize(){}
+
 	void onDestroy();
 	virtual void _onDestroy(){}
 

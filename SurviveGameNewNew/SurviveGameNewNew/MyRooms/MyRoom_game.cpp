@@ -11,7 +11,16 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	blocks = save->blocks->blocks;
 	player.x = save->playerState->x;
 	player.y = save->playerState->y;
+
 	//窗口控件
+	{
+		solidColorWidget = new MySolidColorWidget(e, e->viewW, e->viewH);
+		solidColorWidget->pVisible = &visibleFlags;
+		solidColorWidget->visible = 9999;	//这行和下一行设置了当visible大于9999时显示
+		solidColorWidget->expr.setExpr(MyExpr::Expr{ MyExpr::More, MyExpr::And });
+		solidColorWidget->color = D3DCOLOR_ARGB(96, 0, 0, 0);
+		widgets.push_back(solidColorWidget);
+	}
 
 	//重置
 	e->global.reset();
@@ -26,7 +35,17 @@ void MyRoom_game::setBlockBy2d(int x, int y, int id) {
 }
 
 void MyRoom_game::_onLogic() {
-	int timeStart = timeGetTime();
+	if (e->keyPressFlag(VK_ESCAPE)) {	//如果Esc键被按下
+		if (visibleFlags > 9999) {	//如果visibleFlags大于9999 (显示了Esc菜单)
+			//关闭Esc菜单
+			visibleFlags = 0;
+		}
+		else {
+			//开启Esc菜单
+			visibleFlags = 10000;
+		}
+	}
+
 	//得到视野坐标
 	int viewX = player.x - e->viewW / 2;
 	int viewY = player.y - e->viewH / 2;
@@ -97,6 +116,10 @@ void MyRoom_game::_onDebug() {
 		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
 	wstring wstr = stringToWstring(str);
 	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, 0, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
+}
+
+void MyRoom_game::_onResize() {
+	solidColorWidget->resize(e->viewW, e->viewH);
 }
 
 void MyRoom_game::_onDestroy() {

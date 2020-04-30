@@ -25,7 +25,7 @@ public:
 	D3DCOLOR bdColor = 0xffcccccc;
 
 	std::wstring text = TEXT("");
-	MyExpr expr;
+	MyStrExpr expr;
 	int index = 0;
 	int maxLength = -1;
 

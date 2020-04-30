@@ -11,8 +11,9 @@ void MyRoom::onBeforeKeyCheck() {
 	if (focusWidget) {
 		for (auto it = e->vec_keyBuffer.begin(); it < e->vec_keyBuffer.end(); it++) {
 			MyKey* key = *it;
+			int vk = key->key;
 			if (key->flag) {	//按下按键
-				focusWidget->keyboardEvent(key->key);
+				focusWidget->keyboardEvent(vk);
 			}
 		}
 	}
@@ -55,7 +56,7 @@ void MyRoom::onLogic() {
 	}
 
 	//控件事件
-	int* mice = e->mice;
+	const int* mice = e->mice;
 	for (int i = 0; i < 3; i++) {
 		int mouse = mice[i];
 		if (e->keyPressFlag(mouse)) {
@@ -75,6 +76,11 @@ void MyRoom::onLogic() {
 				mouseWidget->mouseEvent(MyMouseEvent(Release, mouse, e->mouseX - mouseWidget->wndX, e->mouseY - mouseWidget->wndY));
 				e->setKeyReleaseFlag(mouse, false);
 			}
+		}
+		if (mouseWidget) {
+			e->setKeyFlag(mouse, false);
+			e->setKeyPressFlag(mouse, false);
+			e->setKeyReleaseFlag(mouse, false);
 		}
 	}
 
@@ -116,6 +122,11 @@ void MyRoom::onRender() {
 void MyRoom::onDebug() {
 	_onDebug();
 }
+
+void MyRoom::onResize() {
+	_onResize();
+}
+
 void MyRoom::onDestroy() {
 	_onDestroy();
 	//销毁控件

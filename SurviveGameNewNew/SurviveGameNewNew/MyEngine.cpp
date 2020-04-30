@@ -80,15 +80,14 @@ void MyEngine::onInit() {
 }
 void MyEngine::onKeyCheck() {
 	//键盘按键和鼠标按键
-	for (int i = 0; i < keyNumber; i++) {
-		keyPressed[i] = false;
-		keyReleased[i] = false;
-	}
+	ZeroMemory(keyPressed, sizeof(bool) * keyNumber);
+	ZeroMemory(keyReleased, sizeof(bool) * keyNumber);
 	for (auto it = vec_keyBuffer.begin(); it < vec_keyBuffer.end(); it++) {
 		MyKey* key = *it;
-		if (key->isForWidget)
-			continue;
-		key->flag ? setKeyPressFlag(key->key, true) : setKeyReleaseFlag(key->key, true);
+		if (!key->isForWidget)
+			key->flag ? setKeyPressFlag(key->key, true) : setKeyReleaseFlag(key->key, true);
+		safeDelete(key);
+
 	}
 	vec_keyBuffer.clear();
 	POINT mPos;

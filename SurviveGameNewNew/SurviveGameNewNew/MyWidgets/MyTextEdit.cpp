@@ -64,7 +64,7 @@ inline void MyTextEdit::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int rende
 		int pos = textLeft + textOffset;
 		//»æÖÆ
 		if (pos > 0 && pos + 2 < w) {
-			e->drawRestart();
+			//e->drawRestart();
 			e->drawRect(renderX + pos - 1, renderY + (h - textHeight) / 2, 1, textHeight, textColor, textColor, textColor, textColor);
 		}
 	}

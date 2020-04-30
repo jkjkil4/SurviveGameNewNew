@@ -43,9 +43,9 @@ void changeRoomByStr(string room) {
 
 void updateWidgetsPos() {
 	if (currentRoom) {
-		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++) {
+		currentRoom->onResize();
+		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++)
 			(*it)->updatePos(e.viewW, e.viewH);
-		}
 	}
 }
 
