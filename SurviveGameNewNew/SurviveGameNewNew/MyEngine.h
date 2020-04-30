@@ -40,7 +40,7 @@ public:
 	void drawBorder(int x, int y, int w, int h, int size, DWORD col1 = 0xff000000, DWORD col2 = 0xff000000, DWORD col3 = 0xff000000, DWORD col4 = 0xff000000);
 
 	//------------------------------------------------------------------------------------//
-	std::mutex m;
+	std::mutex mutex, changeRoomMutex;
 	//全局变量
 	MyGlobal global;
 	//窗口、视野宽高

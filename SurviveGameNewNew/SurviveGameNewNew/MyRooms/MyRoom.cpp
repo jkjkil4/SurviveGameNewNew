@@ -18,6 +18,18 @@ void MyRoom::onBeforeKeyCheck() {
 	}
 }
 
+string MyRoom::getChangeRoomStr() {
+	e->changeRoomMutex.lock();
+	string str = changeRoomStr;
+	e->changeRoomMutex.unlock();
+	return str;
+}
+void MyRoom::setChangeRoomStr(string str) {
+	e->changeRoomMutex.lock();
+	changeRoomStr = str;
+	e->changeRoomMutex.unlock();
+}
+
 void MyRoom::onLogic() {
 	//ÏìÓ¦ÊäÈë×Ö·û
 	wstring wstr = e->inputWString;

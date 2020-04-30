@@ -14,6 +14,8 @@ public:
 	void _onDebug() override;
 
 	void _onDestroy() override;
+
+	std::wstring saveName = TEXT("");
 };
 
 #endif

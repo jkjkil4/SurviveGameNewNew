@@ -149,6 +149,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 
 	if (visibleFlags == 1)
 		loadSavesList();
+	e->global.reset();
 }
 
 void MyRoom_title::_onLogic() {
@@ -255,7 +256,10 @@ void MyRoom_title::btnExitPressed(MyMouseEvent ev) {
 
 void MyRoom_title::btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-		
+		if (shownSave) {
+			e->global.loadSave = new MyGlobal::LoadSave(shownSave->info->name);
+			setChangeRoomStr("loadSave");
+		}
 	}
 }
 void MyRoom_title::btnSigleRenamePressed(MyMouseEvent ev) {
@@ -292,7 +296,7 @@ void MyRoom_title::btnCreateAcceptPressed(MyMouseEvent ev) {
 		wstring_trimmed(saveName);
 		if (saveName != TEXT("")) {
 			e->global.createSave = new MyGlobal::CreateSave(saveName, 400, 400, 114514);
-			changeRoomStr = "createSave";
+			setChangeRoomStr("createSave");
 		}
 	}
 }

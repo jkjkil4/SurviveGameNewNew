@@ -58,18 +58,21 @@ void mainLoop() {
 			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
-			e.m.lock();
+			e.mutex.lock();
 			currentRoom->onLogic();
-			e.m.unlock();
+			e.mutex.unlock();
 			int& sendMessage = currentRoom->sendMessage;
 			if (sendMessage != 0) {
 				SendMessage(e.g_hWnd, sendMessage, 0, 0);
 				sendMessage = 0;
 			}
-			if (currentRoom->changeRoomStr != "") {
-				changeRoomByStr(currentRoom->changeRoomStr);
+
+			string changeRoomStr = currentRoom->getChangeRoomStr();
+			if (changeRoomStr != "") {
+				changeRoomByStr(changeRoomStr);
 				continue;
 			}
+
 			if (e.g_hWnd) {
 				if (!IsIconic(e.g_hWnd)) {
 					e.renderStart();
@@ -98,7 +101,7 @@ void mainLoop() {
 		currentRoom->onDestroy();
 		safeDelete(currentRoom);
 	}
-	Mutex(e.m);
+	Mutex(e.mutex);
 	needQuit = false;
 }
 
@@ -168,7 +171,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	int _needQuit = true;
 	while (_needQuit) {
 		{
-			Mutex(e.m);
+			Mutex(e.mutex);
 			_needQuit = needQuit;
 		}
 		Sleep(10);

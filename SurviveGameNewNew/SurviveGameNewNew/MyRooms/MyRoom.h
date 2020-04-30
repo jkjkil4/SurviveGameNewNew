@@ -15,6 +15,9 @@ public:
 	
 	void onBeforeKeyCheck();
 
+	std::string getChangeRoomStr();
+	void setChangeRoomStr(std::string str);
+
 	void onLogic();
 	virtual void _onLogic(){}
 	void onRender();

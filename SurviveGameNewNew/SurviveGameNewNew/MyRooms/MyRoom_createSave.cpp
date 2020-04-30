@@ -3,12 +3,8 @@
 using namespace std;
 
 MyRoom_createSave::MyRoom_createSave(MyEngine* e) : MyRoom(e) {
-	MyGlobal::CreateSave* createSave = e->global.createSave;
-	saveName = createSave->name;
-	saveWidth = createSave->width;
-	saveHeight = createSave->height;
+	e->global.createSave->getVarible(saveName, saveWidth, saveHeight, seed);
 	saveCount = saveWidth * saveHeight;
-	seed = createSave->seed;
 	e->global.reset();
 	th->detach();
 }
@@ -32,7 +28,7 @@ void MyRoom_createSave::thFunc() {
 	
 	MyGlobal* global = &e->global;
 	global->visibleFlag = 1;
-	changeRoomStr = "title";
+	setChangeRoomStr("title");
 }
 
 void MyRoom_createSave::_onLogic() {

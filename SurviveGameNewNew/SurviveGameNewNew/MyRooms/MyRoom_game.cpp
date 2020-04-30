@@ -27,6 +27,7 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	player.y = 100;
 	//´°¿Ú¿Ø¼þ
 
+	e->global.reset();
 }
 
 int MyRoom_game::findBlockBy2d(int x, int y) {
