@@ -18,6 +18,7 @@ public:
 	void _onDestroy() override;
 
 	std::wstring path = TEXT("");
+	std::wstring fileName = TEXT("NULL");
 
 	std::thread* th = new std::thread(&MyRoom_loadSave::thFunc, this);
 	UINT proc = 0;

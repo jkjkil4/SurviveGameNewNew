@@ -203,7 +203,7 @@ void MyRoom_title::loadSavesList() {
 	for (auto it = files.begin(); it < files.end(); it++) {
 		MySave* save = new MySave;
 		wstring path = TEXT("data\\saves\\") + *it + TEXT("\\saveInfo");
-		if (!save->loadInfo(path)) {
+		if (!save->loadInfo(path, *it)) {
 			safeDelete(save);
 			continue;
 		}
@@ -230,6 +230,7 @@ void MyRoom_title::loadSavesList() {
 		saveWidget->color = D3DCOLOR_XRGB(66, 66, 128);
 		saveWidget->selColor = D3DCOLOR_XRGB(54, 54, 113);
 		saveWidget->textColor = 0xffffffff;
+		saveWidget->textColor2 = 0xffcccccc;
 	}
 	myd("//----------------\n" << endl);
 	scrView->updateChildsPos();
@@ -261,7 +262,7 @@ void MyRoom_title::btnExitPressed(MyMouseEvent ev) {
 void MyRoom_title::btnSigleJoinPressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
 		if (shownSave) {
-			e->global.loadSave = new MyGlobal::LoadSave(TEXT("data\\saves\\") + shownSave->info->name);
+			e->global.loadSave = new MyGlobal::LoadSave(TEXT("data\\saves\\") + shownSave->info->fileName, shownSave->info->fileName);
 			setChangeRoomStr("loadSave");
 		}
 	}

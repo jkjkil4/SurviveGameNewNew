@@ -52,7 +52,7 @@ void MyRoom::onLogic() {
 				break;
 			}
 		}
-		wheelDelta = 0;
+		e->setWheelDelta(0);
 	}
 
 	//¿Ø¼şÊÂ¼ş

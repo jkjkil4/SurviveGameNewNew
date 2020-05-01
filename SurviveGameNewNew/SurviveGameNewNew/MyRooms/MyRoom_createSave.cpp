@@ -12,12 +12,13 @@ MyRoom_createSave::MyRoom_createSave(MyEngine* e) : MyRoom(e) {
 void MyRoom_createSave::thFunc() {
 	MySave save;
 	//创建
-	MySave::Info* info = new MySave::Info(saveName, time(nullptr), 0, seed, saveWidth, saveHeight);
+	MySave::Info* info = new MySave::Info(saveName, saveName, time(nullptr), 0, seed, saveWidth, saveHeight);
 	if (!save.create(info, &proc, &needUpdate, &m)) {
 		//如果创建失败
 		MessageBox(nullptr, TEXT("创建失败"), TEXT("错误"), MB_OK);
 	}
 	else {
+		save.checkFileName();
 		flag = true;
 		//写入
 		if (!save.save(&proc, &needUpdate, true, &m)) {

@@ -18,9 +18,8 @@ public:
 	MySave** shownSave = nullptr;
 
 	LPD3DXFONT g_pFont = nullptr, g_pFontSmall = nullptr;
-	D3DCOLOR color = 0xffffffff;
-	D3DCOLOR textColor = 0xff000000;
-	D3DCOLOR selColor = 0xff444444;
+	D3DCOLOR color = 0xffffffff, selColor = 0xff444444;
+	D3DCOLOR textColor = 0xff000000, textColor2 = 0xff000000;
 };
 
 #endif

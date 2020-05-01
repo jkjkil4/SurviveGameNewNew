@@ -16,8 +16,10 @@ inline void MySaveWidget::_onRender(LPD3DXSPRITE g_pSprite, int renderX, int ren
 	//»æÖÆÎÄ×Ö
 	if (save->info) {
 		MySave::Info* info = save->info;
-		RECT allowedRect = rect(renderX + 3, renderY + 3, w - 6, h - 6);
+		RECT allowedRect = rect(renderX + 3, renderY + 3, w - 6, h - 8);
 		g_pFont->DrawText(g_pSprite, info->name.c_str(), -1, &allowedRect, DT_LEFT | DT_TOP, textColor);
+		g_pFontSmall->DrawText(g_pSprite, info->fileName.c_str(), -1, &allowedRect, DT_LEFT | DT_BOTTOM, textColor2);
+
 	}
 }
 

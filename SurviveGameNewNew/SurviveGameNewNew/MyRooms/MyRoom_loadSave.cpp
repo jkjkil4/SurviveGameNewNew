@@ -3,16 +3,15 @@
 using namespace std;
 
 MyRoom_loadSave::MyRoom_loadSave(MyEngine* e) : MyRoom(e) {
-	e->global.loadSave->getVarible(path);
+	e->global.loadSave->getVarible(path, fileName);
 	e->global.reset();
-
 	th->detach();
 }
 
 void MyRoom_loadSave::thFunc() {
 	MySave* save = new MySave;
 	//∂¡»°¥Êµµ
-	if (!save->load(path, &proc, &needUpdate, &m)) {
+	if (!save->load(path, fileName, &proc, &needUpdate, &m)) {
 		//∂¡»° ß∞‹
 		MessageBox(nullptr, TEXT("∂¡»° ß∞‹"), TEXT("¥ÌŒÛ"), MB_OK);
 		safeDelete(save);

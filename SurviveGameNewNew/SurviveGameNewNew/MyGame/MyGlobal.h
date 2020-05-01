@@ -26,12 +26,14 @@ public:
 	class LoadSave
 	{
 	public:
-		explicit LoadSave(std::wstring saveName)
-			: saveName(saveName) {}
-		void getVarible(std::wstring& pSaveName) {
-			pSaveName = saveName;
+		explicit LoadSave(std::wstring path, std::wstring fileName)
+			: path(path), fileName(fileName) {}
+		void getVarible(std::wstring& pPath, std::wstring& pFileName) {
+			pPath = path;
+			pFileName = fileName;
 		}
-		std::wstring saveName = TEXT("");
+		std::wstring path = TEXT("");
+		std::wstring fileName = TEXT("NULL");
 	};
 	class Game
 	{

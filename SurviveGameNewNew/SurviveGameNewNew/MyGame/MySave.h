@@ -12,10 +12,11 @@ public:
 	class Info
 	{
 	public:
-		Info(std::wstring name, time_t time, UCHAR version, UINT seed, int width, int height)
-			: name(name), time(time), version(version), seed(seed), width(width), height(height) {}
+		Info(std::wstring name, std::wstring fileName, time_t time, UCHAR version, UINT seed, int width, int height)
+			: name(name), fileName(fileName), time(time), version(version), seed(seed), width(width), height(height) {}
 
 		std::wstring name = TEXT("NULL");
+		std::wstring fileName = TEXT("NULL");
 		time_t time = 0;
 		UCHAR version = 0;
 		UINT seed = 114514;
@@ -50,12 +51,14 @@ public:
 
 	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
 	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, bool checkName = false, std::mutex* m = nullptr);
-	bool load(std::wstring path, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
-	bool loadInfo(std::wstring path);
+	bool load(std::wstring path, std::wstring fileName, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
+	bool loadInfo(std::wstring path, std::wstring fileName);
 
 	int findBlockBy2d(int x, int y);
 	void setBlockBy2d(int x, int y, int id);
 
+	static std::wstring getSuitableFileName(std::wstring name);
+	void checkFileName();
 	void createDirectory();
 
 	Info* info = nullptr;

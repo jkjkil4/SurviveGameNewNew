@@ -46,22 +46,6 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 	if (!info || !playerState || !blocks)
 		return false;
 
-	wstring& saveName = info->name;
-	
-	bool dirFlag = true;
-	string fileName = wstringToString(saveName);
-	if (checkName) {
-		//检测是否已经存在
-		int count = 0;
-		while (true) {
-			dirFlag = MyDir::isExists("data\\saves\\" + fileName + (count == 0 ? "" : "_" + to_string(count)));
-			if (!dirFlag)
-				break;
-			count++;
-		}
-		fileName = fileName + (count == 0 ? "" : "_" + to_string(count));
-		saveName = stringToWstring(fileName);
-	}
 	//创建文件夹
 	createDirectory();
 	m->lock();
@@ -69,7 +53,7 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 		*proc = 0;
 	m->unlock();
 	//存档
-	wstring path = TEXT("data\\saves\\") + saveName;
+	wstring path = TEXT("data\\saves\\") + info->fileName;
 	bool isAccept = true;
 	{
 		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
@@ -78,9 +62,10 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 			UINT ver = VERSION_SAVE;
 			out.write((char*)&ver, sizeof(UINT));
 			//名称
-			size_t strLen = saveName.length();
+			wstring* saveName = &info->name;
+			size_t strLen = saveName->length();
 			out.write((char*)&strLen, sizeof(size_t));
-			out.write((char*)saveName.c_str(), (streamsize)strLen * sizeof(WCHAR));
+			out.write((char*)saveName->c_str(), (streamsize)strLen * sizeof(WCHAR));
 			//时间
 			time_t now = time(nullptr);
 			out.write((char*)&now, sizeof(time_t));
@@ -131,9 +116,9 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 }
 
 
-bool MySave::load(wstring path, UINT* proc, bool* needUpdate, std::mutex* m) {
+bool MySave::load(wstring path, wstring fileName, UINT* proc, bool* needUpdate, std::mutex* m) {
 	//读取信息
-	if (!loadInfo(path + TEXT("\\saveInfo")))
+	if (!loadInfo(path + TEXT("\\saveInfo"), fileName))
 		return false;
 	//读取玩家数据
 	{
@@ -169,7 +154,7 @@ bool MySave::load(wstring path, UINT* proc, bool* needUpdate, std::mutex* m) {
 	return true;
 }
 
-bool MySave::loadInfo(wstring path) {
+bool MySave::loadInfo(wstring path, wstring fileName) {
 	ifstream in(path, ios::in | ios::binary);
 	if (in.fail())
 		return false;
@@ -200,7 +185,7 @@ bool MySave::loadInfo(wstring path) {
 
 	in.close();
 	safeDelete(info);
-	info = new Info(nameStr, time, ver, seed, width, height);
+	info = new Info(nameStr, fileName, time, ver, seed, width, height);
 	/*OutputDebugString((L"\n名称: " + nameStr + L"\n时间: " + to_wstring(time) + L"\n版本: " + to_wstring(ver) +
 		L"\n种子: " + to_wstring(seed) + L"\n宽度: " + to_wstring(width) + L"\n高度: " + to_wstring(height) + L"\n").c_str());*/
 	return true;
@@ -222,10 +207,30 @@ void MySave::setBlockBy2d(int x, int y, int id) {
 }
 
 
+wstring MySave::getSuitableFileName(wstring name) {
+	string fileName = wstringToString(name);
+	int count = 0;
+	bool dirFlag = true;
+	string result;
+	while (true) {
+		result = fileName + (count == 0 ? "" : "_" + to_string(count));
+		dirFlag = MyDir::isExists("data\\saves\\" + result);
+		if (!dirFlag)
+			break;
+		count++;
+	}
+	return stringToWstring(result);
+}
+void MySave::checkFileName() {
+	if (!info)
+		return;
+	info->name = getSuitableFileName(info->fileName);
+	info->fileName = info->name;
+}
 void MySave::createDirectory() {
 	if (!info)
 		return;
-	std::wstring path = TEXT("data\\saves\\") + info->name;
+	std::wstring path = TEXT("data\\saves\\") + info->fileName;
 	MyDir::createDirectory(TEXT("data"));
 	MyDir::createDirectory(TEXT("data\\saves"));
 	MyDir::createDirectory(path);
