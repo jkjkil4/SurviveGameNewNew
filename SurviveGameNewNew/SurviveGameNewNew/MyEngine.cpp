@@ -2,9 +2,9 @@
 
 using namespace std;
 
-MyEngine::MyEngine(void (*signalScaled)(), int* fps) {
-	this->fps = fps;
-	this->signalScaled = signalScaled;
+MyEngine::MyEngine(void (*signalScaled)(), bool (*canClose)(), int* fps)
+	: signalScaled(signalScaled), canClose(canClose), fps(fps)
+{
 	ZeroMemory(keyPressed, sizeof(bool) * keyNumber);
 	ZeroMemory(keyReleased, sizeof(bool) * keyNumber);
 	ZeroMemory(key, sizeof(bool) * keyNumber);
@@ -231,6 +231,8 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	}
 	case WM_CLOSE: {
+		if (!canClose())
+			return 1;
 		DestroyWindow(hWnd);
 		break;
 	}

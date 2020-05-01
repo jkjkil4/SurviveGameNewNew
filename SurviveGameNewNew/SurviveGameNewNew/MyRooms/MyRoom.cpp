@@ -11,9 +11,8 @@ void MyRoom::onBeforeKeyCheck() {
 	if (focusWidget) {
 		for (auto it = e->vec_keyBuffer.begin(); it < e->vec_keyBuffer.end(); it++) {
 			MyKey* key = *it;
-			int vk = key->key;
 			if (key->flag) {	//°´ÏÂ°´¼ü
-				focusWidget->keyboardEvent(vk);
+				focusWidget->keyboardEvent(key->key);
 			}
 		}
 	}

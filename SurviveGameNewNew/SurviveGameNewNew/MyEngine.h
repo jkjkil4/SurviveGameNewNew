@@ -21,7 +21,7 @@
 class MyEngine
 {
 public:
-	explicit MyEngine(void (*signalScaled)(), int* fps);
+	explicit MyEngine(void (*signalScaled)(), bool(*canClose)(), int* fps);
 
 	void onInit();
 	void renderStart();
@@ -70,6 +70,7 @@ public:
 	bool isInited = false;
 	bool hasFocus = true;
 	void (*signalScaled)() = nullptr;
+	bool (*canClose)() = nullptr;
 
 	//°´¼ü¼ì²â
 	bool keyFlag(int num);

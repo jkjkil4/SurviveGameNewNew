@@ -41,13 +41,25 @@ public:
 		void getVarible(MySave*& pSave) {
 			pSave = save;
 		}
-		MySave* save;
+		MySave* save = nullptr;
+	};
+	class SaveSave
+	{
+	public:
+		explicit SaveSave(MySave* save)
+			:save(save) {}
+		void getVarible(MySave*& pSave) {
+			pSave = save;
+		}
+		MySave* save = nullptr;
 	};
 #pragma endregion
 	void reset() {
 		visibleFlag = 0;
 		safeDelete(createSave);
 		safeDelete(loadSave);
+		safeDelete(game);
+		safeDelete(saveSave);
 	}
 
 	//所显示的控件
@@ -56,6 +68,7 @@ public:
 	CreateSave* createSave = nullptr;
 	LoadSave* loadSave = nullptr;
 	Game* game = nullptr;
+	SaveSave* saveSave = nullptr;
 };
 
 #endif

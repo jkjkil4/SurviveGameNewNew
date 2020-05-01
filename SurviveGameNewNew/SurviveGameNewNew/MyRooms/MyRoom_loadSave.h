@@ -22,7 +22,7 @@ public:
 	std::thread* th = new std::thread(&MyRoom_loadSave::thFunc, this);
 	UINT proc = 0;
 	bool needUpdate = false;
-	int blockCount = 160000;
+	UINT blockCount = 160000;
 	std::mutex m;
 };
 

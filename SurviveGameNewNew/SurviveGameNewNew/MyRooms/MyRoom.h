@@ -34,6 +34,7 @@ public:
 	MyEngine* e = nullptr;
 
 	int visibleFlags = 0;
+	bool canClose = false;
 
 	std::vector<MyWidget*> widgets;
 

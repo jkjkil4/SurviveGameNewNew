@@ -4,7 +4,7 @@ using namespace std;
 
 
 MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
-	this->e = e;
+	canClose = true;
 	//窗口控件
 	MyGuiTexture* guiTexture = &e->data.guiTexture;
 	MyTexture* textureBtnVerySmall = &guiTexture->btnVerySmall;
@@ -220,14 +220,18 @@ void MyRoom_title::loadSavesList() {
 			saves.push_back(save);
 	}
 	//创建控件     412 438
+	myd("//----存档列表----\n");
 	for (auto it = saves.begin(); it < saves.end(); it++) {
-		MySaveWidget* saveWidget = new MySaveWidget(e, 412, saveWidgetHeight, *it, e->g_pFontSmall, e->g_pFontVerySmall, scrView);
+		MySave* save = *it;
+		myd(*save->info);
+		MySaveWidget* saveWidget = new MySaveWidget(e, 412, saveWidgetHeight, save, e->g_pFontSmall, e->g_pFontVerySmall, scrView);
 		saveWidget->setAlign(AlignFlags::Top | AlignFlags::Left);
 		saveWidget->shownSave = &shownSave;
 		saveWidget->color = D3DCOLOR_XRGB(66, 66, 128);
 		saveWidget->selColor = D3DCOLOR_XRGB(54, 54, 113);
 		saveWidget->textColor = 0xffffffff;
 	}
+	myd("//----------------\n" << endl);
 	scrView->updateChildsPos();
 }
 

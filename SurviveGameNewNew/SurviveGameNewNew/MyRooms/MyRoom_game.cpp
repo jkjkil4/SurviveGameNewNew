@@ -13,13 +13,16 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	player.y = save->playerState->y;
 
 	//窗口控件
+	MyTexture* textureBtnBig = &e->data.guiTexture.btnBig;
+
+	//Esc菜单
 	{
-		solidColorWidget = new MySolidColorWidget(e, e->viewW, e->viewH);
-		solidColorWidget->pVisible = &visibleFlags;
-		solidColorWidget->visible = 9999;	//这行和下一行设置了当visible大于9999时显示
-		solidColorWidget->expr.setExpr(MyExpr::Expr{ MyExpr::More, MyExpr::And });
-		solidColorWidget->color = D3DCOLOR_ARGB(96, 0, 0, 0);
-		widgets.push_back(solidColorWidget);
+		MyPushButton* btnBack = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
+		btnBack->visible = 10000;
+		btnBack->pVisible = &visibleFlags;
+		btnBack->text = TEXT("保存并返回至标题界面");
+		btnBack->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_game::btnBackPressed), this);
+		widgets.push_back(btnBack);
 	}
 
 	//重置
@@ -118,10 +121,15 @@ void MyRoom_game::_onDebug() {
 	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, 0, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
 }
 
-void MyRoom_game::_onResize() {
-	solidColorWidget->resize(e->viewW, e->viewH);
+void MyRoom_game::_onDestroy() {
+
 }
 
-void MyRoom_game::_onDestroy() {
-	safeDeleteArray(blocks);
+void MyRoom_game::btnBackPressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
+		save->playerState->x = player.x;
+		save->playerState->y = player.y;
+		e->global.saveSave = new MyGlobal::SaveSave(save);
+		setChangeRoomStr("saveSave");
+	}
 }

@@ -93,6 +93,9 @@
     <ClInclude Include="MyClasses\MyExpr.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MyRooms\MyRoom_saveSave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">
@@ -150,6 +153,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyWidgets\MySolidColorWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyRooms\MyRoom_saveSave.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

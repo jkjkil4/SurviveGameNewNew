@@ -63,4 +63,11 @@ public:
 	Blocks* blocks = nullptr;
 };
 
+#ifdef DEBUG_CONSOLE
+static std::ostream& operator<<(std::ostream& stream, MySave::Info& info) {
+	stream << "名称:" << wstringToString(info.name) << "\t种子:" << info.seed << "\t大小:" << info.width << 'x' << info.height << '\n';
+	return stream;
+}
+#endif
+
 #endif

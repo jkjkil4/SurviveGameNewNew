@@ -4,7 +4,7 @@
 #include "MyRoom.h"
 #include "../MyGame/MyPlayer.h"
 
-#include "../MyWidgets/MySolidColorWidget.h"
+#include "../MyWidgets/MyPushButton.h"
 
 /*
 	需要释放的对象
@@ -23,9 +23,9 @@ public:
 	void _onRender() override;
 	void _onDebug() override;
 
-	void _onResize() override;
-
 	void _onDestroy() override;
+
+	void btnBackPressed(MyMouseEvent ev);
 
 	MySave* save = nullptr;
 
@@ -39,7 +39,6 @@ public:
 
 
 	//
-	MySolidColorWidget* solidColorWidget = nullptr;
 };
 
 

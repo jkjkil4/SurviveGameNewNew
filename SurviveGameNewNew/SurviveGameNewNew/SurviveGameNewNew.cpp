@@ -5,13 +5,14 @@
 using namespace std;
 
 void updateWidgetsPos();
+bool canClose();
 
 int fpsCount = 0;
 int startGetFps = 0;
 int fps = 0;
 
 
-MyEngine e(updateWidgetsPos, &fps);
+MyEngine e(updateWidgetsPos, canClose, &fps);
 bool needQuit = false;
 MyRoom* currentRoom = nullptr;
 
@@ -39,6 +40,9 @@ void changeRoomByStr(string room) {
 	else if (room == "loadSave") {
 		changeRoom(new MyRoom_loadSave(&e));
 	}
+	else if (room == "saveSave") {
+		changeRoom(new MyRoom_saveSave(&e));
+	}
 }
 
 void updateWidgetsPos() {
@@ -47,6 +51,12 @@ void updateWidgetsPos() {
 		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++)
 			(*it)->updatePos(e.viewW, e.viewH);
 	}
+}
+
+bool canClose() {
+	if (!currentRoom)
+		return true;
+	return currentRoom->canClose;
 }
 
 void mainLoop() {
@@ -110,6 +120,12 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt LPSTR lpCmdLine,
 	__in int nShowCmd)
 {
+#ifdef DEBUG_CONSOLE
+	AllocConsole();
+	FILE* tempFile = nullptr;
+	freopen_s(&tempFile, "conout$", "w+t", stdout);
+#endif
+
 	HWND& g_hWnd = e.g_hWnd;
 
 	//创建窗口
@@ -178,5 +194,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	}
 	e.onDestroy();
 	UnregisterClass(wc.lpszClassName, hInstance);
+#ifdef DEBUG_CONSOLE
+	FreeConsole();
+#endif
 	return 0;
 }

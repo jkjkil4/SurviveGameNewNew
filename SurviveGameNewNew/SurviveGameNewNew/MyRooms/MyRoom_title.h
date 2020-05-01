@@ -38,8 +38,6 @@ public:
 	void btnCreateBackPressed(MyMouseEvent ev);
 	void btnCreateAcceptPressed(MyMouseEvent ev);
 
-	MyEngine* e = nullptr;
-
 	/*
 	visibleFlags
 		0 -> 标题界面

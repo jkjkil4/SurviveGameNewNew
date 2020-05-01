@@ -166,6 +166,7 @@
     <ClInclude Include="MyRooms\MyRoom_title.h" />
     <ClInclude Include="MyRooms\MyRoom_createSave.h" />
     <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
+    <ClInclude Include="MyRooms\MyRoom_saveSave.h" />
     <ClInclude Include="MyWidgets\MySaveWidget.h" />
     <ClInclude Include="MyWidgets\MyScrollView.h" />
     <ClInclude Include="MyWidgets\MySolidColorWidget.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="MyRooms\MyRoom_title.cpp" />
     <ClCompile Include="MyRooms\MyRoom_createSave.cpp" />
     <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
+    <ClCompile Include="MyRooms\MyRoom_saveSave.cpp" />
     <ClCompile Include="MyWidgets\MySaveWidget.cpp" />
     <ClCompile Include="MyWidgets\MyScrollView.cpp" />
     <ClCompile Include="MyWidgets\MySolidColorWidget.cpp" />

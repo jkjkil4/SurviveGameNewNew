@@ -78,4 +78,14 @@ template<typename T>inline T myBound(T min, T value, T max) {
     return myMin(myMax(value, min), max);
 }
 
+//------Console-----
+#define DEBUG_CONSOLE
+
+#ifdef DEBUG_CONSOLE
+#include <iostream>
+#define myd(...) std::cout << __VA_ARGS__
+#else
+#define myd(...)
+#endif
+
 #endif //_UTILITY_H
