@@ -11,6 +11,8 @@ int fpsCount = 0;
 int startGetFps = 0;
 int fps = 0;
 
+mutex quitMutex;
+
 
 MyEngine e(updateWidgetsPos, canClose, &fps);
 bool needQuit = false;
@@ -49,7 +51,7 @@ void updateWidgetsPos() {
 	if (currentRoom) {
 		currentRoom->onResize();
 		for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++)
-			(*it)->updatePos(e.viewW, e.viewH);
+			(*it)->updatePos(e.getViewW(), e.getViewH());
 	}
 }
 
@@ -68,9 +70,7 @@ void mainLoop() {
 			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
-			e.m.lock();
 			currentRoom->onLogic();
-			e.m.unlock();
 			int& sendMessage = currentRoom->sendMessage;
 			if (sendMessage != 0) {
 				SendMessage(e.g_hWnd, sendMessage, 0, 0);
@@ -111,7 +111,7 @@ void mainLoop() {
 		currentRoom->onDestroy();
 		safeDelete(currentRoom);
 	}
-	Mutex(e.m);
+	Mutex(quitMutex);
 	needQuit = false;
 }
 
@@ -155,16 +155,18 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	//得到画面宽高
 	RECT rect;
 	GetClientRect(g_hWnd, &rect);
-	e.viewW = rect.right - rect.left;
-	e.viewH = rect.bottom - rect.top;
-	e.defWidth = e.viewW;
-	e.defHeight = e.viewH;
+	int viewW = rect.right - rect.left;
+	int viewH = rect.bottom - rect.top;
+	e.setViewW(viewW);
+	e.setViewH(viewH);
+	e.setDefWidth(viewW);
+	e.setDefHeight(viewH);
 
 	if (g_hWnd) {
 		e.g_hInstance = hInstance;
 		e.onInit();
 		changeRoom(new MyRoom_title(&e));
-		e.isInited = true;
+		e.setInited(true);
 		UpdateWindow(g_hWnd);
 	}
 
@@ -186,10 +188,9 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	needQuit = true;
 	int _needQuit = true;
 	while (_needQuit) {
-		{
-			Mutex(e.m);
-			_needQuit = needQuit;
-		}
+		quitMutex.lock();
+		_needQuit = needQuit;
+		quitMutex.unlock();
 		Sleep(10);
 	}
 	e.onDestroy();

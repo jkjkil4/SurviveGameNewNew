@@ -25,8 +25,8 @@ void MyEngine::onInit() {
 
 	d3dpp.BackBufferCount = 1;
 	d3dpp.Windowed = TRUE;
-	d3dpp.BackBufferWidth = defWidth;
-	d3dpp.BackBufferHeight = defHeight;
+	d3dpp.BackBufferWidth = getDefWidth();
+	d3dpp.BackBufferHeight = getDefHeight();
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;	//翻转效果：抛弃
 
 	//创建设备指针
@@ -76,7 +76,7 @@ void MyEngine::onInit() {
 
 	//其他操作
 	data.onInit("data\\texture", g_pDevice);
-	doneTime = timeGetTime();
+	setDoneTime(timeGetTime());
 }
 void MyEngine::onKeyCheck() {
 	//键盘按键和鼠标按键
@@ -140,35 +140,30 @@ void MyEngine::onDestroy() {
 }
 
 LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	
 	switch (uMsg) {
 		//------焦点检测------
 	case WM_KILLFOCUS: {
-		m.lock();
-		hasFocus = false;
-		m.unlock();
+		setHasFocus(false);
 		break;
 	}
 	case WM_SETFOCUS: {
-		m.lock();
-		hasFocus = true;
-		m.unlock();
+		setHasFocus(true);
 		break;
 	}
 		//------大小被改变----
 	case WM_SIZE: {
-		if (isInited) {
-			resizeTime = timeGetTime();
+		if (getInited()) {
+			setResizeTime(timeGetTime());
 			D3DXMATRIX g_scale;
 			RECT rect;
 			GetClientRect(g_hWnd, &rect);
 			int w = rect.right - rect.left;
 			int h = rect.bottom - rect.top;
-			m.lock();
-			viewW = w;
-			viewH = h;
-			mySetScale(g_pSpriteRender, 0, 0, (float)defWidth / w, (float)defHeight / h);
+			setViewW(w);
+			setViewH(h);
+			mySetScale(g_pSpriteRender, 0, 0, (float)getDefWidth() / w, (float)getDefHeight() / h);
 			signalScaled();
-			m.unlock();
 		}
 		break;
 	}
@@ -218,16 +213,16 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	}
 	case WM_MOUSEWHEEL: {
 		short delta = (short)HIWORD(wParam);
-		m.lock();
+		mWheelDelta.lock();
 		wheelDelta += delta;
-		m.unlock();
+		mWheelDelta.unlock();
 		break;
 	}
 	case WM_CHAR: {
 		WCHAR inputWChar = wParam;
-		m.lock();
+		mInputWString.lock();
 		inputWString += inputWChar;
-		m.unlock();
+		mInputWString.unlock();
 		break;
 	}
 	case WM_CLOSE: {

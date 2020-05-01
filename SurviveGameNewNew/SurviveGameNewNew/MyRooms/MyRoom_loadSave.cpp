@@ -34,7 +34,7 @@ void MyRoom_loadSave::_onRender() {
 	int _proc = proc;
 	m.unlock();
 	wstring wstr = TEXT("ÕýÔÚ¶ÁÈ¡\n") + to_wstring((int)((_proc / (double)blockCount * 100))) + TEXT("%");
-	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, &rect(0, 0, e->viewW, e->viewH), DT_CENTER | DT_VCENTER, 0xff000000);
+	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, &rect(0, 0, e->getViewW(), e->getViewH()), DT_CENTER | DT_VCENTER, 0xff000000);
 }
 
 void MyRoom_loadSave::_onDebug() {

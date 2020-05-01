@@ -7,6 +7,19 @@
 #include "MyClasses/MyStrExpr.h"
 #include "MyGame/MyGlobal.h"
 
+#define NEEDLOCK_VARIBLE_FUNC(funcName, varibleName, varibleType)\
+	std::mutex m##funcName;\
+	varibleType get##funcName(){\
+		m##funcName.lock();\
+		varibleType temp = varibleName;\
+		m##funcName.unlock();\
+		return temp;\
+	}\
+	void set##funcName(varibleType _var){\
+		m##funcName.lock();\
+		varibleName = _var;\
+		m##funcName.unlock();\
+	}
 /*
 	需要释放的对象：
 	g_pD3D, g_pDevice, 
@@ -20,8 +33,30 @@
 */
 class MyEngine
 {
+private:
+	bool hasFocus = true, inited = false;
+	int doneTime = 0, resizeTime = timeGetTime();
+	int defWidth = 800, defHeight = 608;
+	int viewW = 800, viewH = 608;
+	//滚轮
+	int wheelDelta = 0;
+	//输入的字符
+	std::wstring inputWString = TEXT("");
+
 public:
 	explicit MyEngine(void (*signalScaled)(), bool(*canClose)(), int* fps);
+
+	std::mutex changeRoomMutex;
+	NEEDLOCK_VARIBLE_FUNC(HasFocus, hasFocus, bool);
+	NEEDLOCK_VARIBLE_FUNC(Inited, inited, bool);
+	NEEDLOCK_VARIBLE_FUNC(DoneTime, doneTime, int);
+	NEEDLOCK_VARIBLE_FUNC(ResizeTime, resizeTime, int);
+	NEEDLOCK_VARIBLE_FUNC(DefWidth, defWidth, int);
+	NEEDLOCK_VARIBLE_FUNC(DefHeight, defHeight, int);
+	NEEDLOCK_VARIBLE_FUNC(ViewW, viewW, int);
+	NEEDLOCK_VARIBLE_FUNC(ViewH, viewH, int);
+	NEEDLOCK_VARIBLE_FUNC(WheelDelta, wheelDelta, int);
+	NEEDLOCK_VARIBLE_FUNC(InputWString, inputWString, std::wstring);
 
 	void onInit();
 	void renderStart();
@@ -36,12 +71,9 @@ public:
 	void drawBorder(int x, int y, int w, int h, int size, DWORD col1 = 0xff000000, DWORD col2 = 0xff000000, DWORD col3 = 0xff000000, DWORD col4 = 0xff000000);
 
 	//------------------------------------------------------------------------------------//
-	std::mutex m, changeRoomMutex;
+	
 	//全局变量
 	MyGlobal global;
-	//窗口、视野宽高
-	int defWidth = 800, defHeight = 608;
-	int viewW = 800, viewH = 608;
 
 	//windows的一些东西
 	HWND g_hWnd = 0;
@@ -66,9 +98,6 @@ public:
 	D3DCOLOR clearColor = D3DCOLOR_XRGB(102, 204, 255);
 
 	//一些东西
-	int doneTime = 0, resizeTime = timeGetTime();
-	bool isInited = false;
-	bool hasFocus = true;
 	void (*signalScaled)() = nullptr;
 	bool (*canClose)() = nullptr;
 
@@ -86,15 +115,9 @@ public:
 	bool keyReleased[keyNumber];
 	static constexpr int mice[3]{ VK_LBUTTON, VK_MBUTTON, VK_RBUTTON };
 
-	//滚轮delta
-	int wheelDelta = 0;
-
 	//鼠标位置
 	int mouseX = -1;
 	int mouseY = -1;
-
-	//输入的字符
-	std::wstring inputWString = TEXT("");
 
 	//字体
 	LPD3DXFONT g_pFont = nullptr;

@@ -50,10 +50,10 @@ void MyRoom_game::_onLogic() {
 	}
 
 	//得到视野坐标
-	int viewX = player.x - e->viewW / 2;
-	int viewY = player.y - e->viewH / 2;
-	viewX = bound(0, viewX, roomWidth * 16 - e->viewW);
-	viewY = bound(0, viewY, roomHeight * 16 - e->viewH);
+	int viewX = player.x - e->getViewW() / 2;
+	int viewY = player.y - e->getViewH() / 2;
+	viewX = bound(0, viewX, roomWidth * 16 - e->getViewW());
+	viewY = bound(0, viewY, roomHeight * 16 - e->getViewH());
 	//得到鼠标所在方块坐标
 	int blockX = (e->mouseX + viewX) / 16;
 	int blockY = (e->mouseY + viewY) / 16;
@@ -70,7 +70,7 @@ void MyRoom_game::_onLogic() {
 		}
 	}
 	//放置方块
-	if (e->mouseX >= 0 && e->mouseY >= 0 && e->mouseX <= e->viewW && e->mouseY <= e->viewH) {
+	if (e->mouseX >= 0 && e->mouseY >= 0 && e->mouseX <= e->getViewW() && e->mouseY <= e->getViewH()) {
 		if (e->keyFlag(VK_RBUTTON)) {
 			if (16 * (blockX + 1) <= player.x - player.plW / 2 || 16 * blockX >= player.x + player.plW / 2
 				|| 16 * (blockY + 1) <= player.y - player.plH || 16 * blockY >= player.y) {
@@ -84,13 +84,13 @@ void MyRoom_game::_onLogic() {
 }
 void MyRoom_game::_onRender() {
 	//一些操作
-	int viewX = player.x - e->viewW / 2;
-	int viewY = player.y - e->viewH / 2;
-	viewX = bound(0, viewX, roomWidth * 16 - e->viewW);
-	viewY = bound(0, viewY, roomHeight * 16 - e->viewH);
+	int viewX = player.x - e->getViewW() / 2;
+	int viewY = player.y - e->getViewH() / 2;
+	viewX = bound(0, viewX, roomWidth * 16 - e->getViewW());
+	viewY = bound(0, viewY, roomHeight * 16 - e->getViewH());
 	//绘制方块
-	int xMax = (viewX + e->viewW) / 16;
-	int yMax = (viewY + e->viewH) / 16;
+	int xMax = (viewX + e->getViewW()) / 16;
+	int yMax = (viewY + e->getViewH()) / 16;
 	int xStart = viewX / 16;
 	int yStart = viewY / 16;
 	D3DXVECTOR3* off = &D3DXVECTOR3((float)(viewX % 16), (float)(viewY % 16), 0);
@@ -116,7 +116,8 @@ void MyRoom_game::_onDebug() {
 		+ "\n玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
 		+ "\n玩家速度: " + to_string(player.currentXSpd) + " , " + to_string(player.currentYSpd)
 		+ "\n玩家横向速度限制(可以按W来增加，按S来降低): " + to_string(player.xSpdMax)
-		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax);
+		+ "\n跳跃次数: " + to_string(player.jumped) + "   最大跳跃次数: " + to_string(player.jumpMax)
+		+ "\n\n提示: 按Esc打开菜单      仅在标题界面能关闭窗口";
 	wstring wstr = stringToWstring(str);
 	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, 0, DT_LEFT | DT_TOP, D3DCOLOR_XRGB(0, 0, 0));
 }

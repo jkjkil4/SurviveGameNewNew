@@ -32,14 +32,15 @@ void MyRoom::setChangeRoomStr(string str) {
 
 void MyRoom::onLogic() {
 	//响应输入字符
-	wstring wstr = e->inputWString;
-	e->inputWString = TEXT("");
+	wstring wstr = e->getInputWString();
+	e->setInputWString(TEXT(""));
 	if (focusWidget && wstr != TEXT("")) {
 		focusWidget->charEvent(wstr);
 	}
 	
 	//鼠标滚轮
-	if (e->wheelDelta != 0) {
+	int wheelDelta = e->getWheelDelta();
+	if (wheelDelta != 0) {
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 			MyWidget* w = *it;
 			if (!w->isVisible())
@@ -47,11 +48,11 @@ void MyRoom::onLogic() {
 			int localX = e->mouseX - w->realX;
 			int localY = e->mouseY - w->realY;
 			if (localX >= 0 && localX <= w->w && localY >= 0 && localY <= w->h) {
-				w->wheelEvent(localX, localY, e->wheelDelta);
+				w->wheelEvent(localX, localY, wheelDelta);
 				break;
 			}
 		}
-		e->wheelDelta = 0;
+		wheelDelta = 0;
 	}
 
 	//控件事件
@@ -89,7 +90,7 @@ void MyRoom::onLogic() {
 		mouseWidget = nullptr;
 	}
 	//检测鼠标所在控件
-	if (e->hasFocus) {
+	if (e->getHasFocus()) {
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {
 			MyWidget* w = *it;
 			if (!w->isVisible())

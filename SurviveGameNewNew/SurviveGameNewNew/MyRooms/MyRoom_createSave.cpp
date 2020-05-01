@@ -44,7 +44,7 @@ void MyRoom_createSave::_onRender() {
 	wstring wstr = TEXT("当前进行的是: ") + type
 		+ TEXT("\n宽度: ") + to_wstring(saveWidth) + TEXT("    高度: ") + to_wstring(saveHeight)
 		+ TEXT("\n进度: ") + to_wstring((int)((_proc / (double)saveCount * 100))) + TEXT("%");
-	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, &rect(0, 0, e->viewW, e->viewH), DT_CENTER | DT_VCENTER, 0xff000000);
+	e->g_pFont->DrawText(e->g_pSprite, wstr.c_str(), -1, &rect(0, 0, e->getViewW(), e->getViewH()), DT_CENTER | DT_VCENTER, 0xff000000);
 }
 
 void MyRoom_createSave::_onDestroy() {

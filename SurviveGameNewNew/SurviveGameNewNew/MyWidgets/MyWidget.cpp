@@ -15,7 +15,7 @@ MyWidget::MyWidget(MyEngine* e, LPDIRECT3DTEXTURE9 g_pTexture, D3DXIMAGE_INFO* p
 		updatePos(parent->w, parent->h);
 	}
 	else {
-		updatePos(e->viewW, e->viewH);
+		updatePos(e->getViewW(), e->getViewH());
 	}
 
 	expr.addExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And });
@@ -31,7 +31,7 @@ MyWidget::MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget, MyWidget* 
 		updatePos(parent->w, parent->h);
 	}
 	else {
-		updatePos(e->viewW, e->viewH);
+		updatePos(e->getViewW(), e->getViewH());
 	}
 }
 
@@ -40,18 +40,18 @@ MyWidget::MyWidget(MyEngine* e, int w, int h, MyWidget** focusWidget, MyWidget* 
 void MyWidget::move(int x, int y) {
 	this->x = x;
 	this->y = y;
-	parent ? updatePos(parent->w, parent->h) : updatePos(e->viewW, e->viewH);
+	parent ? updatePos(parent->w, parent->h) : updatePos(e->getViewW(), e->getViewH());
 }
 void MyWidget::resize(int w, int h) {
 	this->w = w;
 	this->h = h;
-	parent ? updatePos(parent->w, parent->h) : updatePos(e->viewW, e->viewH);
+	parent ? updatePos(parent->w, parent->h) : updatePos(e->getViewW(), e->getViewH());
 	for (auto it = childs.begin(); it < childs.end(); it++)
 		updatePos(w, h);
 }
 void MyWidget::setAlign(int flags) { 
 	alignFlags = flags;
-	parent ? updatePos(parent->w, parent->h) : updatePos(e->viewW, e->viewH);
+	parent ? updatePos(parent->w, parent->h) : updatePos(e->getViewW(), e->getViewH());
 }
 void MyWidget::useRenderTarget() {
 	safeRelease(g_pRenderTexture);
