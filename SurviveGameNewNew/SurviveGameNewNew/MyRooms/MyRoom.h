@@ -9,14 +9,16 @@
 
 class MyRoom
 {
+private:
+	std::string changeRoomStr = "";
+
 public:
 	explicit MyRoom(MyEngine* e);
 	virtual ~MyRoom() = default;
 	
-	void onBeforeKeyCheck();
+	NEEDLOCK_VARIBLE_FUNC(ChangeRoomStr, changeRoomStr, std::string);
 
-	std::string getChangeRoomStr();
-	void setChangeRoomStr(std::string str);
+	void onBeforeKeyCheck();
 
 	void onLogic();
 	virtual void _onLogic(){}
@@ -41,7 +43,6 @@ public:
 	MyWidget* focusWidget = nullptr;
 	MyWidget* mouseWidget = nullptr;
 
-	std::string changeRoomStr = "";
 	int sendMessage = 0;
 };
 

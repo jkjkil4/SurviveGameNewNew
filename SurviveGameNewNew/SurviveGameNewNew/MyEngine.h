@@ -46,7 +46,6 @@ private:
 public:
 	explicit MyEngine(void (*signalScaled)(), bool(*canClose)(), int* fps);
 
-	std::mutex changeRoomMutex;
 	NEEDLOCK_VARIBLE_FUNC(HasFocus, hasFocus, bool);
 	NEEDLOCK_VARIBLE_FUNC(Inited, inited, bool);
 	NEEDLOCK_VARIBLE_FUNC(DoneTime, doneTime, int);

@@ -274,7 +274,15 @@ void MyRoom_title::btnSigleRenamePressed(MyMouseEvent ev) {
 }
 void MyRoom_title::btnSigleDeletePressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-
+		if (shownSave) {
+			if (!MyDir::removeDirectory(TEXT("data\\saves\\") + shownSave->info->fileName)) {
+				MessageBox(nullptr, TEXT("É¾³ıÊ§°Ü"), TEXT("´íÎó"), MB_OK);
+			}
+			else {
+				myd("´æµµ " << wstringToString(shownSave->info->name) << " ÒÑ±»É¾³ı" << endl);
+				loadSavesList();
+			}
+		}
 	}
 }
 void MyRoom_title::btnSigleCreatePressed(MyMouseEvent ev) {

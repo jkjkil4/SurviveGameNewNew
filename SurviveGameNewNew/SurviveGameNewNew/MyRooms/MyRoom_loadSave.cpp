@@ -9,16 +9,19 @@ MyRoom_loadSave::MyRoom_loadSave(MyEngine* e) : MyRoom(e) {
 }
 
 void MyRoom_loadSave::thFunc() {
+	myd("ÕýÔÚ¶ÁÈ¡´æµµ" << endl);
 	MySave* save = new MySave;
 	//¶ÁÈ¡´æµµ
 	if (!save->load(path, fileName, &proc, &needUpdate, &m)) {
 		//¶ÁÈ¡Ê§°Ü
+		myd("¶ÁÈ¡´æµµÊ§°Ü");
 		MessageBox(nullptr, TEXT("¶ÁÈ¡Ê§°Ü"), TEXT("´íÎó"), MB_OK);
 		safeDelete(save);
 		e->global.visibleFlag = 1;
 		setChangeRoomStr("title");
 		return;
 	}
+	myd("¶ÁÈ¡´æµµ³É¹¦" << endl);
 	e->global.game = new MyGlobal::Game(save);
 	setChangeRoomStr("game");
 }

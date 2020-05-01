@@ -10,6 +10,7 @@ MyRoom_createSave::MyRoom_createSave(MyEngine* e) : MyRoom(e) {
 }
 
 void MyRoom_createSave::thFunc() {
+	myd("正在创建存档" << endl);
 	MySave save;
 	//创建
 	MySave::Info* info = new MySave::Info(saveName, saveName, time(nullptr), 0, seed, saveWidth, saveHeight);
@@ -26,7 +27,7 @@ void MyRoom_createSave::thFunc() {
 			MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
 		}
 	}
-	
+	myd("创建存档结束" << endl);
 	MyGlobal* global = &e->global;
 	global->visibleFlag = 1;
 	setChangeRoomStr("title");
