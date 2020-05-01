@@ -50,7 +50,8 @@ public:
 	~MySave();
 
 	bool create(Info* info, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
-	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, bool checkName = false, std::mutex* m = nullptr);
+	bool save(UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
+	bool saveInfo();
 	bool load(std::wstring path, std::wstring fileName, UINT* proc = nullptr, bool* needUpdate = nullptr, std::mutex* m = nullptr);
 	bool loadInfo(std::wstring path, std::wstring fileName);
 

@@ -22,7 +22,7 @@ void MyRoom_createSave::thFunc() {
 		save.checkFileName();
 		flag = true;
 		//写入
-		if (!save.save(&proc, &needUpdate, true, &m)) {
+		if (!save.save(&proc, &needUpdate, &m)) {
 			//如果写入失败
 			MessageBox(nullptr, TEXT("写入失败"), TEXT("错误"), MB_OK);
 		}

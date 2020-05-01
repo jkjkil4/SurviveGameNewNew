@@ -138,6 +138,14 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 			title->format = DT_CENTER | DT_VCENTER;
 			title->textColor = 0xffcccccc;
 			title->setAlign(AlignFlags::Top);
+
+			MyPushButton* btnAccept = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info, e->g_pFont, widget);
+			btnAccept->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 5 });
+			btnAccept->pVisible = &visibleFlags;
+			btnAccept->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnRenamePressed), this);
+			btnAccept->setAlign(AlignFlags::Right | AlignFlags::Bottom);
+			btnAccept->move(5, 5);
+			btnAccept->text = TEXT("确定");
 		}
 
 		//通用的部分
@@ -331,6 +339,17 @@ void MyRoom_title::btnCreateAcceptPressed(MyMouseEvent ev) {
 		if (saveName != TEXT("")) {
 			e->global.createSave = new MyGlobal::CreateSave(saveName, 400, 400, 114514);
 			setChangeRoomStr("createSave");
+		}
+	}
+}
+void MyRoom_title::btnRenamePressed(MyMouseEvent ev) {
+	if (ev.mouse == VK_LBUTTON) {
+		if (shownSave->info) {
+			shownSave->info->name = editSaveName->text;
+			shownSave->saveInfo();
+			editSaveName->clear();
+			loadSavesList();
+			visibleFlags = 1;
 		}
 	}
 }

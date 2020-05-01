@@ -37,6 +37,7 @@ public:
 
 	void btnCreateBackPressed(MyMouseEvent ev);
 	void btnCreateAcceptPressed(MyMouseEvent ev);
+	void btnRenamePressed(MyMouseEvent ev);
 
 	/*
 	visibleFlags

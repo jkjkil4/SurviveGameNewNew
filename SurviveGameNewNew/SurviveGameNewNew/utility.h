@@ -14,6 +14,10 @@
 #include <mutex>
 #define Mutex(m) std::lock_guard<std::mutex> guard(m)
 
+#include <vector>
+
+#include <fstream>
+
 
 void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScale, float yScale, 
     float rotPosX = 0, float rotPosY = 0, float rot = 0);
@@ -22,9 +26,6 @@ void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScal
 std::wstring stringToWstring(std::string orig);
 std::string wstringToString(const std::wstring str);
 
-//------文件操作-------
-#include <vector>
-#include <fstream>
 //string file = path + "\\*" + (exd == "" ? "" : "." + exd);
 
 //------别的东西-------

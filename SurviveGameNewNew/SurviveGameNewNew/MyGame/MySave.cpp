@@ -42,7 +42,7 @@ bool MySave::create(Info* info, UINT* proc, bool* needUpdate, std::mutex* m) {
 }
 
 
-bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
+bool MySave::save(UINT* proc, bool* needUpdate, std::mutex* m) {
 	if (!info || !playerState || !blocks)
 		return false;
 
@@ -55,33 +55,8 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 	//存档
 	wstring path = TEXT("data\\saves\\") + info->fileName;
 	bool isAccept = true;
-	{
-		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
-		if (!out.fail()) {
-			//存档版本
-			UINT ver = VERSION_SAVE;
-			out.write((char*)&ver, sizeof(UINT));
-			//名称
-			wstring* saveName = &info->name;
-			size_t strLen = saveName->length();
-			out.write((char*)&strLen, sizeof(size_t));
-			out.write((char*)saveName->c_str(), (streamsize)strLen * sizeof(WCHAR));
-			//时间
-			time_t now = time(nullptr);
-			out.write((char*)&now, sizeof(time_t));
-			//种子
-			out.write((char*)&info->seed, sizeof(UINT));
-			//横向方块数量
-			out.write((char*)&info->width, sizeof(int));
-			//纵向方块数量
-			out.write((char*)&info->height, sizeof(int));
-
-			out.close();
-		}
-		else {
-			isAccept = false;
-		}
-	}
+	if (!saveInfo())
+		return false;
 	//玩家
 	{
 		ofstream out(path + TEXT("\\player"), ios::out | ios::binary);
@@ -106,6 +81,40 @@ bool MySave::save(UINT* proc, bool* needUpdate, bool checkName, std::mutex* m) {
 						*proc = i * info->width;
 				}
 			}
+			out.close();
+		}
+		else {
+			isAccept = false;
+		}
+	}
+	return isAccept;
+}
+bool MySave::saveInfo() {
+	if (!info)
+		return false;
+	wstring path = TEXT("data\\saves\\") + info->fileName;
+	bool isAccept = true;
+	{
+		ofstream out(path + TEXT("\\saveInfo"), ios::out | ios::binary);
+		if (!out.fail()) {
+			//存档版本
+			UINT ver = VERSION_SAVE;
+			out.write((char*)&ver, sizeof(UINT));
+			//名称
+			wstring* saveName = &info->name;
+			size_t strLen = saveName->length();
+			out.write((char*)&strLen, sizeof(size_t));
+			out.write((char*)saveName->c_str(), (streamsize)strLen * sizeof(WCHAR));
+			//时间
+			time_t now = time(nullptr);
+			out.write((char*)&now, sizeof(time_t));
+			//种子
+			out.write((char*)&info->seed, sizeof(UINT));
+			//横向方块数量
+			out.write((char*)&info->width, sizeof(int));
+			//纵向方块数量
+			out.write((char*)&info->height, sizeof(int));
+
 			out.close();
 		}
 		else {

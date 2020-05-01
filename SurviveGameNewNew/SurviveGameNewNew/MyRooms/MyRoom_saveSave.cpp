@@ -12,7 +12,7 @@ MyRoom_saveSave::MyRoom_saveSave(MyEngine* e) : MyRoom(e)
 
 void MyRoom_saveSave::thFunc() {
 	myd("正在保存存档" << endl);
-	if (!save->save(&proc, &needUpdate, false, &m)) {
+	if (!save->save(&proc, &needUpdate, &m)) {
 		MessageBox(nullptr, TEXT("存档保存失败"), TEXT("错误"), MB_OK);
 	}
 	myd("保存存档结束" << endl);
