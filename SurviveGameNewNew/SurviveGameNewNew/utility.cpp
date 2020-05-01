@@ -24,25 +24,6 @@ std::string wstringToString(const std::wstring str) {// wstring转string
 	return str1;
 }
 
-void myCreateTexture(LPDIRECT3DDEVICE9 g_pDevice, string path, UINT w, UINT h,
-	D3DXIMAGE_INFO* imageInfo, LPDIRECT3DTEXTURE9* g_pTexture) {
-	D3DXCreateTextureFromFileEx(
-		g_pDevice,	//设备指针
-		stringToWstring(path).c_str(),
-		w,	//图片的宽  //若要来自于图片本身则是 D3DX_FROM_FILE
-		h,	//图片的高
-		0,				//多级渐进纹理的等级
-		0,				//图片的作用
-		D3DFMT_UNKNOWN,	//未知纹理格式
-		D3DPOOL_MANAGED,	//受系统管理的存储空间
-		D3DX_FILTER_NONE,
-		D3DX_FILTER_NONE,
-		NULL,
-		imageInfo,		//图片详细信息存储在这个结构体中
-		nullptr,		//调色板信息
-		g_pTexture		//返回的纹理指针
-	);
-}
 void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScale, float yScale, 
 	float rotPosX, float rotPosY, float rot){
 	D3DXMATRIX g_scale;
@@ -57,33 +38,6 @@ void mySetScale(LPD3DXSPRITE pSpr, float scalePosX, float scalePosY, float xScal
 	);
 	pSpr->SetTransform(&g_scale);
 	D3DXMatrixIdentity(&g_scale);
-}
-
-
-void getFiles(string path, string exd, vector<wstring>* files){
-	files->clear();
-	//文件句柄
-	HANDLE hFile = 0;
-	//文件信息
-	WIN32_FIND_DATAW data;
-
-	string file = path + "\\*" + (exd == "" ? "" : "." + exd);
-	
-	wstring wfile = stringToWstring(file);
-	wstring dot = stringToWstring("."), dotdot = stringToWstring("..");
-
-	hFile = FindFirstFile(wfile.c_str(), &data);
-	if ((int)hFile != -1) {
-		do {
-			if (data.dwFileAttributes & 32) {
-				if (data.cFileName != dot && data.cFileName != dotdot) {
-					files->push_back(data.cFileName);
-					OutputDebugString(data.cFileName);
-				}
-			}
-		} while (FindNextFile(hFile, &data));
-		FindClose(hFile);
-	}
 }
 
 void wstring_trimmed(wstring& wstr) {

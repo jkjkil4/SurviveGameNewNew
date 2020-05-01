@@ -2,6 +2,7 @@
 #define _MYDIR_H
 
 #include "utility.h"
+#include <sys/stat.h>
 
 namespace MyDir {
 	enum EntryFlags {Dir = 0b01, File = 0b10};

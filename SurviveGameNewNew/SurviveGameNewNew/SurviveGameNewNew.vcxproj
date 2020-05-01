@@ -178,6 +178,8 @@
     <ClInclude Include="SurviveGameNewNew.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utility.h" />
+    <ClInclude Include="utility_d3d9.h" />
+    <ClInclude Include="utility_proc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyDir.cpp" />

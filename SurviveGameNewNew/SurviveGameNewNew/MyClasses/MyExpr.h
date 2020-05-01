@@ -13,6 +13,7 @@ public:
 	{
 		int type = Equal;
 		int oper = And;
+		int num = 0;
 	};
 
 	bool def = false;
@@ -26,17 +27,17 @@ public:
 		vec.push_back(expr);
 	}
 
-	inline bool checkType(int num1, int num2, int type) {
+	inline bool checkType(int num1, Expr expr) {
 		bool result = false;
-		switch (type) {
+		switch (expr.type) {
 		case Equal:
-			result = num1 == num2;
+			result = num1 == expr.num;
 			break;
 		case More:
-			result = num1 > num2;
+			result = num1 > expr.num;
 			break;
 		case Less:
-			result = num1 < num2;
+			result = num1 < expr.num;
 			break;
 		}
 		return result;
@@ -54,18 +55,18 @@ public:
 		return result;
 	}
 
-	bool checkNumber(int num1, int num2) {
+	bool checkNumber(int num) {
 		int size = vec.size();
 
 		if (size == 0)
 			return def;
-		bool result = checkType(num1, num2, (*vec.begin()).type);
-
+		bool result = checkType(num, *vec.begin());
+		
 		if (size == 1)
 			return result;
 		for (auto it = vec.begin() + 1; it < vec.end(); it++) {
 			Expr expr = *it;
-			bool result2 = checkType(num1, num2, expr.type);
+			bool result2 = checkType(num, expr);
 			result = checkOper(result, result2, expr.oper);
 		}
 		return result;

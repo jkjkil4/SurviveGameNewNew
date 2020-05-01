@@ -18,7 +18,7 @@ MyRoom_game::MyRoom_game(MyEngine* e) : MyRoom(e) {
 	//Esc菜单
 	{
 		MyPushButton* btnBack = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
-		btnBack->visible = 10000;
+		btnBack->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 10000 });
 		btnBack->pVisible = &visibleFlags;
 		btnBack->text = TEXT("保存并返回至标题界面");
 		btnBack->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_game::btnBackPressed), this);
@@ -111,7 +111,8 @@ void MyRoom_game::_onRender() {
 	mySetScale(e->g_pSprite, 0, 0, 1, 1);
 }
 void MyRoom_game::_onDebug() {
-	string str = "左右移动: A、D    跳跃: 空格键\n左键删除方块 右键放置方块\n"
+	string str = "visibleFlags: " + to_string(visibleFlags)
+		+ "\n左右移动: A、D    跳跃: 空格键\n左键删除方块 右键放置方块\n"
 		"\nFPS: " + to_string(*e->fps)
 		+ "\n玩家坐标: " + to_string(player.x) + " , " + to_string(player.y)
 		+ "\n玩家速度: " + to_string(player.currentXSpd) + " , " + to_string(player.currentYSpd)

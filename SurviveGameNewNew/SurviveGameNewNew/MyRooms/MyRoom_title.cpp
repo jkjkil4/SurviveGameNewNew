@@ -19,7 +19,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		int offY = 40;
 		MyPushButton* btnSigle = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
 		btnSigle->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSiglePressed), this);
-		btnSigle->visible = 0;
+		btnSigle->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 0 });
 		btnSigle->pVisible = &visibleFlags;
 		btnSigle->move(0, -70 + offY);
 		btnSigle->text = TEXT("单人游戏");
@@ -27,7 +27,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		
 		MyPushButton* btnMulti = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
 		btnMulti->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnMultiPressed), this);
-		btnMulti->visible = 0;
+		btnMulti->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 0 });
 		btnMulti->pVisible = &visibleFlags;
 		btnMulti->move(0, offY);
 		btnMulti->text = TEXT("多人游戏(没做)");
@@ -35,7 +35,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 
 		MyPushButton* btnSettings = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
 		btnSettings->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSettingsPressed), this);
-		btnSettings->visible = 0;
+		btnSettings->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 0 });
 		btnSettings->pVisible = &visibleFlags;
 		btnSettings->move(0, 70 + offY);
 		btnSettings->text = TEXT("设置(没做)");
@@ -43,7 +43,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 
 		MyPushButton* btnExit = new MyPushButton(e, textureBtnBig->g_pTexture, &textureBtnBig->info, e->g_pFont);
 		btnExit->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnExitPressed), this);
-		btnExit->visible = 0;
+		btnExit->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 0 });
 		btnExit->pVisible = &visibleFlags;
 		btnExit->move(0, 140 + offY);
 		btnExit->text = TEXT("退出");
@@ -53,7 +53,7 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 	//存档选择界面
 	{
 		MyWidget* widget = new MyWidget(e, textureSaveSelect->g_pTexture, &textureSaveSelect->info);
-		widget->visible = 1;
+		widget->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 1 });
 		widget->pVisible = &visibleFlags;
 		widgets.push_back(widget);
 
@@ -77,13 +77,13 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnRename->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleRenamePressed), this);
 		btnRename->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnRename->move(88, 46);
-		btnRename->text = TEXT("重命名(没做)");
+		btnRename->text = TEXT("重命名");
 
 		MyPushButton* btnDelete = new MyPushButton(e, textureBtnVerySmall->g_pTexture, &textureBtnVerySmall->info, e->g_pFontVerySmall, widget);
 		btnDelete->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleDeletePressed), this);
 		btnDelete->setAlign(AlignFlags::Right | AlignFlags::Bottom);
 		btnDelete->move(5, 46);
-		btnDelete->text = TEXT("删除(没做)");
+		btnDelete->text = TEXT("删除");
 		
 		MyPushButton* btnJoin = new MyPushButton(e, textureBtnMedium->g_pTexture, &textureBtnMedium->info, e->g_pFont, widget);
 		btnJoin->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnSigleJoinPressed), this);
@@ -104,18 +104,43 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnBack->text = TEXT("返回");
 	}
 
-	//新建存档界面
+	//新建存档界面 /同时也是重命名界面
 	{
 		MyWidget* widget = new MyWidget(e, textureSaveCreate->g_pTexture, &textureSaveCreate->info);
-		widget->visible = 4;
+		widget->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 4 });
+		widget->expr.addExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::Or, 5 });
 		widget->pVisible = &visibleFlags;
 		widgets.push_back(widget);
 
-		MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontVerySmall, TEXT("新建存档"), nullptr, widget);
-		title->format = DT_CENTER | DT_VCENTER;
-		title->textColor = 0xffcccccc;
-		title->setAlign(AlignFlags::Top);
-		//24 22
+		//新建存档界面
+		{
+			MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontVerySmall, TEXT("新建存档"), nullptr, widget);
+			title->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 4 });
+			title->pVisible = &visibleFlags;
+			title->format = DT_CENTER | DT_VCENTER;
+			title->textColor = 0xffcccccc;
+			title->setAlign(AlignFlags::Top);
+
+			MyPushButton* btnAccept = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info, e->g_pFont, widget);
+			btnAccept->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 4 });
+			btnAccept->pVisible = &visibleFlags;
+			btnAccept->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnCreateAcceptPressed), this);
+			btnAccept->setAlign(AlignFlags::Right | AlignFlags::Bottom);
+			btnAccept->move(5, 5);
+			btnAccept->text = TEXT("创建");
+		}
+
+		//重命名界面
+		{
+			MyTextWidget* title = new MyTextWidget(e, widget->w, 20, e->g_pFontVerySmall, TEXT("重命名存档"), nullptr, widget);
+			title->expr.setExpr(MyExpr::Expr{ MyExpr::Equal, MyExpr::And, 5 });
+			title->pVisible = &visibleFlags;
+			title->format = DT_CENTER | DT_VCENTER;
+			title->textColor = 0xffcccccc;
+			title->setAlign(AlignFlags::Top);
+		}
+
+		//通用的部分
 		MyTextWidget* saveNameLeft = new MyTextWidget(e, 220, 22, e->g_pFontVerySmall, TEXT("存档名称"), nullptr, widget);
 		saveNameLeft->format = DT_LEFT | DT_BOTTOM;
 		saveNameLeft->textColor = 0xffffffff;
@@ -139,12 +164,6 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		btnBack->setAlign(AlignFlags::Left | AlignFlags::Bottom);
 		btnBack->move(5, 5);
 		btnBack->text = TEXT("返回");
-
-		MyPushButton* btnAccept = new MyPushButton(e, textureBtnSmall->g_pTexture, &textureBtnSmall->info, e->g_pFont, widget);
-		btnAccept->setPressSlot(PUSH_BUTTON_SLOT(&MyRoom_title::btnCreateAcceptPressed), this);
-		btnAccept->setAlign(AlignFlags::Right | AlignFlags::Bottom);
-		btnAccept->move(5, 5);
-		btnAccept->text = TEXT("创建");
 	}
 
 	if (visibleFlags == 1)
@@ -269,7 +288,9 @@ void MyRoom_title::btnSigleJoinPressed(MyMouseEvent ev) {
 }
 void MyRoom_title::btnSigleRenamePressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
-
+		if (shownSave) {
+			visibleFlags = 5;
+		}
 	}
 }
 void MyRoom_title::btnSigleDeletePressed(MyMouseEvent ev) {

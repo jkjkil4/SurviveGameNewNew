@@ -96,6 +96,12 @@
     <ClInclude Include="MyRooms\MyRoom_saveSave.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="utility_d3d9.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="utility_proc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">

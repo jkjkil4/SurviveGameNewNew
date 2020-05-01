@@ -92,7 +92,6 @@ public:
 
 	//是否可见
 	int* pVisible = nullptr;
-	int visible = 0;
 	MyExpr expr;
 	//鼠标是否在该控件中
 	bool isMouseAt = false;
