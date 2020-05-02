@@ -2,6 +2,7 @@
 #define _MYTEXTEDIT_H
 
 #include "MyWidget.h"
+#include "../MyClasses/MyStrExpr.h"
 
 class MyTextEdit : public MyWidget
 {

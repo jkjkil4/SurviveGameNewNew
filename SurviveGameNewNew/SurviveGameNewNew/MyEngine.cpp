@@ -2,8 +2,8 @@
 
 using namespace std;
 
-MyEngine::MyEngine(void (*signalScaled)(), bool (*canClose)(), int* fps)
-	: signalScaled(signalScaled), canClose(canClose), fps(fps)
+MyEngine::MyEngine(void (*signalScaled)(), bool (*canClose)(), void (*onLostDevice)(), void (*onResetDevice)(), int* fps)
+	: signalScaled(signalScaled), canClose(canClose), onLostDevice(onLostDevice), onResetDevice(onResetDevice), fps(fps)
 {
 	ZeroMemory(keyPressed, sizeof(bool) * keyNumber);
 	ZeroMemory(keyReleased, sizeof(bool) * keyNumber);
@@ -20,9 +20,7 @@ void MyEngine::onInit() {
 	g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
 
 	//创建D3D的设备指针
-	D3DPRESENT_PARAMETERS d3dpp;	//描述D3D设备的能力
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
-
 	d3dpp.BackBufferCount = 1;
 	d3dpp.Windowed = TRUE;
 	d3dpp.BackBufferWidth = getDefWidth();
@@ -43,16 +41,8 @@ void MyEngine::onInit() {
 	D3DXCreateSprite(g_pDevice, &g_pSprite);
 	D3DXCreateSprite(g_pDevice, &g_pSpriteRender);
 	
-	//"渲染到纹理"
-	g_pDevice->CreateTexture(
-		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
-		D3DUSAGE_RENDERTARGET, D3DFMT_R5G6B5, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL
-		);
-	//得到纹理的Surface
-	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
-	//得到设备的Surface
-	g_pDevice->GetRenderTarget(0, &g_pWindowSurface);
-	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
+	//渲染到纹理
+	createRenderTarget();
 
 	//初始化字体
 	D3DXCreateFont(g_pDevice, 20, 10, 0, 1000, FALSE, DEFAULT_CHARSET, 0, 0, 0, NULL, &g_pFont);
@@ -61,9 +51,9 @@ void MyEngine::onInit() {
 
 	//初始化顶点
 	g_pDevice->CreateVertexBuffer(4 * sizeof(Vertex), 0, D3DFVF_XYZRHW | D3DFVF_DIFFUSE,
-		D3DPOOL_DEFAULT, &vbRectangle, nullptr);
+		D3DPOOL_MANAGED, &vbRectangle, nullptr);
 	g_pDevice->CreateIndexBuffer(6 * sizeof(WORD), D3DUSAGE_WRITEONLY,
-		D3DFMT_INDEX16, D3DPOOL_DEFAULT, &ibRectangle, 0);
+		D3DFMT_INDEX16, D3DPOOL_MANAGED, &ibRectangle, 0);
 	WORD* index = nullptr;
 	ibRectangle->Lock(0, 0, (void**)&index, 0);
 	index[0] = 0;
@@ -112,7 +102,11 @@ void MyEngine::renderEnd() {
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制
-	g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+
+	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+	if (FAILED(hr))
+		resetDevice();
+
 	g_pDevice->SetRenderTarget(0, g_pRenderSurface);	//设置为绘制到g_pRenderSurface
 }
 void MyEngine::onDestroy() {
@@ -137,6 +131,78 @@ void MyEngine::onDestroy() {
 
 	//destroy
 	data.onDestroy();
+}
+
+void MyEngine::createRenderTarget() {
+	//"渲染到纹理"
+	g_pDevice->CreateTexture(
+		GetSystemMetrics(SM_CXFULLSCREEN), GetSystemMetrics(SM_CYFULLSCREEN), 1,
+		D3DUSAGE_RENDERTARGET, D3DFMT_R5G6B5, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL
+		);
+	//得到纹理的Surface
+	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
+	
+	//得到设备的Surface
+	g_pDevice->GetRenderTarget(0, &g_pWindowSurface);
+	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
+}
+HRESULT MyEngine::resetDevice() {
+	//检查设备状态
+	HRESULT hr = g_pDevice->TestCooperativeLevel();
+
+	//设备能被Reset
+	if (SUCCEEDED(hr) || hr == D3DERR_DEVICENOTRESET) {
+		g_pSprite->OnLostDevice();
+		g_pSpriteRender->OnLostDevice();
+		g_pFont->OnLostDevice();
+		g_pFontSmall->OnLostDevice();
+		g_pFontVerySmall->OnLostDevice();
+		safeRelease(g_pRenderTexture);
+		safeRelease(g_pRenderSurface);
+		safeRelease(g_pWindowSurface);
+		onLostDevice();
+		
+		retry:
+		//Reset设备
+		HRESULT hr2;
+		int times = 0;
+		for (int i = 0; i < 20; i++) {
+			hr2 = g_pDevice->Reset(&d3dpp);
+			times++;
+			if (SUCCEEDED(hr2))
+				break;
+		}
+		if (SUCCEEDED(hr2)) {
+			g_pSprite->OnResetDevice();
+			g_pSpriteRender->OnResetDevice();
+			g_pFont->OnResetDevice();
+			g_pFontSmall->OnResetDevice();
+			g_pFontVerySmall->OnResetDevice();
+			createRenderTarget();
+			onResetDevice();
+			myd("Reset成功，本次尝试次数(最大20): " << times << endl);
+		}
+		else {
+			//Reset设备失败
+			myd("Reset失败\t" << hr2 << endl);
+			int res = MessageBox(nullptr, TEXT("重置设备失败\n\n重试? (取消则会退出)"), TEXT("错误"), MB_OKCANCEL);
+			if (res == 1) {
+				goto retry;
+			}
+			else {
+				SendMessage(g_hWnd, WM_CLOSE, 0, 0);
+			}
+		}
+	}
+	else if (hr == D3DERR_DEVICELOST) {	
+		Sleep(25);
+	}
+	else {	
+		//其他错误
+		MessageBox(nullptr, TEXT("重置设备失败1"), TEXT("错误"), MB_OK);
+	}
+
+	return hr;
 }
 
 LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -226,8 +292,6 @@ LRESULT MyEngine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 	}
 	case WM_CLOSE: {
-		if (!canClose())
-			return 1;
 		DestroyWindow(hWnd);
 		break;
 	}

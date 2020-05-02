@@ -52,6 +52,9 @@ public:
 	void onRender(LPD3DXSPRITE g_pSprite, int targetX = 0, int targetY = 0, int a = 255, int r = 255, int g = 255, int b = 255);
 	virtual inline void _onRender(LPD3DXSPRITE, int, int) {}
 
+	void onLostDevice();
+	void onResetDevice();
+
 	void onDestroy();
 
 	void mouseEvent(MyMouseEvent ev);
@@ -89,6 +92,7 @@ public:
 	//纹理和对应的表面(用来限制区域
 	LPDIRECT3DTEXTURE9 g_pRenderTexture = nullptr;
 	LPDIRECT3DSURFACE9 g_pRenderSurface = nullptr;
+	bool hasTarget = false;
 
 	//是否可见
 	int* pVisible = nullptr;

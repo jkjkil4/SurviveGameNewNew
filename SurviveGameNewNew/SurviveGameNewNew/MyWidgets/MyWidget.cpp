@@ -56,6 +56,7 @@ void MyWidget::useRenderTarget() {
 	safeRelease(g_pRenderSurface);
 	e->g_pDevice->CreateTexture(w, h, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pRenderTexture, NULL);
 	g_pRenderTexture->GetSurfaceLevel(0, &g_pRenderSurface);
+	hasTarget = true;
 }
 
 void MyWidget::updatePos(int alignW, int alignH) {
@@ -142,6 +143,23 @@ void MyWidget::onRender(LPD3DXSPRITE g_pSprite, int targetX, int targetY, int a,
 			&D3DXVECTOR3((float)(childTargetX - targetX), (float)(childTargetY - targetY), 0), 0xffffffff);
 	}
 }
+
+void MyWidget::onLostDevice() {
+	for (auto it = childs.begin(); it < childs.end(); it++)
+		(*it)->onLostDevice();
+	if (hasTarget) {
+		safeRelease(g_pRenderTexture);
+		safeRelease(g_pRenderSurface);
+	}
+}
+void MyWidget::onResetDevice() {
+	for (auto it = childs.begin(); it < childs.end(); it++)
+		(*it)->onResetDevice();
+	if (hasTarget) {
+		useRenderTarget();
+	}
+}
+
 void MyWidget::onDestroy() {
 	for (auto it = childs.begin(); it < childs.end(); it++) {
 		MyWidget* w = *it;

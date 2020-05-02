@@ -6,16 +6,24 @@ using namespace std;
 
 void updateWidgetsPos();
 bool canClose();
+void onLostDevice();
+void onResetDevice();
 
 int fpsCount = 0;
 int startGetFps = 0;
 int fps = 0;
 
-mutex quitMutex;
 
 
-MyEngine e(updateWidgetsPos, canClose, &fps);
+MyEngine e(updateWidgetsPos, canClose, onLostDevice, onResetDevice, &fps);
+
+
+bool needInitRoom = false;
 bool needQuit = false;
+NEEDLOCK_VARIBLE_FUNC(NeedQuit, needQuit, bool);
+NEEDLOCK_VARIBLE_FUNC(NeedInitRoom, needInitRoom, bool);
+
+
 MyRoom* currentRoom = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -61,16 +69,37 @@ bool canClose() {
 	return currentRoom->canClose;
 }
 
+void onLostDevice() {
+	if (!currentRoom)
+		return;
+	for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++)
+		(*it)->onLostDevice();
+}
+void onResetDevice() {
+	if (!currentRoom)
+		return;
+	for (auto it = currentRoom->widgets.begin(); it < currentRoom->widgets.end(); it++)
+		(*it)->onResetDevice();
+}
+
 void mainLoop() {
+	e.onInit();
+
+	setNeedInitRoom(true);
+	while (getNeedInitRoom())
+		Sleep(10);
+
 	while (true) {
-		if (needQuit)
+		if (getNeedQuit())
 			break;
+
 		int currentTime = timeGetTime();
 		if (currentRoom)
 			currentRoom->onBeforeKeyCheck();
 		e.onKeyCheck();
 		if (currentRoom) {
 			currentRoom->onLogic();
+
 			int& sendMessage = currentRoom->sendMessage;
 			if (sendMessage != 0) {
 				SendMessage(e.g_hWnd, sendMessage, 0, 0);
@@ -111,8 +140,7 @@ void mainLoop() {
 		currentRoom->onDestroy();
 		safeDelete(currentRoom);
 	}
-	Mutex(quitMutex);
-	needQuit = false;
+	setNeedQuit(false);
 }
 
 INT WINAPI WinMain(__in HINSTANCE hInstance,
@@ -148,6 +176,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		TEXT("SurviveGameNewNew"), WS_OVERLAPPEDWINDOW, 40, 20, 
 		GetSystemMetrics(SM_CXFULLSCREEN) - 80, GetSystemMetrics(SM_CYFULLSCREEN) - 40, 
 		NULL, NULL, hInstance, NULL);
+	e.g_hInstance = hInstance;
 
 	//最大化
 	ShowWindow(g_hWnd, SW_SHOWMAXIMIZED);
@@ -162,17 +191,20 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	e.setDefWidth(viewW);
 	e.setDefHeight(viewH);
 
+	//多线程
+	thread thMainLoop(mainLoop);
+	thMainLoop.detach();
+
+	while (!getNeedInitRoom())
+		Sleep(10);
+
 	if (g_hWnd) {
-		e.g_hInstance = hInstance;
-		e.onInit();
 		changeRoom(new MyRoom_title(&e));
 		e.setInited(true);
 		UpdateWindow(g_hWnd);
 	}
 
-	//多线程
-	thread thMainLoop(mainLoop);
-	thMainLoop.detach();
+	setNeedInitRoom(false);
 
 	//消息循环
 	MSG msg;
@@ -185,14 +217,9 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
-	needQuit = true;
-	int _needQuit = true;
-	while (_needQuit) {
-		quitMutex.lock();
-		_needQuit = needQuit;
-		quitMutex.unlock();
+	setNeedQuit(true);
+	while (getNeedQuit())
 		Sleep(10);
-	}
 	e.onDestroy();
 	UnregisterClass(wc.lpszClassName, hInstance);
 #ifdef DEBUG_CONSOLE

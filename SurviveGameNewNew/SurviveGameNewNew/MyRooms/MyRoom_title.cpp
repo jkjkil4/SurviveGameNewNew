@@ -61,12 +61,12 @@ MyRoom_title::MyRoom_title(MyEngine* e) : MyRoom(e) {
 		title->format = DT_CENTER | DT_VCENTER;
 		title->textColor = 0xffcccccc;
 		title->setAlign(AlignFlags::Top);
-
+		
 		scrView = new MyScrollView(e, 412, 440, widget);
 		scrView->setAlign(AlignFlags::Left | AlignFlags::Top);
 		scrView->move(9, 30);
 		scrView->childH = saveWidgetHeight;
-
+		
 		saveInfoWidget = new MyTextWidget(e, 159, 276, e->g_pFontVerySmall, TEXT(""), nullptr, widget);
 		saveInfoWidget->setAlign(AlignFlags::Right | AlignFlags::Top);
 		saveInfoWidget->move(7, 168);
@@ -346,7 +346,8 @@ void MyRoom_title::btnRenamePressed(MyMouseEvent ev) {
 	if (ev.mouse == VK_LBUTTON) {
 		if (shownSave->info) {
 			shownSave->info->name = editSaveName->text;
-			shownSave->saveInfo();
+			if (!shownSave->saveInfo())
+				MessageBox(nullptr, TEXT("´æµµÖØÃüÃûÊ§°Ü"), TEXT("´íÎó"), MB_OK);
 			editSaveName->clear();
 			loadSavesList();
 			visibleFlags = 1;

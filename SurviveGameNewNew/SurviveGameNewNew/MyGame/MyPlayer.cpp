@@ -128,7 +128,7 @@ void MyPlayer::updatePos(short* arrayBlock, int width, int height, MyEngine* e) 
 	//重力
 	int yMin = plH;
 	int yMax = height * 16;
-	int intHSpd = (int)currentYSpd;		//int的纵向速度
+	int intHSpd = (int)round(currentYSpd);		//int的纵向速度
 	int toY = y + intHSpd;
 	//向上移动
 	if (intHSpd < 0) {

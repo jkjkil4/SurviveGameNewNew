@@ -4,7 +4,6 @@
 #include "utility.h"
 #include "MyGame/MyData.h"
 #include "MyNameSpace.h"
-#include "MyClasses/MyStrExpr.h"
 #include "MyGame/MyGlobal.h"
 
 #define NEEDLOCK_VARIBLE_FUNC(funcName, varibleName, varibleType)\
@@ -44,7 +43,7 @@ private:
 	std::wstring inputWString = TEXT("");
 
 public:
-	explicit MyEngine(void (*signalScaled)(), bool(*canClose)(), int* fps);
+	explicit MyEngine(void (*signalScaled)(), bool(*canClose)(), void (*onLostDevice)(), void (*onResetDevice)(), int* fps);
 
 	NEEDLOCK_VARIBLE_FUNC(HasFocus, hasFocus, bool);
 	NEEDLOCK_VARIBLE_FUNC(Inited, inited, bool);
@@ -62,6 +61,9 @@ public:
 	void renderEnd();
 	void onDestroy();
 
+	void createRenderTarget();
+	HRESULT resetDevice();
+
 	LRESULT ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	//绘制
@@ -78,15 +80,16 @@ public:
 	HWND g_hWnd = 0;
 	HINSTANCE g_hInstance = 0;
 	//接口和设备指针
+	D3DPRESENT_PARAMETERS d3dpp;	//描述D3D设备的能力
 	LPDIRECT3D9 g_pD3D = nullptr;			//D3D的接口指针，为了创建设备指针
 	LPDIRECT3DDEVICE9 g_pDevice = nullptr;	//D3D的设备指针，为了创建精灵指针
 	//精灵指针
 	LPD3DXSPRITE g_pSprite = nullptr;		//D3D的精灵指针，为了画图
 	LPD3DXSPRITE g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
 	// 渲染到纹理
-	IDirect3DTexture9* g_pRenderTexture = nullptr;
-	IDirect3DSurface9* g_pRenderSurface = nullptr;
-	IDirect3DSurface9* g_pWindowSurface = nullptr;
+	LPDIRECT3DTEXTURE9 g_pRenderTexture = nullptr;
+	LPDIRECT3DSURFACE9 g_pRenderSurface = nullptr;
+	LPDIRECT3DSURFACE9 g_pWindowSurface = nullptr;
 
 	//处理
 	void onKeyCheck();
@@ -99,6 +102,8 @@ public:
 	//一些东西
 	void (*signalScaled)() = nullptr;
 	bool (*canClose)() = nullptr;
+	void (*onLostDevice)() = nullptr;
+	void (*onResetDevice)() = nullptr;
 
 	//按键检测
 	bool keyFlag(int num);
@@ -124,8 +129,8 @@ public:
 	LPD3DXFONT g_pFontVerySmall = nullptr;
 
 	//绘制矩形的顶点Buffer
-	LPDIRECT3DVERTEXBUFFER9 vbRectangle;
-	LPDIRECT3DINDEXBUFFER9 ibRectangle;
+	LPDIRECT3DVERTEXBUFFER9 vbRectangle = nullptr;
+	LPDIRECT3DINDEXBUFFER9 ibRectangle = nullptr;
 
 	//pointer
 	int* fps = nullptr;

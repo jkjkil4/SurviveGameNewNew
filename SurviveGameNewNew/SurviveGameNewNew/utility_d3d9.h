@@ -10,6 +10,7 @@
 
 #define MyMsgBox(str, title) MessageBox(nullptr, str.c_str(), title.c_str(), MB_OK)
 
+
 inline RECT rect(int x, int y, int w, int h) {
     RECT rect;
     rect.left = x;
@@ -37,6 +38,9 @@ struct Vertex
     float x, y, z, rhw;
     DWORD color;
 };
+
+#define CHECK_HR(hr, ...) if(FAILED(hr))##__VA_ARGS__
+
 //, 路径, 宽(来自图片D3DX_FROM_FILE), 高, 多级渐进纹理的等级, 图片的作用, 未知纹理格式, 受系统管理的存储空间, , , , 图片详细信息存储在这个结构体中, 调色板信息, 返回的纹理指针
 #define myCreateTexture(g_pDevice, path, w, h, imageInfo, g_pTexture) \
     D3DXCreateTextureFromFileEx(\
