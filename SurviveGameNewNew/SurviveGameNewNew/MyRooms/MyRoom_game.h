@@ -35,7 +35,7 @@ public:
 	int roomHeight = 400;	//纵向的方块数量
 	int blockCount = 160000;	//方块数量
 
-	MyPlayer player;
+	MyPlayer* player = nullptr;
 
 
 	//

@@ -1,9 +1,9 @@
 #ifndef _MYSAVE_H
 #define _MYSAVE_H
 
-#include "../utility.h"
-#include "../MyNameSpace.h"
 #include "../MyDir.h"
+#include "../MyNameSpace.h"
+#include "MyPlayerData.h"
 
 class MySave
 {
@@ -21,16 +21,6 @@ public:
 		UCHAR version = 0;
 		UINT seed = 114514;
 		int width = 400, height = 400;
-	};
-	class PlayerState
-	{
-	public:
-		PlayerState(int x, int y) {
-			this->x = x;
-			this->y = y;
-		}
-
-		int x = 0, y = 0;
 	};
 	class Blocks
 	{
@@ -63,7 +53,7 @@ public:
 	void createDirectory();
 
 	Info* info = nullptr;
-	PlayerState* playerState = nullptr;
+	MyPlayerData* player = nullptr;
 	Blocks* blocks = nullptr;
 };
 

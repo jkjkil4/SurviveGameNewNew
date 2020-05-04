@@ -147,6 +147,7 @@ void MyEngine::createRenderTarget() {
 	g_pDevice->SetRenderTarget(0, g_pRenderSurface);
 }
 HRESULT MyEngine::resetDevice() {
+	int startTime = timeGetTime();
 	//检查设备状态
 	HRESULT hr = g_pDevice->TestCooperativeLevel();
 
@@ -166,7 +167,7 @@ HRESULT MyEngine::resetDevice() {
 		//Reset设备
 		HRESULT hr2;
 		int times = 0;
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 10; i++) {
 			hr2 = g_pDevice->Reset(&d3dpp);
 			times++;
 			if (SUCCEEDED(hr2))
@@ -180,7 +181,7 @@ HRESULT MyEngine::resetDevice() {
 			g_pFontVerySmall->OnResetDevice();
 			createRenderTarget();
 			onResetDevice();
-			myd("Reset成功，本次尝试次数(最大20): " << times << endl);
+			myd("Reset成功\t  本次尝试次数(最大10):" << times << "\t  本次消耗时间(ms):" << timeGetTime() - startTime << endl);
 		}
 		else {
 			//Reset设备失败

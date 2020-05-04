@@ -77,6 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\WORKING\2Cpp\DirectX\DX\Microsoft DirectX SDK %28June 2010%29\Include$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath).</IncludePath>
+    <LibraryPath>D:\WORKING\2Cpp\DirectX\DX\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -85,6 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\WORKING\2Cpp\DirectX\DX\Microsoft DirectX SDK %28June 2010%29\Include$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath).</IncludePath>
+    <LibraryPath>D:\WORKING\2Cpp\DirectX\DX\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,6 +161,7 @@
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="MyGame\MyData.h" />
     <ClInclude Include="MyGame\MyPlayer.h" />
+    <ClInclude Include="MyGame\MyPlayerData.h" />
     <ClInclude Include="MyGame\MySave.h" />
     <ClInclude Include="MyGame\MyGlobal.h" />
     <ClInclude Include="MyRooms\include_rooms.h" />

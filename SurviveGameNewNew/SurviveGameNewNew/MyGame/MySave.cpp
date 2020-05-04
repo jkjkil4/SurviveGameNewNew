@@ -4,7 +4,7 @@ using namespace std;
 
 MySave::~MySave() {
 	safeDelete(info);
-	safeDelete(playerState);
+	safeDelete(player);
 	if (blocks) {
 		blocks->onDestroy();
 		safeDelete(blocks);
@@ -14,7 +14,7 @@ MySave::~MySave() {
 
 bool MySave::create(Info* info, UINT* proc, bool* needUpdate, std::mutex* m) {
 	this->info = info;
-	playerState = new PlayerState(1020, 100);
+	player = new MyPlayerData;
 	blocks = new Blocks(new short[info->width * info->height]);
 	//填充
 	for (int j = 0; j < info->height; j++) {
@@ -43,7 +43,7 @@ bool MySave::create(Info* info, UINT* proc, bool* needUpdate, std::mutex* m) {
 
 
 bool MySave::save(UINT* proc, bool* needUpdate, std::mutex* m) {
-	if (!info || !playerState || !blocks)
+	if (!info || !player || !blocks)
 		return false;
 
 	//创建文件夹
@@ -61,8 +61,12 @@ bool MySave::save(UINT* proc, bool* needUpdate, std::mutex* m) {
 	{
 		ofstream out(path + TEXT("\\player"), ios::out | ios::binary);
 		if (!out.fail()) {
-			out.write((char*)&playerState->x, sizeof(int));	//玩家横坐标
-			out.write((char*)&playerState->y, sizeof(int));	//玩家纵坐标
+			out.write((char*)&player->x, sizeof(player->x));	//玩家横坐标
+			out.write((char*)&player->y, sizeof(player->y));	//玩家纵坐标
+			out.write((char*)&player->direction, sizeof(player->direction));		//玩家朝向
+			out.write((char*)&player->currentXSpd, sizeof(player->currentXSpd));	//玩家横向速度
+			out.write((char*)&player->currentYSpd, sizeof(player->currentYSpd));	//玩家纵向速度
+			out.write((char*)&player->jumped, sizeof(player->jumped));				//玩家跳跃次数
 			out.close();
 		}
 		else {
@@ -134,11 +138,14 @@ bool MySave::load(wstring path, wstring fileName, UINT* proc, bool* needUpdate, 
 		ifstream in(path + TEXT("\\player"), ios::in | ios::binary);
 		if (in.fail())
 			return false;
-		int playerX = 1000, playerY = 100;
-		in.read((char*)&playerX, sizeof(int));	//玩家横坐标
-		in.read((char*)&playerY, sizeof(int));	//玩家纵坐标
+		player = new MyPlayerData;
+		in.read((char*)&player->x, sizeof(player->x));	//玩家横坐标
+		in.read((char*)&player->y, sizeof(player->y));	//玩家纵坐标
+		in.read((char*)&player->direction, sizeof(player->direction));		//玩家朝向
+		in.read((char*)&player->currentXSpd, sizeof(player->currentXSpd));	//玩家横向速度
+		in.read((char*)&player->currentYSpd, sizeof(player->currentYSpd));	//玩家纵向速度
+		in.read((char*)&player->jumped, sizeof(player->jumped));			//玩家跳跃次数
 		in.close();
-		playerState = new PlayerState(playerX, playerY);
 	}
 	//读取方块数据
 	{
