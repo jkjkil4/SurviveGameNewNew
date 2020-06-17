@@ -160,8 +160,9 @@
     <ClInclude Include="MyDir.h" />
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="MyGame\MyData.h" />
-    <ClInclude Include="MyGame\MyPlayer.h" />
-    <ClInclude Include="MyGame\MyPlayerData.h" />
+    <ClInclude Include="MyGame\MyPlayer\MyBackage.h" />
+    <ClInclude Include="MyGame\MyPlayer\MyPlayer.h" />
+    <ClInclude Include="MyGame\MyPlayer\MyPlayerData.h" />
     <ClInclude Include="MyGame\MySave.h" />
     <ClInclude Include="MyGame\MyGlobal.h" />
     <ClInclude Include="MyRooms\include_rooms.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="MyRooms\MyRoom_createSave.h" />
     <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
     <ClInclude Include="MyRooms\MyRoom_saveSave.h" />
+    <ClInclude Include="MyWidgets\MyBackageWidget.h" />
     <ClInclude Include="MyWidgets\MySaveWidget.h" />
     <ClInclude Include="MyWidgets\MyScrollView.h" />
     <ClInclude Include="MyWidgets\MySolidColorWidget.h" />
@@ -190,7 +192,8 @@
     <ClCompile Include="MyDir.cpp" />
     <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="MyGame\MyData.cpp" />
-    <ClCompile Include="MyGame\MyPlayer.cpp" />
+    <ClCompile Include="MyGame\MyPlayer\MyBackage.cpp" />
+    <ClCompile Include="MyGame\MyPlayer\MyPlayer.cpp" />
     <ClCompile Include="MyGame\MySave.cpp" />
     <ClCompile Include="MyRooms\MyRoom.cpp" />
     <ClCompile Include="MyRooms\MyRoom_game.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="MyRooms\MyRoom_createSave.cpp" />
     <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
     <ClCompile Include="MyRooms\MyRoom_saveSave.cpp" />
+    <ClCompile Include="MyWidgets\MyBackageWidget.cpp" />
     <ClCompile Include="MyWidgets\MySaveWidget.cpp" />
     <ClCompile Include="MyWidgets\MyScrollView.cpp" />
     <ClCompile Include="MyWidgets\MySolidColorWidget.cpp" />
@@ -214,6 +218,9 @@
   <ItemGroup>
     <Image Include="small.ico" />
     <Image Include="SurviveGameNewNew.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
