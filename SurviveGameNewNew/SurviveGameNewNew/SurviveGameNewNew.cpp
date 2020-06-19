@@ -7,6 +7,11 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt LPSTR lpCmdLine,
 	__in int nShowCmd)
 {
+#ifdef DEBUG_CONSOLE
+	AllocConsole();
+	FILE* tempFile = nullptr;
+	freopen_s(&tempFile, "conout$", "w+t", stdout);
+#endif
 
 	engine.onInit(hInstance);
 
@@ -20,4 +25,10 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	}
 
 	engine.onDestroy();
+
+#ifdef DEBUG_CONSOLE
+	FreeConsole();
+#endif
+	
+	return 0;
 }

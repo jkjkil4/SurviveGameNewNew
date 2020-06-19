@@ -104,3 +104,14 @@ namespace My {
         }
     }
 }
+
+
+
+//------Console-----
+#define DEBUG_CONSOLE
+#ifdef DEBUG_CONSOLE
+#include <iostream>
+#define myd(...) std::cout << __VA_ARGS__
+#else
+#define myd(...)
+#endif

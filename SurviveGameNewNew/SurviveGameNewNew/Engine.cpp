@@ -220,12 +220,17 @@ void Engine::onRender() {
 	g_pDevice->EndScene();		//结束绘制
 
 	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
-	//if (FAILED(hr) && !getClosed())
-	//	resetDevice();
+	if (FAILED(hr) && !getClosed())
+		resetDevice();
 
 	g_pDevice->SetRenderTarget(0, g_pRenderSurface);	//设置为绘制到g_pRenderSurface
 }
 
+
+void Engine::drawRestart() {
+	g_pSprite->End();
+	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
 
 void Engine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
 	Vertex* vertexs;
@@ -253,6 +258,58 @@ void Engine::drawBorder(int x, int y, int w, int h, int size, DWORD col) {
 	drawRect(x + size, y, w - 2 * size, size, col, col, col, col);
 	//底部
 	drawRect(x + size, y + h - size, w - 2 * size, size, col, col, col, col);
+}
+
+HRESULT Engine::resetDevice() {
+	int startTime = timeGetTime();
+	//检查设备状态
+	HRESULT hr = g_pDevice->TestCooperativeLevel();
+
+	//设备能被Reset
+	if (hr == D3DERR_DEVICENOTRESET) {
+		g_pSprite->OnLostDevice();
+		g_pSpriteRender->OnLostDevice();
+		g_pFont->OnLostDevice();
+		g_pFontSmall->OnLostDevice();
+		g_pFontVerySmall->OnLostDevice();
+		TextureManager::onReleaseTextures();
+
+	retry:
+		//Reset设备
+		HRESULT hr2;
+		int times = 0;
+		for (int i = 0; i < 10; i++) {
+			hr2 = g_pDevice->Reset(&d3dpp);
+			times++;
+			if (SUCCEEDED(hr2))
+				break;
+		}
+		if (SUCCEEDED(hr2)) {
+			g_pSprite->OnResetDevice();
+			g_pSpriteRender->OnResetDevice();
+			g_pFont->OnResetDevice();
+			g_pFontSmall->OnResetDevice();
+			g_pFontVerySmall->OnResetDevice();
+			TextureManager::onResetTextures();
+			myd("Reset成功\t  本次尝试次数(最大10):" << times << "\t  本次消耗时间(ms):" << timeGetTime() - startTime << endl);
+		}
+		else {
+			//Reset设备失败
+			myd("Reset失败\t" << hr2 << endl);
+			int res = MessageBox(nullptr, TEXT("重置设备失败\n\n重试? (取消则会退出)"), TEXT("错误"), MB_OKCANCEL);
+			if (res == 1) {
+				goto retry;
+			}
+			else {
+				SendMessage(g_hWnd, WM_CLOSE, 0, 0);
+			}
+		}
+	}
+	else if (hr == D3DERR_DEVICELOST) {
+		Sleep(25);
+	}
+
+	return hr;
 }
 
 
