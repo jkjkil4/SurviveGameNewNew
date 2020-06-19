@@ -17,6 +17,8 @@ inline RECT mkRect(int x, int y, int w, int h) {
     return rect;
 }
 
+#define _T TEXT
+
 #pragma endregion
 
 #pragma region d3d9的头文件和库文件
@@ -79,6 +81,9 @@ typedef D3DXIMAGE_INFO ImageInfo;
 namespace My {
     inline void createTextureFromFile(LPDevice g_pDevice, std::wstring& path, UINT w, UINT h, ImageInfo* imageInfo, LPTexture* g_pTexture);
     inline void createTextureSizeFromFile(LPDevice g_pDevice, std::wstring& path, ImageInfo* imageInfo, LPTexture* g_pTexture);
+
+    void setSpriteScale(LPSprite pSpr, float scalePosX, float scalePosY, float xScale, float yScale,
+        float rotPosX = 0, float rotPosY = 0, float rot = 0);
 	
     template<typename T>inline void safeDelete(T*& p) {
         if (p) {

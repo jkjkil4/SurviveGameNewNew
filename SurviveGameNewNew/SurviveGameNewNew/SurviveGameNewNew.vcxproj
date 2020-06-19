@@ -171,7 +171,9 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\Counter.h" />
     <ClInclude Include="Class\TextureManager.h" />
+    <ClInclude Include="Class\Delayer.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="utility.h" />

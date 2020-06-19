@@ -16,10 +16,19 @@ public:
 	void onInit(HINSTANCE hInstance);
 	void onDestroy();
 
+	void onLogic();
+	void onRender();
+
 	std::mutex mutexGameLoop;
 	void funcLogic();
 	void funcRender();
 
+	//绘制
+	void drawRestart();
+	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
+	void drawBorder(int x, int y, int w, int h, int size, DWORD col = 0xff000000);
+
+	LRESULT CALLBACK ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
@@ -51,13 +60,20 @@ public:
 	//管理Texture
 	TextureManager* renderTextureManager = nullptr;
 
+	//清空时的颜色
+	D3DCOLOR clearColor = D3DCOLOR_XRGB(102, 204, 255);
+
 
 	std::mutex mThreadCount;
 	NEEDLOCK_GET_FUNC(mThreadCount, ThreadCount, threadCount, int)
 
+	NEEDLOCK_VARIBLE_FUNC(WndInited, wndInited, bool)
 	NEEDLOCK_VARIBLE_FUNC(DirectxInited, directxInited, bool)
 
 	NEEDLOCK_VARIBLE_FUNC(NeedExit, needExit, bool)
+	NEEDLOCK_VARIBLE_FUNC(Closed, closed, bool)
+
+	NEEDLOCK_VARIBLE_FUNC(ResizeTime, resizeTime, int)
 
 	NEEDLOCK_VARIBLE_FUNC(DefWidth, defWidth, int)
 	NEEDLOCK_VARIBLE_FUNC(DefHeight, defHeight, int)
@@ -70,8 +86,11 @@ private:
 
 	int threadCount = 0;
 
-	bool directxInited = false;
+	bool wndInited = false, directxInited = false;
 	bool needExit = false;
+	bool closed = false;
+
+	int resizeTime = 0;
 
 	int defWidth = 800, defHeight = 608;
 	int viewW = 800, viewH = 608;

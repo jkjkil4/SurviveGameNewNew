@@ -57,5 +57,11 @@
     <ClInclude Include="Class\TextureManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Class\Delayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Counter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

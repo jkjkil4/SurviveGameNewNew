@@ -1,11 +1,14 @@
 #include "Engine.h"
 
+#include "Class/Delayer.h"
+
 using namespace My;
 using namespace std;
 
 Engine My::engine;
 
 #define THREAD_COUNT(...) mThreadCount.lock(); threadCount##__VA_ARGS__; mThreadCount.unlock();
+#define DELAY_MICRO 16667
 
 Engine::Engine() {
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
@@ -60,6 +63,8 @@ void Engine::initWnd() {
 	setViewH(viewH);
 	setDefWidth(viewW);
 	setDefHeight(viewH);
+
+	setWndInited(true);
 }
 
 void Engine::initDirectx() {
@@ -115,6 +120,7 @@ void Engine::initDirectx() {
 	};
 	#pragma endregion
 	renderTextureManager = new TextureManager(releaseFunc, resetFunc, this);
+	renderTextureManager->resetTexture();
 	TextureManager::addManager(renderTextureManager);
 
 	//初始化字体
@@ -165,18 +171,114 @@ void Engine::funcRender() {
 	initDirectx();
 	setDirectxInited(true);
 
+	Counter counter;
+	counter.start();
+	Delayer delayer(DELAY_MICRO);
+	int fpsCount = 0;
+	double fpsStartTime = counter.get();
+
 	while (!getNeedExit()) {
-		Sleep(10);
+		double startTime = counter.get();
+		onRender();
+		int spentMicro = (int)((counter.get() - startTime) * 1000);
+		delayer.delay(DELAY_MICRO - spentMicro);
+
+		fpsCount++;
+		double time = counter.get();
+		if (time - fpsStartTime > 1000) {
+			//TODO: setFpsNum
+			fpsCount = 0;
+			fpsStartTime = time;
+		}
 	}
 
 	THREAD_COUNT(--);
 }
 
 
+void Engine::onLogic() {
+
+}
+
+void Engine::onRender() {
+	//填充
+	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, clearColor, 1.0f, 0);
+	//开始绘制
+	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+	//TODO: 绘制
+	drawRect(50, 50, 200, 100, 0xff00ffff, 0xffff00ff, 0xff00ff00, 0xffff0000);
+
+	//结束绘制
+	g_pSprite->End();
+	//将纹理绘制到窗口
+	g_pDevice->SetRenderTarget(0, g_pWindowSurface);	//设置为绘制到窗口
+	g_pDevice->BeginScene();	//获取绘制权限
+	g_pSpriteRender->Begin(0);
+	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
+	g_pSpriteRender->End();
+	g_pDevice->EndScene();		//结束绘制
+
+	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+	//if (FAILED(hr) && !getClosed())
+	//	resetDevice();
+
+	g_pDevice->SetRenderTarget(0, g_pRenderSurface);	//设置为绘制到g_pRenderSurface
+}
+
+
+void Engine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
+	Vertex* vertexs;
+	vbRectangle->Lock(0, 0, (void**)&vertexs, 0);
+	vertexs[0] = Vertex{ (float)x, (float)y, 0.0f, 1.0f, col1 };
+	vertexs[1] = Vertex{ (float)(x + w), (float)y, 0.0f, 1.0f, col2 };
+	vertexs[2] = Vertex{ (float)(x + w), (float)(y + h), 0.0f, 1.0f, col3 };
+	vertexs[3] = Vertex{ (float)x, (float)(y + h), 0.0f, 1.0f, col4 };
+	vbRectangle->Unlock();
+
+	g_pDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
+	g_pDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
+	g_pDevice->SetStreamSource(0, vbRectangle, 0, sizeof(Vertex));
+	g_pDevice->SetIndices(ibRectangle);
+
+	g_pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+}
+
+void Engine::drawBorder(int x, int y, int w, int h, int size, DWORD col) {
+	//左侧
+	drawRect(x, y, size, h, col, col, col, col);
+	//右侧
+	drawRect(x + w - size, y, size, h, col, col, col, col);
+	//顶部
+	drawRect(x + size, y, w - 2 * size, size, col, col, col, col);
+	//底部
+	drawRect(x + size, y + h - size, w - 2 * size, size, col, col, col, col);
+}
+
+
 LRESULT CALLBACK Engine::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	return engine.ProcWndMessage(hWnd, uMsg, wParam, lParam);
+}
+
+LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
+	case WM_SIZE: {//大小被改变
+		if (getWndInited()) {
+			//setResizeTime(timeGetTime());
+			D3DXMATRIX g_scale;
+			RECT rect;
+			GetClientRect(g_hWnd, &rect);
+			int w = rect.right - rect.left;
+			int h = rect.bottom - rect.top;
+			setViewW(w);
+			setViewH(h);
+			setSpriteScale(g_pSpriteRender, 0, 0, (float)getDefWidth() / w, (float)getDefHeight() / h);
+			//TODO: 调整控件的位置
+		}
+		break;
+	}
 	case WM_CLOSE: {
-		//setClosed(true);
+		setClosed(true);
 		DestroyWindow(hWnd);
 		break;
 	}

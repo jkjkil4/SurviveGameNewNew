@@ -7,6 +7,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt LPSTR lpCmdLine,
 	__in int nShowCmd)
 {
+
 	engine.onInit(hInstance);
 
 	MSG msg;
