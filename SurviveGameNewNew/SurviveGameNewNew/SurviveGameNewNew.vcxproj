@@ -155,60 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="MyClasses\MyStrExpr.h" />
-    <ClInclude Include="MyClasses\MyExpr.h" />
-    <ClInclude Include="MyDir.h" />
-    <ClInclude Include="MyEngine.h" />
-    <ClInclude Include="MyGame\MyData.h" />
-    <ClInclude Include="MyGame\MyPlayer\MyBackage.h" />
-    <ClInclude Include="MyGame\MyPlayer\MyPlayer.h" />
-    <ClInclude Include="MyGame\MyPlayer\MyPlayerData.h" />
-    <ClInclude Include="MyGame\MySave.h" />
-    <ClInclude Include="MyGame\MyGlobal.h" />
-    <ClInclude Include="MyRooms\include_rooms.h" />
-    <ClInclude Include="MyRooms\MyRoom.h" />
-    <ClInclude Include="MyRooms\MyRoom_game.h" />
-    <ClInclude Include="MyNameSpace.h" />
-    <ClInclude Include="MyRooms\MyRoom_title.h" />
-    <ClInclude Include="MyRooms\MyRoom_createSave.h" />
-    <ClInclude Include="MyRooms\MyRoom_loadSave.h" />
-    <ClInclude Include="MyRooms\MyRoom_saveSave.h" />
-    <ClInclude Include="MyWidgets\MyBackageWidget.h" />
-    <ClInclude Include="MyWidgets\MySaveWidget.h" />
-    <ClInclude Include="MyWidgets\MyScrollView.h" />
-    <ClInclude Include="MyWidgets\MySolidColorWidget.h" />
-    <ClInclude Include="MyWidgets\MyTextWidget.h" />
-    <ClInclude Include="MyWidgets\MyTextEdit.h" />
-    <ClInclude Include="MyWidgets\MyPushButton.h" />
-    <ClInclude Include="MyWidgets\MyWidget.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="SurviveGameNewNew.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="utility.h" />
-    <ClInclude Include="utility_d3d9.h" />
-    <ClInclude Include="utility_proc.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MyDir.cpp" />
-    <ClCompile Include="MyEngine.cpp" />
-    <ClCompile Include="MyGame\MyData.cpp" />
-    <ClCompile Include="MyGame\MyPlayer\MyBackage.cpp" />
-    <ClCompile Include="MyGame\MyPlayer\MyPlayer.cpp" />
-    <ClCompile Include="MyGame\MySave.cpp" />
-    <ClCompile Include="MyRooms\MyRoom.cpp" />
-    <ClCompile Include="MyRooms\MyRoom_game.cpp" />
-    <ClCompile Include="MyRooms\MyRoom_title.cpp" />
-    <ClCompile Include="MyRooms\MyRoom_createSave.cpp" />
-    <ClCompile Include="MyRooms\MyRoom_loadSave.cpp" />
-    <ClCompile Include="MyRooms\MyRoom_saveSave.cpp" />
-    <ClCompile Include="MyWidgets\MyBackageWidget.cpp" />
-    <ClCompile Include="MyWidgets\MySaveWidget.cpp" />
-    <ClCompile Include="MyWidgets\MyScrollView.cpp" />
-    <ClCompile Include="MyWidgets\MySolidColorWidget.cpp" />
-    <ClCompile Include="MyWidgets\MyTextWidget.cpp" />
-    <ClCompile Include="MyWidgets\MyTextEdit.cpp" />
-    <ClCompile Include="MyWidgets\MyPushButton.cpp" />
-    <ClCompile Include="MyWidgets\MyWidget.cpp" />
+    <ClCompile Include="Class\TextureManager.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
@@ -221,6 +169,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Class\TextureManager.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

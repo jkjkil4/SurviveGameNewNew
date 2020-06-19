@@ -15,168 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utility.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SurviveGameNewNew.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_game.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\include_rooms.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyData.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyWidget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyPushButton.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_title.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyTextEdit.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyEngine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyNameSpace.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyTextWidget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_createSave.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_loadSave.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyDir.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MySave.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyScrollView.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MySaveWidget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyGlobal.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MySolidColorWidget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyClasses\MyStrExpr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyClasses\MyExpr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyRooms\MyRoom_saveSave.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="utility_d3d9.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="utility_proc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyPlayer\MyPlayer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyPlayer\MyPlayerData.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyGame\MyPlayer\MyBackage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyWidgets\MyBackageWidget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="SurviveGameNewNew.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="utility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom.cpp">
+    <ClCompile Include="Engine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_game.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame\MyData.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyWidget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyPushButton.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_title.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyTextEdit.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyEngine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyTextWidget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_createSave.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_loadSave.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyDir.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame\MySave.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyScrollView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MySaveWidget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MySolidColorWidget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyRooms\MyRoom_saveSave.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame\MyPlayer\MyPlayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyGame\MyPlayer\MyBackage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyWidgets\MyBackageWidget.cpp">
+    <ClCompile Include="Class\TextureManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -195,5 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\TextureManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
