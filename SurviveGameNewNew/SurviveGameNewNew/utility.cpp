@@ -35,3 +35,8 @@ void My::setSpriteScale(LPSprite pSpr, float scalePosX, float scalePosY, float x
 	pSpr->SetTransform(&g_scale);
 	D3DXMatrixIdentity(&g_scale);
 }
+
+
+#ifdef DEBUG_CONSOLE
+HANDLE hConsole;
+#endif

@@ -10,21 +10,26 @@ class My::Counter {
 public:
     void start() {
         LARGE_INTEGER li;
-        if (!QueryPerformanceFrequency(&li))
-            /*cout << "QueryPerformanceFrequency failed!\n"*/OutputDebugString(_T("QueryPerformanceFrequency failed!\n"));
+        
+        if (!QueryPerformanceFrequency(&li)) {
+            #ifdef DEBUG_CONSOLE
+            SetConsoleAtt(FORE_RED + FORE_LIGHT);
+            std::cout << "QueryPerformanceFrequency failed!\n";
+            SetConsoleAtt(FORE_WHITE);
+            #endif
+
+            throw "QueryPerformanceFrequency failed!";
+        }
 
         PCFreq = double(li.QuadPart) / 1000.0;
 
         QueryPerformanceCounter(&li);
         CounterStart = li.QuadPart;
     }
-    double get() {
+    double getTime() {
         LARGE_INTEGER li;
         QueryPerformanceCounter(&li);
-        double result = double(li.QuadPart - CounterStart) / PCFreq;
-        if (result > 100000)
-            start();
-        return result;
+        return double(li.QuadPart - CounterStart) / PCFreq;
     }
 
 private:

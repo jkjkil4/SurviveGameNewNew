@@ -10,26 +10,29 @@ namespace My {
 
 class My::Delayer {
 public:
-	explicit Delayer(int needDelayMicro)
-		: needDelayMicro(needDelayMicro) 
+	explicit Delayer(int standardMicro)
+		: standardMicro(standardMicro)
     {
         counter.start();
     }
 
-	void delay(int micro) {
+	void delay(int micro, bool skipBelowOffset = false) {
+        needDelayMicro += micro;
         if (needDelayMicro > 0) {
-            double startTime = counter.get();
+            double startTime = counter.getTime();
             std::this_thread::sleep_for(std::chrono::microseconds(needDelayMicro));
-            int delayedMicro = (int)((counter.get() - startTime) * 1000);
+            int delayedMicro = (int)((counter.getTime() - startTime) * 1000);
             int outMicro = delayedMicro - needDelayMicro;
-            needDelayMicro = micro - outMicro;
+            needDelayMicro = -outMicro;
         }
         else {
-            needDelayMicro += micro;
+            if (skipBelowOffset && needDelayMicro < -standardMicro * 4)
+                needDelayMicro = 1;
         }
 	}
 
 private:
     Counter counter;
-	int needDelayMicro = 0;
+    int standardMicro = 0;
+    int needDelayMicro = 0;
 };

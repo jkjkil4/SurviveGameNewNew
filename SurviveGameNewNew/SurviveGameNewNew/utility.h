@@ -111,7 +111,17 @@ namespace My {
 #define DEBUG_CONSOLE
 #ifdef DEBUG_CONSOLE
 #include <iostream>
-#define myd(...) std::cout << __VA_ARGS__
-#else
-#define myd(...)
+extern HANDLE hConsole;
+#define SetConsoleAtt(att) SetConsoleTextAttribute(hConsole, att)
+
+#define FORE_RED FOREGROUND_RED
+#define FORE_GREEN FOREGROUND_GREEN
+#define FORE_BLUE FOREGROUND_BLUE
+#define FORE_LIGHT FOREGROUND_INTENSITY
+
+#define FORE_YELLOW (FORE_RED + FORE_GREEN)
+#define FORE_CYAN (FORE_GREEN + FORE_BLUE)
+#define FORE_PINK (FORE_RED + FORE_BLUE)
+#define FORE_WHITE (FORE_RED + FORE_GREEN + FORE_BLUE)
+//#define myd(...) std::cout << __VA_ARGS__
 #endif

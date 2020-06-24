@@ -3,6 +3,7 @@
 #include "utility.h"
 
 #include "Class/TextureManager.h"
+#include "Class/LimitSizeVector.h"
 
 namespace My {
 	class Engine;
@@ -17,7 +18,8 @@ public:
 	void onDestroy();
 
 	void onLogic();
-	void onRender();
+	void onRenderStart();
+	void onRenderEnd(int& err);
 
 	std::mutex mutexGameLoop;
 	void funcLogic();
@@ -77,6 +79,9 @@ public:
 
 	NEEDLOCK_VARIBLE_FUNC(ResizeTime, resizeTime, int)
 
+	NEEDLOCK_VARIBLE_FUNC(LogicFps, logicFps, int)
+	NEEDLOCK_VARIBLE_FUNC(RenderFps, renderFps, int)
+
 	NEEDLOCK_VARIBLE_FUNC(DefWidth, defWidth, int)
 	NEEDLOCK_VARIBLE_FUNC(DefHeight, defHeight, int)
 	NEEDLOCK_VARIBLE_FUNC(ViewW, viewW, int)
@@ -86,6 +91,11 @@ private:
 	void initWnd();
 	void initDirectx();
 
+	std::mutex mutexLogicRender;
+#ifdef DEBUG_CONSOLE
+	std::mutex mutexConsoleOutput;
+#endif
+
 	int threadCount = 0;
 
 	bool wndInited = false, directxInited = false;
@@ -94,9 +104,12 @@ private:
 
 	int resizeTime = 0;
 
+	int logicFps = -1, renderFps = -1;
+
 	int defWidth = 800, defHeight = 608;
 	int viewW = 800, viewH = 608;
 
+	LimitSizeVector<double> vecRenderPresentTime = LimitSizeVector<double>(20);
 };
 
 namespace My {

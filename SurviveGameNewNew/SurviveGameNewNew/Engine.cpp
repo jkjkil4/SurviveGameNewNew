@@ -7,8 +7,11 @@ using namespace std;
 
 Engine My::engine;
 
+#define NoError 0
+#define ErrorCannotPresent 1
+
 #define THREAD_COUNT(...) mThreadCount.lock(); threadCount##__VA_ARGS__; mThreadCount.unlock();
-#define DELAY_MICRO 16667
+#define DELAY_MICRO (1000000 / 60)
 
 Engine::Engine() {
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
@@ -152,15 +155,62 @@ void Engine::onDestroy() {
 
 	TextureManager::removeManager(renderTextureManager);
 	safeDelete(renderTextureManager);
+
+	safeRelease(vbRectangle);
+	safeRelease(ibRectangle);
+
+	safeRelease(g_pFontVerySmall);
+	safeRelease(g_pFontSmall);
+	safeRelease(g_pFont);
+
+	safeRelease(g_pSprite);
+	safeRelease(g_pSpriteRender);
+
+	safeRelease(g_pRenderTexture);
+	safeRelease(g_pRenderSurface);
+	safeRelease(g_pWindowSurface);
+
+	safeRelease(g_pDevice);
+	safeRelease(g_pD3D);
 }
 
 
 void Engine::funcLogic() {
 	THREAD_COUNT(++);
 
+	timeBeginPeriod(1);
+	Counter counter;
+	counter.start();
+	Delayer delayer(DELAY_MICRO);
+	int fpsCount = 0;
+	double fpsStartTime = counter.getTime();
+
 	while (!getNeedExit()) {
-		Sleep(10);
+		double startTime = counter.getTime();
+		mutexLogicRender.lock();
+		onLogic();
+		mutexLogicRender.unlock();
+		int spentMicro = (int)((counter.getTime() - startTime) * 1000);
+		delayer.delay(DELAY_MICRO - spentMicro);
+
+		fpsCount++;
+		double time = counter.getTime();
+		if (time - fpsStartTime > 1000) {
+			setLogicFps(fpsCount);
+
+			#ifdef DEBUG_CONSOLE
+			mutexConsoleOutput.lock();
+			SetConsoleAtt(FORE_YELLOW);
+			cout << "Logic\t FPS: " << fpsCount << "\tDebug: " << time << "\t " << (long long)(time * 1000) << "\t  " << (int)((time - startTime) * 1000) << endl;
+			SetConsoleAtt(FORE_WHITE);
+			mutexConsoleOutput.unlock();
+			#endif
+
+			fpsCount = 0;
+			fpsStartTime = time;
+		}
 	}
+	timeEndPeriod(1);
 
 	THREAD_COUNT(--);
 }
@@ -171,26 +221,60 @@ void Engine::funcRender() {
 	initDirectx();
 	setDirectxInited(true);
 
+	timeBeginPeriod(1);
 	Counter counter;
 	counter.start();
 	Delayer delayer(DELAY_MICRO);
 	int fpsCount = 0;
-	double fpsStartTime = counter.get();
+	double fpsStartTime = counter.getTime();
 
 	while (!getNeedExit()) {
-		double startTime = counter.get();
-		onRender();
-		int spentMicro = (int)((counter.get() - startTime) * 1000);
-		delayer.delay(DELAY_MICRO - spentMicro);
+		double startTime = counter.getTime();
+		int err = NoError;
+		if (!IsIconic(g_hWnd)) {
+			onRenderStart();
+			mutexLogicRender.lock();
+
+			//TODO: 绘制
+			drawRect(50, 50, 200, 100, 0xff00ffff, 0xffff00ff, 0xff00ff00, 0xffff0000);
+			wstring debugWString = _T("LogicFps: ") + to_wstring(getLogicFps()) + _T("   RenderFps: ") + to_wstring(getRenderFps());
+			g_pFont->DrawText(g_pSprite, debugWString.c_str(), -1, nullptr, DT_LEFT | DT_TOP, 0xff000000);
+
+			g_pFontSmall->DrawText(g_pSprite, _T("这是g_pDevice->Present()的耗时"), -1, &mkRect(0, 60, 250, 20), DT_LEFT, 0xff000000);
+			int i = 0;
+			for (auto it = vecRenderPresentTime.begin(); it < vecRenderPresentTime.end(); it++) {
+				g_pFontSmall->DrawText(g_pSprite, (to_wstring(*it)).c_str(), -1, &mkRect(0, 80 + 20 * i, 100, 20), DT_LEFT, 0xff000000);
+				i++;
+			}
+
+			mutexLogicRender.unlock();
+			onRenderEnd(err);
+			
+			if (err == ErrorCannotPresent) {
+				resetDevice();
+			}
+		}
+		int spentMicro = (err == NoError) ? (int)((counter.getTime() - startTime) * 1000) : 0;
+		delayer.delay(DELAY_MICRO - spentMicro, true);
 
 		fpsCount++;
-		double time = counter.get();
+		double time = counter.getTime();
 		if (time - fpsStartTime > 1000) {
-			//TODO: setFpsNum
+			setRenderFps(fpsCount);
+
+			#ifdef DEBUG_CONSOLE
+			mutexConsoleOutput.lock();
+			SetConsoleAtt(FORE_PINK);
+			cout << "Render\t FPS: " << fpsCount << endl;
+			SetConsoleAtt(FORE_WHITE);
+			mutexConsoleOutput.unlock();
+			#endif
+
 			fpsCount = 0;
 			fpsStartTime = time;
 		}
 	}
+	timeEndPeriod(1);
 
 	THREAD_COUNT(--);
 }
@@ -200,15 +284,14 @@ void Engine::onLogic() {
 
 }
 
-void Engine::onRender() {
+void Engine::onRenderStart() {
 	//填充
 	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, clearColor, 1.0f, 0);
 	//开始绘制
 	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
 
-	//TODO: 绘制
-	drawRect(50, 50, 200, 100, 0xff00ffff, 0xffff00ff, 0xff00ff00, 0xffff0000);
-
+void Engine::onRenderEnd(int& err) {
 	//结束绘制
 	g_pSprite->End();
 	//将纹理绘制到窗口
@@ -218,12 +301,17 @@ void Engine::onRender() {
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制
-
+	
+	Counter counter;
+	counter.start();
 	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+	vecRenderPresentTime.addElement(counter.getTime());
+
 	if (FAILED(hr) && !getClosed())
-		resetDevice();
+		err = ErrorCannotPresent;
 
 	g_pDevice->SetRenderTarget(0, g_pRenderSurface);	//设置为绘制到g_pRenderSurface
+	
 }
 
 
@@ -261,12 +349,19 @@ void Engine::drawBorder(int x, int y, int w, int h, int size, DWORD col) {
 }
 
 HRESULT Engine::resetDevice() {
+	Sleep(100);
 	int startTime = timeGetTime();
 	//检查设备状态
 	HRESULT hr = g_pDevice->TestCooperativeLevel();
 
 	//设备能被Reset
 	if (hr == D3DERR_DEVICENOTRESET) {
+		#ifdef DEBUG_CONSOLE
+		SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+		cout << "Is Reseting Device" << endl;
+		SetConsoleAtt(FORE_WHITE);
+		#endif
+
 		g_pSprite->OnLostDevice();
 		g_pSpriteRender->OnLostDevice();
 		g_pFont->OnLostDevice();
@@ -291,11 +386,21 @@ HRESULT Engine::resetDevice() {
 			g_pFontSmall->OnResetDevice();
 			g_pFontVerySmall->OnResetDevice();
 			TextureManager::onResetTextures();
-			myd("Reset成功\t  本次尝试次数(最大10):" << times << "\t  本次消耗时间(ms):" << timeGetTime() - startTime << endl);
+
+			#ifdef DEBUG_CONSOLE
+			SetConsoleAtt(FORE_GREEN + FORE_LIGHT);
+			cout << "Reset Device 成功\t  本次尝试次数(最大10):" << times << "\t  本次消耗时间(ms):" << timeGetTime() - startTime << endl;
+			SetConsoleAtt(FORE_WHITE);
+			#endif
 		}
 		else {
 			//Reset设备失败
-			myd("Reset失败\t" << hr2 << endl);
+			#ifdef DEBUG_CONSOLE
+			SetConsoleAtt(FORE_RED + FORE_LIGHT);
+			cout << "Reset Device 失败\t" << hr2 << endl;
+			SetConsoleAtt(FORE_WHITE);
+			#endif
+
 			int res = MessageBox(nullptr, TEXT("重置设备失败\n\n重试? (取消则会退出)"), TEXT("错误"), MB_OKCANCEL);
 			if (res == 1) {
 				goto retry;
@@ -306,6 +411,12 @@ HRESULT Engine::resetDevice() {
 		}
 	}
 	else if (hr == D3DERR_DEVICELOST) {
+		#ifdef DEBUG_CONSOLE
+		SetConsoleAtt(FORE_RED + FORE_LIGHT);
+		cout << "Device Lost" << endl;
+		SetConsoleAtt(FORE_WHITE);
+		#endif
+
 		Sleep(25);
 	}
 

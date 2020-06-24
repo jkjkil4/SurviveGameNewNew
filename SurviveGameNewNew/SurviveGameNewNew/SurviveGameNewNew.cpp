@@ -1,6 +1,9 @@
 #include "Engine.h"
 
+#include "Room/Room.h"
+
 using namespace My;
+using namespace std;
 
 INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt HINSTANCE hPrevInstance,
@@ -9,11 +12,22 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 {
 #ifdef DEBUG_CONSOLE
 	AllocConsole();
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	FILE* tempFile = nullptr;
 	freopen_s(&tempFile, "conout$", "w+t", stdout);
+
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "正在初始化" << endl;
+	SetConsoleAtt(FORE_WHITE);
 #endif
 
 	engine.onInit(hInstance);
+
+#ifdef DEBUG_CONSOLE
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "初始化完毕" << endl;
+	SetConsoleAtt(FORE_WHITE);
+#endif
 
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -24,10 +38,19 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 		}
 	}
 
+#ifdef DEBUG_CONSOLE
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "正在退出" << endl;
+	SetConsoleAtt(FORE_WHITE);
+#endif
+
 	engine.onDestroy();
 
 #ifdef DEBUG_CONSOLE
 	FreeConsole();
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "退出完毕" << endl;
+	SetConsoleAtt(FORE_WHITE);
 #endif
 	
 	return 0;
