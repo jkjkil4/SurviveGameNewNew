@@ -19,11 +19,11 @@ public:
 	void delay(int micro, bool skipBelowOffset = false) {
         needDelayMicro += micro;
         if (needDelayMicro > 0) {
-            double startTime = counter.getTime();
-            std::this_thread::sleep_for(std::chrono::microseconds(needDelayMicro));
-            int delayedMicro = (int)((counter.getTime() - startTime) * 1000);
-            int outMicro = delayedMicro - needDelayMicro;
-            needDelayMicro = -outMicro;
+            double startTime = counter.getTime();   //得到延时开始的时间(ms)
+            std::this_thread::sleep_for(std::chrono::microseconds(needDelayMicro)); //延时
+            int delayedMicro = (int)((counter.getTime() - startTime) * 1000);   //得到延时消耗的微秒数
+            int outMicro = delayedMicro - needDelayMicro;   //得到超出的微秒数
+            needDelayMicro = -outMicro; //将 needDelayMicro 设置为 -outMicro，也就是在下一次延时的时候就扣去了这个事件
         }
         else {
             if (skipBelowOffset && needDelayMicro < -standardMicro * 4)

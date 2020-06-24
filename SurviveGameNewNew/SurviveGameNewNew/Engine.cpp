@@ -10,7 +10,7 @@ Engine My::engine;
 #define NoError 0
 #define ErrorCannotPresent 1
 
-#define THREAD_COUNT(...) mThreadCount.lock(); threadCount##__VA_ARGS__; mThreadCount.unlock();
+#define THREAD_COUNT(m) mThreadCount.lock(); threadCount##m; mThreadCount.unlock();
 #define DELAY_MICRO (1000000 / 60)
 
 Engine::Engine() {
@@ -20,15 +20,15 @@ Engine::Engine() {
 void Engine::onInit(HINSTANCE hInstance) {
 	g_hInstance = hInstance;
 
-	initWnd();
+	initWnd();	//初始化窗口
 
-	thread* thRender = new thread(&Engine::funcRender, this);
+	thRender = new thread(&Engine::funcRender, this);	//渲染线程
 	thRender->detach();
 
 	while (!getDirectxInited())
 		Sleep(10);
 
-	thread* thLogic = new thread(&Engine::funcLogic, this);
+	thLogic = new thread(&Engine::funcLogic, this);	//逻辑处理线程
 	thLogic->detach();
 }
 
@@ -150,8 +150,15 @@ void Engine::initDirectx() {
 
 void Engine::onDestroy() {
 	setNeedExit(true);
-	while (getThreadCount() == 0)
+
+	while (getThreadCount() != 0)
 		Sleep(10);
+
+#ifdef DEBUG_CONSOLE
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "子线程已退出" << endl;
+	SetConsoleAtt(FORE_WHITE);
+#endif
 
 	TextureManager::removeManager(renderTextureManager);
 	safeDelete(renderTextureManager);
@@ -175,7 +182,7 @@ void Engine::onDestroy() {
 }
 
 
-void Engine::funcLogic() {
+void Engine::funcLogic() {	//逻辑处理线程 的 函数
 	THREAD_COUNT(++);
 
 	timeBeginPeriod(1);
@@ -188,7 +195,9 @@ void Engine::funcLogic() {
 	while (!getNeedExit()) {
 		double startTime = counter.getTime();
 		mutexLogicRender.lock();
-		onLogic();
+
+		//TODO: Logic
+
 		mutexLogicRender.unlock();
 		int spentMicro = (int)((counter.getTime() - startTime) * 1000);
 		delayer.delay(DELAY_MICRO - spentMicro);
@@ -210,12 +219,13 @@ void Engine::funcLogic() {
 			fpsStartTime = time;
 		}
 	}
+	Sleep(1);
 	timeEndPeriod(1);
 
 	THREAD_COUNT(--);
 }
 
-void Engine::funcRender() {
+void Engine::funcRender() {	//渲染线程 的 函数
 	THREAD_COUNT(++);
 
 	initDirectx();
@@ -274,15 +284,12 @@ void Engine::funcRender() {
 			fpsStartTime = time;
 		}
 	}
+	Sleep(1);
 	timeEndPeriod(1);
 
 	THREAD_COUNT(--);
 }
 
-
-void Engine::onLogic() {
-
-}
 
 void Engine::onRenderStart() {
 	//填充

@@ -47,11 +47,11 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	engine.onDestroy();
 
 #ifdef DEBUG_CONSOLE
-	FreeConsole();
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
 	cout << "ÍË³öÍê±Ï" << endl;
 	SetConsoleAtt(FORE_WHITE);
+	FreeConsole();
 #endif
-	
+
 	return 0;
 }

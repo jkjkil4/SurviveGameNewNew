@@ -17,9 +17,8 @@ public:
 	void onInit(HINSTANCE hInstance);
 	void onDestroy();
 
-	void onLogic();
-	void onRenderStart();
-	void onRenderEnd(int& err);
+	void onRenderStart();	//渲染开始
+	void onRenderEnd(int& err);	//渲染结束
 
 	std::mutex mutexGameLoop;
 	void funcLogic();
@@ -91,24 +90,27 @@ private:
 	void initWnd();
 	void initDirectx();
 
-	std::mutex mutexLogicRender;
+	std::thread* thLogic = nullptr, * thRender = nullptr;	//分别是逻辑处理和渲染的线程
+
+	std::mutex mutexLogicRender;	//逻辑处理和渲染之间的线程锁
 #ifdef DEBUG_CONSOLE
-	std::mutex mutexConsoleOutput;
+	std::mutex mutexConsoleOutput;	//输出控制台的线程锁
 #endif
 
-	int threadCount = 0;
+	int threadCount = 0;	//子线程数量
 
-	bool wndInited = false, directxInited = false;
-	bool needExit = false;
-	bool closed = false;
+	bool wndInited = false, directxInited = false;	//分别是窗口、图形界面是否被初始化
+	bool needExit = false;	//是否需要退出，用来让子线程退出
+	bool closed = false;	//是否关闭了窗口
 
-	int resizeTime = 0;
+	int resizeTime = 0;	//大小改变是记录的时间
 
-	int logicFps = -1, renderFps = -1;
+	int logicFps = -1, renderFps = -1;	//分别是逻辑和渲染的帧率
 
-	int defWidth = 800, defHeight = 608;
-	int viewW = 800, viewH = 608;
+	int defWidth = 800, defHeight = 608;	//默认宽高
+	int viewW = 800, viewH = 608;	//视野宽高
 
+	//用来存储Present耗时的vector
 	LimitSizeVector<double> vecRenderPresentTime = LimitSizeVector<double>(20);
 };
 
