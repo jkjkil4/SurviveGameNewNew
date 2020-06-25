@@ -1,0 +1,170 @@
+#include "Engine.h"
+
+using namespace My;
+using namespace std;
+
+Engine My::engine;
+
+
+Engine::Engine() {
+	ZeroMemory(&d3dpp, sizeof(d3dpp));
+
+	ZeroMemory(keyPressed, sizeof(keyPressed));
+	ZeroMemory(key, sizeof(key));
+	ZeroMemory(keyReleased, sizeof(keyReleased));
+}
+
+
+
+void Engine::onLogic() {
+	//处理按键
+	ZeroMemory(keyPressed, sizeof(keyPressed));
+	ZeroMemory(keyReleased, sizeof(keyReleased));
+	for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
+		Key key = *it;
+		if (!key.isAutoRepeat) {
+			if (key.state == Key::State::Press)
+				setKeyPressed(key.key);
+			else
+				setKeyReleased(key.key);
+		}
+		//TODO: 调用控件的按键处理函数
+	}
+	vecKeyBuffer.clear();
+
+	//TODO: 调用Room的逻辑处理函数
+}
+
+void Engine::onRender() {
+	if (isKeyReleased('R')) {
+		#ifdef DEBUG_CONSOLE
+		cout << "注:由于某些不可抗力因素，可能执行多次" << endl;
+		#endif
+
+		onResetingDevice();
+	}
+
+	drawRect(50, 50, 200, 100, 0xff00ffff, 0xffff00ff, 0xff00ff00, 0xffff0000);
+	wstring debugWString = _T("LogicFps: ") + to_wstring(getLogicFps()) + _T("   RenderFps: ") + to_wstring(getRenderFps())
+		+ _T("\n按下'R'可以重置设备(用于测试)，结果会在控制台输出");
+	g_pFont->DrawText(g_pSprite, debugWString.c_str(), -1, nullptr, DT_LEFT | DT_TOP, 0xff000000);
+
+	g_pFontSmall->DrawText(g_pSprite, _T("这是g_pDevice->Present()的耗时"), -1, &mkRect(0, 80, 250, 20), DT_LEFT, 0xff000000);
+	int i = 0;
+	for (auto it = vecRenderPresentTime.begin(); it < vecRenderPresentTime.end(); it++) {
+		g_pFontSmall->DrawText(g_pSprite, (to_wstring(*it)).c_str(), -1, &mkRect(0, 100 + 20 * i, 100, 20), DT_LEFT, 0xff000000);
+		i++;
+	}
+}
+
+
+void Engine::onRenderStart() {
+	//填充
+	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, clearColor, 1.0f, 0);
+	//开始绘制
+	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+}
+
+void Engine::onRenderEnd(RenderError& err) {
+	//结束绘制
+	g_pSprite->End();
+	//将纹理绘制到窗口
+	g_pDevice->SetRenderTarget(0, g_pWindowSurface);	//设置为绘制到窗口
+	g_pDevice->BeginScene();	//获取绘制权限
+	g_pSpriteRender->Begin(0);
+	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
+	g_pSpriteRender->End();
+	g_pDevice->EndScene();		//结束绘制
+	
+	Counter counter;
+	counter.start();
+	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
+	vecRenderPresentTime.addElement(counter.getTime());
+
+	if (FAILED(hr) && !getClosed())
+		err = RenderError::ErrorCannotPresent;
+
+	g_pDevice->SetRenderTarget(0, g_pRenderSurface);	//设置为绘制到g_pRenderSurface
+	
+}
+
+HRESULT Engine::resetDevice() {
+	//检查设备状态
+	HRESULT hr = g_pDevice->TestCooperativeLevel();
+
+	//设备能被Reset
+	if (hr == D3DERR_DEVICENOTRESET) {
+		onResetingDevice();
+	}
+	else if (hr == D3DERR_DEVICELOST) {
+		#ifdef DEBUG_CONSOLE
+		SetConsoleAtt(FORE_RED + FORE_LIGHT);
+		cout << "Device Lost" << endl;
+		SetConsoleAtt(FORE_WHITE);
+		#endif
+
+		Sleep(25);
+	}
+
+	return hr;
+}
+
+
+void Engine::onResetingDevice() {
+	int startTime = timeGetTime();
+
+	#ifdef DEBUG_CONSOLE
+	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
+	cout << "Is Reseting Device" << endl;
+	SetConsoleAtt(FORE_WHITE);
+	#endif
+
+	g_pSprite->OnLostDevice();
+	g_pSpriteRender->OnLostDevice();
+	g_pFont->OnLostDevice();
+	g_pFontSmall->OnLostDevice();
+	g_pFontVerySmall->OnLostDevice();
+	TextureManager::onReleaseTextures();
+
+retry:
+	//Reset设备
+	HRESULT hr2;
+	//int times = 0;
+	//for (int i = 0; i < 10; i++) {
+	hr2 = g_pDevice->Reset(&d3dpp);
+	//	times++;
+	//	if (SUCCEEDED(hr2))
+	//		break;
+	//}
+	if (SUCCEEDED(hr2)) {
+		//Reset设备成功
+		g_pSprite->OnResetDevice();
+		g_pSpriteRender->OnResetDevice();
+		g_pFont->OnResetDevice();
+		g_pFontSmall->OnResetDevice();
+		g_pFontVerySmall->OnResetDevice();
+		TextureManager::onResetTextures();
+
+		#ifdef DEBUG_CONSOLE
+		SetConsoleAtt(FORE_GREEN + FORE_LIGHT);
+		cout << "Reset Device 成功"/*"\t  本次尝试次数(最大10):" << times <<*/ "\t  本次消耗时间(ms):" << timeGetTime() - startTime << endl;
+		SetConsoleAtt(FORE_WHITE);
+		#endif
+	}
+	else {
+		//Reset设备失败
+		#ifdef DEBUG_CONSOLE
+		SetConsoleAtt(FORE_RED + FORE_LIGHT);
+		cout << "Reset Device 失败\t" << hr2 << endl;
+		SetConsoleAtt(FORE_WHITE);
+		#endif
+
+		int res = MessageBox(nullptr, TEXT("重置设备失败\n\n重试? (取消则会退出)"), TEXT("错误"), MB_OKCANCEL);
+		if (res == 1) {
+			goto retry;
+		}
+		else {
+			SendMessage(g_hWnd, WM_CLOSE, 0, 0);
+		}
+	}
+}

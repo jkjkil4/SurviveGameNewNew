@@ -1,13 +1,30 @@
 #pragma once
 
-#include "utility.h"
+#include "../utility.h"
 
-#include "Class/TextureManager.h"
-#include "Class/LimitSizeVector.h"
+#include "../NameSpace.h"
+#include "../Class/TextureManager.h"
+#include "../Class/LimitSizeVector.h"
+#include "../Class/Delayer.h"
 
 namespace My {
+	struct Key;
+
 	class Engine;
 }
+
+
+struct My::Key {
+public:
+	enum class State { Press, Release };
+
+	Key(int key, State state, bool isAutoRepeat = false)
+		: key(key), state(state), isAutoRepeat(isAutoRepeat) {}
+
+	int key = 0;
+	State state = State::Press;
+	bool isAutoRepeat = false;
+};
 
 
 class My::Engine {
@@ -17,8 +34,11 @@ public:
 	void onInit(HINSTANCE hInstance);
 	void onDestroy();
 
+	void onLogic();
+	void onRender();
+
 	void onRenderStart();	//渲染开始
-	void onRenderEnd(int& err);	//渲染结束
+	void onRenderEnd(RenderError& err);	//渲染结束
 
 	std::mutex mutexGameLoop;
 	void funcLogic();
@@ -30,6 +50,7 @@ public:
 	void drawBorder(int x, int y, int w, int h, int size, DWORD col = 0xff000000);
 
 	HRESULT resetDevice();
+	void onResetingDevice();
 
 	LRESULT CALLBACK ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -66,9 +87,25 @@ public:
 	//清空时的颜色
 	D3DCOLOR clearColor = D3DCOLOR_XRGB(102, 204, 255);
 
+	//按键
+	bool isKeyPressed(int num);
+	bool isKey(int num);
+	bool isKeyReleased(int num);
+	void setKeyPressed(int num, bool on = true);
+	void setKey(int num, bool on = true);
+	void setKeyReleased(int num, bool on = true);
+	std::vector<Key> vecKeyBuffer;
+	SC int keyNumber = 0x88;
+	std::mutex mutexKeyPressed;
+	std::mutex mutexKey;
+	std::mutex mutexKeyReleased;
+	bool keyPressed[keyNumber];
+	bool key[keyNumber];
+	bool keyReleased[keyNumber];
 
-	std::mutex mThreadCount;
-	NEEDLOCK_GET_FUNC(mThreadCount, ThreadCount, threadCount, int)
+
+	std::mutex mutexThreadCount;
+	NEEDLOCK_GET_FUNC(mutexThreadCount, ThreadCount, threadCount, int)
 
 	NEEDLOCK_VARIBLE_FUNC(WndInited, wndInited, bool)
 	NEEDLOCK_VARIBLE_FUNC(DirectxInited, directxInited, bool)
@@ -93,9 +130,9 @@ private:
 	std::thread* thLogic = nullptr, * thRender = nullptr;	//分别是逻辑处理和渲染的线程
 
 	std::mutex mutexLogicRender;	//逻辑处理和渲染之间的线程锁
-#ifdef DEBUG_CONSOLE
-	std::mutex mutexConsoleOutput;	//输出控制台的线程锁
-#endif
+//#ifdef DEBUG_CONSOLE
+//	std::mutex mutexConsoleOutput;	//输出控制台的线程锁
+//#endif
 
 	int threadCount = 0;	//子线程数量
 

@@ -72,9 +72,9 @@ typedef D3DXIMAGE_INFO ImageInfo;
 	}
 
 #define NEEDLOCK_VARIBLE_FUNC(FuncName, varibleName, varibleType)\
-	std::mutex m##FuncName;\
-	NEEDLOCK_GET_FUNC(m##FuncName, FuncName, varibleName, varibleType)\
-    NEEDLOCK_SET_FUNC(m##FuncName, FuncName, varibleName, varibleType)\
+	std::mutex mutex##FuncName;\
+	NEEDLOCK_GET_FUNC(mutex##FuncName, FuncName, varibleName, varibleType)\
+    NEEDLOCK_SET_FUNC(mutex##FuncName, FuncName, varibleName, varibleType)\
 
 #pragma endregion
 

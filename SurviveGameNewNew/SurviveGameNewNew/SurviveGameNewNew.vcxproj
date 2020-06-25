@@ -156,7 +156,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Class\TextureManager.cpp" />
-    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\Engine_DrawFunc.cpp" />
+    <ClCompile Include="Engine\Engine_Init_Destroy.cpp" />
+    <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp" />
+    <ClCompile Include="Engine\Engine_ThreadFunc.cpp" />
+    <ClCompile Include="Engine\Engine_WndProcFunc.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -176,7 +181,8 @@
     <ClInclude Include="Class\LimitSizeVector.h" />
     <ClInclude Include="Class\TextureManager.h" />
     <ClInclude Include="Class\Delayer.h" />
-    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="NameSpace.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="utility.h" />
