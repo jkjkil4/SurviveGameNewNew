@@ -160,9 +160,11 @@
     <ClCompile Include="Engine\Engine_DrawFunc.cpp" />
     <ClCompile Include="Engine\Engine_Init_Destroy.cpp" />
     <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp" />
+    <ClCompile Include="Engine\Engine_RoomFunc.cpp" />
     <ClCompile Include="Engine\Engine_ThreadFunc.cpp" />
     <ClCompile Include="Engine\Engine_WndProcFunc.cpp" />
     <ClCompile Include="Room\Room.cpp" />
+    <ClCompile Include="Room\RoomTitle.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
@@ -185,6 +187,7 @@
     <ClInclude Include="NameSpace.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Room\Room.h" />
+    <ClInclude Include="Room\RoomTitle.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

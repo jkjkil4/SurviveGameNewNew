@@ -13,12 +13,3 @@ void Room::onRender() {
 void Room::onDestroy() {
 
 }
-
-
-void Room::mouseEvent() {
-
-}
-
-void Room::wheelEvent() {
-
-}

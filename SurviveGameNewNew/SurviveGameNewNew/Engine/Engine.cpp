@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "../Room/Room.h"
+
 using namespace My;
 using namespace std;
 
@@ -32,28 +34,14 @@ void Engine::onLogic() {
 	}
 	vecKeyBuffer.clear();
 
-	//TODO: 调用Room的逻辑处理函数
+	if (currentRoom) {
+		currentRoom->onLogic();
+	}
 }
 
 void Engine::onRender() {
-	if (isKeyReleased('R')) {
-		#ifdef DEBUG_CONSOLE
-		cout << "注:由于某些不可抗力因素，可能执行多次" << endl;
-		#endif
-
-		onResetingDevice();
-	}
-
-	drawRect(50, 50, 200, 100, 0xff00ffff, 0xffff00ff, 0xff00ff00, 0xffff0000);
-	wstring debugWString = _T("LogicFps: ") + to_wstring(getLogicFps()) + _T("   RenderFps: ") + to_wstring(getRenderFps())
-		+ _T("\n按下'R'可以重置设备(用于测试)，结果会在控制台输出");
-	g_pFont->DrawText(g_pSprite, debugWString.c_str(), -1, nullptr, DT_LEFT | DT_TOP, 0xff000000);
-
-	g_pFontSmall->DrawText(g_pSprite, _T("这是g_pDevice->Present()的耗时"), -1, &mkRect(0, 80, 250, 20), DT_LEFT, 0xff000000);
-	int i = 0;
-	for (auto it = vecRenderPresentTime.begin(); it < vecRenderPresentTime.end(); it++) {
-		g_pFontSmall->DrawText(g_pSprite, (to_wstring(*it)).c_str(), -1, &mkRect(0, 100 + 20 * i, 100, 20), DT_LEFT, 0xff000000);
-		i++;
+	if (currentRoom) {
+		currentRoom->onRender();
 	}
 }
 

@@ -45,6 +45,12 @@
     <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Room\RoomTitle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine_RoomFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SurviveGameNewNew.rc">
@@ -88,6 +94,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="NameSpace.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\RoomTitle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

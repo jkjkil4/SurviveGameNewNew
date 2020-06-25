@@ -14,11 +14,6 @@ public:
 
 	virtual void onDestroy();
 
-
-	virtual void mouseEvent();
-
-	virtual void wheelEvent();
-
 private:
 
 };

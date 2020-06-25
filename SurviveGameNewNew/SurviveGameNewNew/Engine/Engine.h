@@ -11,6 +11,8 @@ namespace My {
 	struct Key;
 
 	class Engine;
+
+	class Room;
 }
 
 
@@ -44,18 +46,13 @@ public:
 	void funcLogic();
 	void funcRender();
 
-	//绘制
-	void drawRestart();
-	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
-	void drawBorder(int x, int y, int w, int h, int size, DWORD col = 0xff000000);
-
 	HRESULT resetDevice();
 	void onResetingDevice();
 
 	LRESULT CALLBACK ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-
+	#pragma region 一些变量
 	//windows的一些东西
 	HWND g_hWnd = 0;
 	HINSTANCE g_hInstance = 0;
@@ -77,17 +74,22 @@ public:
 	LPD3DXFONT g_pFontSmall = nullptr;
 	LPD3DXFONT g_pFontVerySmall = nullptr;
 
+	//管理Texture
+	TextureManager* renderTextureManager = nullptr;
+	#pragma endregion
+
+	#pragma region 绘制相关
+	void drawRestart();
+	void drawRect(int x, int y, int w, int h, DWORD col1 = 0xffffffff, DWORD col2 = 0xffffffff, DWORD col3 = 0xffffffff, DWORD col4 = 0xffffffff);
+	void drawBorder(int x, int y, int w, int h, int size, DWORD col = 0xff000000);
 	//绘制矩形的顶点Buffer
 	LPDIRECT3DVERTEXBUFFER9 vbRectangle = nullptr;
 	LPDIRECT3DINDEXBUFFER9 ibRectangle = nullptr;
-
-	//管理Texture
-	TextureManager* renderTextureManager = nullptr;
-
 	//清空时的颜色
 	D3DCOLOR clearColor = D3DCOLOR_XRGB(102, 204, 255);
+	#pragma endregion
 
-	//按键
+	#pragma region 按键处理
 	bool isKeyPressed(int num);
 	bool isKey(int num);
 	bool isKeyReleased(int num);
@@ -102,8 +104,14 @@ public:
 	bool keyPressed[keyNumber];
 	bool key[keyNumber];
 	bool keyReleased[keyNumber];
+	#pragma endregion
 
+	#pragma region Room相关
+	void setCurrentRoom(Room* room);
+	Room* currentRoom = nullptr;
+	#pragma endregion
 
+	#pragma region 获取和设定变量的函数
 	std::mutex mutexThreadCount;
 	NEEDLOCK_GET_FUNC(mutexThreadCount, ThreadCount, threadCount, int)
 
@@ -122,6 +130,7 @@ public:
 	NEEDLOCK_VARIBLE_FUNC(DefHeight, defHeight, int)
 	NEEDLOCK_VARIBLE_FUNC(ViewW, viewW, int)
 	NEEDLOCK_VARIBLE_FUNC(ViewH, viewH, int)
+	#pragma endregion
 
 private:
 	void initWnd();
@@ -130,9 +139,6 @@ private:
 	std::thread* thLogic = nullptr, * thRender = nullptr;	//分别是逻辑处理和渲染的线程
 
 	std::mutex mutexLogicRender;	//逻辑处理和渲染之间的线程锁
-//#ifdef DEBUG_CONSOLE
-//	std::mutex mutexConsoleOutput;	//输出控制台的线程锁
-//#endif
 
 	int threadCount = 0;	//子线程数量
 

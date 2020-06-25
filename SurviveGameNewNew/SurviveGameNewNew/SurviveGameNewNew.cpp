@@ -1,6 +1,6 @@
 #include "Engine/Engine.h"
 
-#include "Room/Room.h"
+#include "Room/RoomTitle.h"
 
 using namespace My;
 using namespace std;
@@ -22,6 +22,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 #endif
 
 	engine.onInit(hInstance);
+	engine.setCurrentRoom(new RoomTitle);
 
 #ifdef DEBUG_CONSOLE
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
