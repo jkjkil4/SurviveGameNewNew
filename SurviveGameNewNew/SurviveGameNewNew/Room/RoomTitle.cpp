@@ -4,10 +4,16 @@
 
 using namespace My;
 
-void RoomTitle::onLogic() {
+Room_Title::Room_Title() {
 
 }
 
-void RoomTitle::onRender() {
-	engine.drawBorder(100, 100, 240, 140, 4, 0xffff88ff);
+void Room_Title::onLogic() {
+
+	Room::onLogic();
+}
+
+void Room_Title::onRender() {
+
+	Room::onRender();
 }

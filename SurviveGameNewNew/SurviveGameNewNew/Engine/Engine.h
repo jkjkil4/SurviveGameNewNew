@@ -29,6 +29,9 @@ public:
 };
 
 
+
+typedef void(My::Engine::* EngineFunc)();
+
 class My::Engine {
 public:
 	explicit Engine();
@@ -111,6 +114,13 @@ public:
 	Room* currentRoom = nullptr;
 	#pragma endregion
 
+	#pragma region Event相关
+	void addEvent(EngineFunc func, bool single = false);
+	void evResized();
+	std::mutex mutexEvent;
+	std::vector<EngineFunc> vecEvents;
+	#pragma endregion
+
 	#pragma region 获取和设定变量的函数
 	std::mutex mutexThreadCount;
 	NEEDLOCK_GET_FUNC(mutexThreadCount, ThreadCount, threadCount, int)
@@ -152,6 +162,8 @@ private:
 
 	int defWidth = 800, defHeight = 608;	//默认宽高
 	int viewW = 800, viewH = 608;	//视野宽高
+
+	bool isWndResized = false;
 
 	//用来存储Present耗时的vector
 	LimitSizeVector<double> vecRenderPresentTime = LimitSizeVector<double>(20);

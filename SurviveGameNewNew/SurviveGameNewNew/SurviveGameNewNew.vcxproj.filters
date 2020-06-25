@@ -48,7 +48,10 @@
     <ClCompile Include="Room\RoomTitle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Engine_RoomFunc.cpp">
+    <ClCompile Include="Widget\Widget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine_Other.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,6 +100,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Room\RoomTitle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Widget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

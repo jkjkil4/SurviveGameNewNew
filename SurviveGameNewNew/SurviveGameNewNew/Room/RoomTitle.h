@@ -3,14 +3,15 @@
 #include "Room.h"
 
 namespace My {
-	class RoomTitle;
+	class Room_Title;
 }
 
 
-class My::RoomTitle : public Room
+class My::Room_Title : public Room
 {
 public:
-	~RoomTitle() override = default;
+	Room_Title();
+	~Room_Title() override = default;
 
 	void onLogic() override;
 

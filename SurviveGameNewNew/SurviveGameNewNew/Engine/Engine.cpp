@@ -19,9 +19,16 @@ Engine::Engine() {
 
 
 void Engine::onLogic() {
+	mutexEvent.lock();
+	for (auto func : vecEvents)
+		(this->*func)();
+	vecEvents.clear();
+	mutexEvent.unlock();
+
 	//处理按键
 	ZeroMemory(keyPressed, sizeof(keyPressed));
 	ZeroMemory(keyReleased, sizeof(keyReleased));
+	//设置按键Pressed和Released的状态
 	for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
 		Key key = *it;
 		if (!key.isAutoRepeat) {
@@ -30,13 +37,19 @@ void Engine::onLogic() {
 			else
 				setKeyReleased(key.key);
 		}
-		//TODO: 调用控件的按键处理函数
 	}
-	vecKeyBuffer.clear();
 
+	//调用Room的Logic
 	if (currentRoom) {
 		currentRoom->onLogic();
 	}
+
+	//调用控件的按键处理函数
+	for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
+		//TODO: 调用控件的按键处理函数
+	}
+	//清空KeyBuffer
+	vecKeyBuffer.clear();
 }
 
 void Engine::onRender() {

@@ -40,7 +40,7 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 			setViewW(w);
 			setViewH(h);
 			setSpriteScale(g_pSpriteRender, 0, 0, (float)getDefWidth() / w, (float)getDefHeight() / h);
-			//TODO: 调整控件的位置
+			addEvent(&Engine::evResized, true);
 		}
 		break;
 	}

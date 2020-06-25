@@ -22,7 +22,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 #endif
 
 	engine.onInit(hInstance);
-	engine.setCurrentRoom(new RoomTitle);
+	engine.setCurrentRoom(new Room_Title);
 
 #ifdef DEBUG_CONSOLE
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
