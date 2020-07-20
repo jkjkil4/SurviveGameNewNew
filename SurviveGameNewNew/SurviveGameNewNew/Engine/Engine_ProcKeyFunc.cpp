@@ -62,3 +62,9 @@ void Engine::setKeyReleased(int num, bool on) {
 		mutexKeyReleased.unlock();
 	}
 }
+
+void Engine::clearKeys() {
+	ZeroMemory(keyPressed, sizeof(keyPressed));
+	ZeroMemory(key, sizeof(key));
+	ZeroMemory(keyReleased, sizeof(keyReleased));
+}

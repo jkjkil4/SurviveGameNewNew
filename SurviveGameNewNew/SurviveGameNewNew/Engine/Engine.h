@@ -99,6 +99,7 @@ public:
 	void setKeyPressed(int num, bool on = true);
 	void setKey(int num, bool on = true);
 	void setKeyReleased(int num, bool on = true);
+	void clearKeys();
 	std::vector<Key> vecKeyBuffer;
 	SC int keyNumber = 0x88;
 	std::mutex mutexKeyPressed;
@@ -120,6 +121,8 @@ public:
 	std::mutex mutexEvent;
 	std::vector<EngineFunc> vecEvents;
 	#pragma endregion
+
+	void showMsgBox(std::wstring caption, std::wstring text, UINT btns);
 
 	#pragma region 获取和设定变量的函数
 	std::mutex mutexThreadCount;

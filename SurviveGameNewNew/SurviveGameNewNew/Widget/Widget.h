@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Class/Object.h"
 #include "../NameSpace.h"
 #include "../Class/Event.h"
 

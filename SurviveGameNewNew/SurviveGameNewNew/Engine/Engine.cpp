@@ -11,9 +11,7 @@ Engine My::engine;
 Engine::Engine() {
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
 
-	ZeroMemory(keyPressed, sizeof(keyPressed));
-	ZeroMemory(key, sizeof(key));
-	ZeroMemory(keyReleased, sizeof(keyReleased));
+	clearKeys();
 }
 
 
@@ -41,7 +39,12 @@ void Engine::onLogic() {
 
 	//调用Room的Logic
 	if (currentRoom) {
-		currentRoom->onLogic();
+		try {
+			currentRoom->onLogic();
+		}
+		catch (RoomGoto roomGoto) {
+			setCurrentRoom(roomGoto.room);
+		}
 	}
 
 	//调用控件的按键处理函数
