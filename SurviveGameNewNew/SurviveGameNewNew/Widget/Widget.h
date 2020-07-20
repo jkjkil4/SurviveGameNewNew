@@ -29,7 +29,9 @@ public:
 	void onDestroy();	//控件销毁
 
 	void getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY);	//得到鼠标悬停的控件
-	virtual void onMouseMove(MouseMoveEvent* ev);
+	virtual void onMousePressed(MouseEvent* ev) {}
+	virtual void onMouseMove(MouseMoveEvent* ev) {}
+	virtual void onMouseReleased(MouseEvent* ev) {}
 	bool isMouseTracking = false;
 
 	void updatePos();	//更新位置

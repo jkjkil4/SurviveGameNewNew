@@ -90,10 +90,6 @@ void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
 	*pMouseAtWidget = this;	//将鼠标悬停的控件设置为自己
 }
 
-void Widget::onMouseMove(MouseMoveEvent* ev) {
-	std::cout << "[MouseMoveEvnet]  mouseX:" << ev->mouseX << "  mouseY:" << ev->mouseY << "  wid:" << this << std::endl;
-}
-
 
 void Widget::updatePos() {
 	int parentW = parent ? parent->w : engine.getViewW();	//得到父控件的宽度 (如果没有父控件则为窗口宽度)

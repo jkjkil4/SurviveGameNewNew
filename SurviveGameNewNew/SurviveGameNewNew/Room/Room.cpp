@@ -2,8 +2,51 @@
 
 using namespace My;
 
+#define KEY_CHECK(State, VK, _Mouse)\
+	if (engine.isKey##State(VK)) {\
+		MouseEvent ev;\
+		ev.button = Mouse::_Mouse;\
+		ev.mouseX = mouseX - mouseAtWidget->wndX;\
+		ev.mouseY = mouseY - mouseAtWidget->wndY;\
+		mouseAtWidget->onMouse##State(&ev);\
+	}
+
 void Room::onLogic() {
 	int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
+
+
+	if (mouseAtWidget) {
+		//onMousePressed
+		KEY_CHECK(Pressed, VK_LBUTTON, Left)
+		KEY_CHECK(Pressed, VK_MBUTTON, Middle)
+		KEY_CHECK(Pressed, VK_RBUTTON, Right)
+
+		//onMouseReleased
+		KEY_CHECK(Released, VK_LBUTTON, Left)
+		KEY_CHECK(Released, VK_MBUTTON, Middle)
+		KEY_CHECK(Released, VK_RBUTTON, Right)
+
+		//onMouseMove
+		if (mouseX != mouseXBefore || mouseY != mouseYBefore) {
+			Mouse mouse = Mouse::None;
+			if (engine.isKey(VK_LBUTTON))
+				mouse = mouse | Mouse::Left;
+			if (engine.isKey(VK_MBUTTON))
+				mouse = mouse | Mouse::Middle;
+			if (engine.isKey(VK_RBUTTON))
+				mouse = mouse | Mouse::Right;
+
+			MouseMoveEvent ev;
+			ev.buttons = mouse;
+			ev.mouseX = mouseX - mouseAtWidget->wndX;
+			ev.mouseY = mouseY - mouseAtWidget->wndY;
+			if (mouse != Mouse::None || mouseAtWidget->isMouseTracking)
+				mouseAtWidget->onMouseMove(&ev);
+		}
+	}
+	mouseXBefore = mouseX;
+	mouseYBefore = mouseY;
+
 
 	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {	//如果没有按下左键，或者刚按下左键
 		//得到鼠标悬停在哪个控件上面
@@ -35,33 +78,13 @@ void Room::onLogic() {
 #endif
 	}
 
-	if (mouseAtWidget) {
-		//onMouseMove
-		if (mouseX != mouseXBefore || mouseY != mouseYBefore) {
-			Mouse mouse = Mouse::None;
-			if (engine.isKey(VK_LBUTTON))
-				mouse = mouse | Mouse::Left;
-			if (engine.isKey(VK_MBUTTON))
-				mouse = mouse | Mouse::Middle;
-			if (engine.isKey(VK_RBUTTON))
-				mouse = mouse | Mouse::Right;
-
-			MouseMoveEvent ev;
-			ev.button = mouse;
-			ev.mouseX = mouseX - mouseAtWidget->wndX;
-			ev.mouseY = mouseY - mouseAtWidget->wndY;
-			if (mouse != Mouse::None || mouseAtWidget->isMouseTracking)
-				mouseAtWidget->onMouseMove(&ev);
-		}
-	}
-	mouseXBefore = mouseX;
-	mouseYBefore = mouseY;
-
 
 	//调用控件的onLogic
 	for (Widget* widget : widgets)
 		widget->onLogic();
 }
+
+#undef KEY_CHECK
 
 void Room::onRender() {
 	//调用控件的onRender
