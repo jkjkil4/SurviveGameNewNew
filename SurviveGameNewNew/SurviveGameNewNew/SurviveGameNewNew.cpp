@@ -6,6 +6,8 @@
 using namespace My;
 using namespace std;
 
+#define DEBUG_MEMSIZE
+
 INT WINAPI WinMain(__in HINSTANCE hInstance,
 	__in_opt HINSTANCE hPrevInstance,
 	__in_opt LPSTR lpCmdLine,
@@ -16,6 +18,13 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	FILE* tempFile = nullptr;
 	freopen_s(&tempFile, "conout$", "w+t", stdout);
+
+#ifdef DEBUG_MEMSIZE
+	cout << "----MemSize----" << endl;
+	cout << "Room:\t" << sizeof(Room) << endl;
+	cout << "Widget:\t" << sizeof(Widget) << endl;
+	cout << "---------------" << endl;
+#endif
 
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
 	cout << "正在初始化" << endl;

@@ -7,9 +7,26 @@ LRESULT CALLBACK Engine::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	return engine.ProcWndMessage(hWnd, uMsg, wParam, lParam);
 }
 
+
+#define MOUSE_CHECK(btn)\
+	case WM_##btn##DOWN:\
+		setKey(VK_##btn);\
+		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Press, false));\
+		break;\
+	case WM_##btn##UP:\
+		setKey(VK_##btn, false);\
+		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Release, false));\
+		break
+
 LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 	#pragma region œÏ”¶ Û±Í∫Õº¸≈Ã
+		MOUSE_CHECK(LBUTTON);
+		MOUSE_CHECK(MBUTTON);
+		MOUSE_CHECK(RBUTTON);
+	case WM_MOUSEMOVE:
+		
+		break;
 	case WM_KEYDOWN: {
 		int keyNum = wParam;
 		bool isAutoRepeat = false;
@@ -56,3 +73,5 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
+#undef MOUSE_CHECK

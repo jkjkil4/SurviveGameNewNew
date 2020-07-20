@@ -37,6 +37,13 @@ void Engine::onLogic() {
 		}
 	}
 
+	//得到鼠标位置
+	POINT mPos;
+	GetCursorPos(&mPos);
+	ScreenToClient(g_hWnd, &mPos);
+	mouseX = mPos.x;
+	mouseY = mPos.y;
+
 	//调用Room的Logic
 	if (currentRoom) {
 		try {

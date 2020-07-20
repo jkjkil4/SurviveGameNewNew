@@ -26,6 +26,8 @@ public:
 
 	void onDestroy();	//控件销毁
 
+	void getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY);	//得到鼠标悬停的控件
+
 	void updatePos();	//更新位置
 
 	void createRenderTarget();	//使用RenderTarget，使得超出控件的部分不会被显示

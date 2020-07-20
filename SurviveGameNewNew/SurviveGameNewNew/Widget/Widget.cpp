@@ -64,6 +64,19 @@ void Widget::onDestroy() {
 }
 
 
+void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
+	for (auto it = childs.rbegin(); it < childs.rend(); it++) {	//反向遍历子控件
+		Widget* child = *it;
+		if (mouseX >= child->wndX && mouseY <= child->wndX + child->w
+			&& mouseY >= child->wndY && mouseY <= child->wndY + child->h) {	//如果鼠标在子控件范围内
+			child->getMouseAtWidget(pMouseAtWidget, mouseX, mouseY);	//调用子控件的该函数
+			return;
+		}
+	}
+	*pMouseAtWidget = this;	//将鼠标悬停的控件设置为自己
+}
+
+
 void Widget::updatePos() {
 	int parentW = parent ? parent->w : engine.getViewW();	//得到父控件的宽度 (如果没有父控件则为窗口宽度)
 	int parentH = parent ? parent->h : engine.getViewH();	//得到父控件的高度 (...高度)

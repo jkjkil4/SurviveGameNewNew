@@ -108,6 +108,7 @@ public:
 	bool keyPressed[keyNumber];
 	bool key[keyNumber];
 	bool keyReleased[keyNumber];
+	int mouseX = -1, mouseY = -1;
 	#pragma endregion
 
 	#pragma region RoomÏà¹Ø

@@ -3,7 +3,17 @@
 using namespace My;
 
 void Room::onLogic() {
-	Widget* mouseAtWidget = nullptr;	//鼠标悬停的控件
+	//得到鼠标悬停在哪个控件上面
+	Widget* mouseAtWidget = nullptr;
+	int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
+	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
+		Widget* widget = *it;
+		if (mouseX >= widget->wndX && mouseY <= widget->wndX + widget->w
+			&& mouseY >= widget->wndY && mouseY <= widget->wndY + widget->h) {	//如果鼠标在子控件范围内
+			widget->getMouseAtWidget(&mouseAtWidget, mouseX, mouseY);	//调用子控件的该函数
+			break;
+		}
+	}
 
 
 	//调用控件的onLogic
