@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Widget/Widget.h"
+#include "../Widget/ImageLabel/ImageLabel.h"
 
 #include "../utility.h"
 

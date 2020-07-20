@@ -16,12 +16,14 @@ void Engine::setCurrentRoom(Room* room) {
 
 void Engine::addEvent(EngineFunc func, bool single) {
 	mutexEvent.lock();
-	if (single)
-		for (auto it = vecEvents.begin(); it < vecEvents.end(); it++)
+	if (single) {
+		for (auto it = vecEvents.begin(); it < vecEvents.end(); it++) {
 			if (*it == func) {
 				mutexEvent.unlock();
 				return;
 			}
+		}
+	}
 	vecEvents.push_back(func);
 	mutexEvent.unlock();
 }

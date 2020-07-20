@@ -19,7 +19,6 @@ namespace My {
 		Room* room;
 	};
 
-
 	enum class RenderError { NoError, ErrorCannotPresent };	//Render时遇到的错误
 
 	enum class Align { None = 0, Left = 0b1, Right = 0b10, Top = 0b100, Bottom = 0b1000 };	//对齐方式

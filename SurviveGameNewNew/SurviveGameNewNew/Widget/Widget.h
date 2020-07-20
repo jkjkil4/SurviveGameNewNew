@@ -5,6 +5,8 @@
 
 #include "../Class/TextureManager.h"
 
+#include "../Game/Data.h"
+
 #include "../utility.h"
 
 namespace My {
@@ -14,7 +16,7 @@ namespace My {
 class My::Widget : public Object
 {
 public:
-	Widget(int w, int h, Align align, Widget* parent = nullptr);
+	Widget(int w, int h, Align align = Align::None, Widget* parent = nullptr);
 	~Widget() override = default;
 
 	void onLogic();
@@ -50,5 +52,4 @@ public:
 	void setAlign(Align align);
 	Align align = Align::None;
 
-	D3DCOLOR col = rand() % 0xffffff + 0xff000000;
 };

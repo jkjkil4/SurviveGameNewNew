@@ -48,10 +48,16 @@
     <ClCompile Include="Room\RoomTitle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Engine_Other.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="Widget\Widget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Engine_Other.cpp">
+    <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,10 +108,19 @@
     <ClInclude Include="Room\RoomTitle.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Class\Event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="Widget\Widget.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Class\Event.h">
+    <ClInclude Include="Widget\ImageLabel\ImageLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Data.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

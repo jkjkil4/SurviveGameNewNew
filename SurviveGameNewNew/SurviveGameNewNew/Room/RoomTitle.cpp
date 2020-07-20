@@ -5,7 +5,8 @@
 using namespace My;
 
 Room_Title::Room_Title() {
-
+	auto m = new ImageLabel(gameData.testImage1);
+	addWidget(m);
 }
 
 void Room_Title::onLogic() {

@@ -1,4 +1,5 @@
 #include "Engine/Engine.h"
+#include "Game/Data.h"
 
 #include "Room/RoomTitle.h"
 
@@ -22,6 +23,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 #endif
 
 	engine.onInit(hInstance);
+	gameData.onInit();
 	engine.setCurrentRoom(new Room_Title);
 
 #ifdef DEBUG_CONSOLE
@@ -45,6 +47,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	SetConsoleAtt(FORE_WHITE);
 #endif
 
+	gameData.onDestroy();
 	engine.onDestroy();
 
 #ifdef DEBUG_CONSOLE

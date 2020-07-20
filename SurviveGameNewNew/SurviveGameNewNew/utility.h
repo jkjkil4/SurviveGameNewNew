@@ -41,6 +41,7 @@ struct Vertex
 
 #include <string>
 #include <vector>
+#include <map>
 #include <mutex>
 
 #pragma region d3d9µÄÒ»Ð©typedef
