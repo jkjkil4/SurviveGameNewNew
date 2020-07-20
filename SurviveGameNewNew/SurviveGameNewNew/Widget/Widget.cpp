@@ -7,16 +7,16 @@ using namespace My;
 Widget::Widget(int w, int h, Align align, Widget* parent)
 	: parent(parent), w(w), h(h), align(align)
 {
-	if (parent) {
+	if (parent) {	//如果有父控件的话，那么将当前控件的指针加入到 父控件的子控件列表 中
 		parent->addChild(this);
 	}
-	updatePos();
+	updatePos();	//更新位置
 }
 
 
 void Widget::onLogic() {
-	for (auto it = childs.begin(); it < childs.end(); it++)
-		(*it)->onLogic();
+	for (Widget* child : childs)	//子控件的逻辑处理
+		child->onLogic();
 }
 
 void Widget::onRender(RenderEvent* ev) {
@@ -42,8 +42,8 @@ void Widget::onRender(RenderEvent* ev) {
 	onSelfRender(wndX - ev->targetX, wndY - ev->targetY);
 	
 	//子控件的绘制
-	for (auto it = childs.begin(); it < childs.end(); it++)
-		(*it)->onRender(ev);
+	for (Widget* child : childs)
+		child->onRender(ev);
 
 	//还原Target
 	if (g_pOldTarget) {
@@ -60,15 +60,15 @@ void Widget::onRender(RenderEvent* ev) {
 
 
 void Widget::onDestroy() {
-	destroyRenderTarget();
+	destroyRenderTarget();	//销毁RenderTarget
 }
 
 
 void Widget::updatePos() {
-	int parentW = parent ? parent->w : engine.getViewW();
-	int parentH = parent ? parent->h : engine.getViewH();
-	int parentX = parent ? parent->wndX : 0;
-	int parentY = parent ? parent->wndY : 0;
+	int parentW = parent ? parent->w : engine.getViewW();	//得到父控件的宽度 (如果没有父控件则为窗口宽度)
+	int parentH = parent ? parent->h : engine.getViewH();	//得到父控件的高度 (...高度)
+	int parentX = parent ? parent->wndX : 0;	//得到父控件的x (如果没有父控件则为0)
+	int parentY = parent ? parent->wndY : 0;	//得到父控件的y (...)
 
 	realX = (align & Align::Left) ? x : ((align & Align::Right) ? parentW - x - w : (parentW - w) / 2 + x);
 	realY = (align & Align::Top) ? y : ((align & Align::Bottom) ? parentH - y - h : (parentH - h) / 2 + y);
@@ -76,21 +76,21 @@ void Widget::updatePos() {
 	wndX = parentX + realX;
 	wndY = parentY + realY;
 
-	for (auto it = childs.begin(); it < childs.end(); it++)
-		(*it)->updatePos();
+	for (Widget* child : childs)
+		child->updatePos();
 }
 
 
 
 void Widget::createRenderTarget() {
-	destroyRenderTarget();
+	destroyRenderTarget();	//销毁RenderTarget
 
-	TextureManagerFunc releaseFunc = [](void* sendObj) {
+	TextureManagerFunc releaseFunc = [](void* sendObj) {	//在销毁RenderTarget时调用的函数
 		Widget* obj = (Widget*)sendObj;
 		safeRelease(obj->g_pTargetSurface);
 		safeRelease(obj->g_pTargetTexture);
 	};
-	TextureManagerFunc resetFunc = [](void* sendObj) {
+	TextureManagerFunc resetFunc = [](void* sendObj) {	//在创建RenderTarget时调用的函数
 		Widget* obj = (Widget*)sendObj;
 		engine.g_pDevice->CreateTexture(obj->w, obj->h, 1, D3DUSAGE_RENDERTARGET, 
 			D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, 
@@ -114,10 +114,11 @@ bool Widget::hasTarget() {
 }
 
 
-void Widget::setParent(Widget* parent) {
-	this->parent->removeChild(this);
-	this->parent = parent;
-	parent->addChild(this);
+void Widget::setParent(Widget* newParent) {
+	if (parent)		//如果有父控件
+		parent->removeChild(this);	//将当前控件从 父控件的子控件列表 中移除
+	parent = newParent;	//设置新的父控件
+	newParent->addChild(this);	//将当前控件添加到 新的父控件的子控件列表 中
 }
 
 void Widget::addChild(Widget* child) {

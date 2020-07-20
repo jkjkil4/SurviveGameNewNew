@@ -19,37 +19,37 @@ public:
 	Widget(int w, int h, Align align = Align::None, Widget* parent = nullptr);
 	~Widget() override = default;
 
-	void onLogic();
+	virtual void onLogic();	//控件的逻辑处理
 
-	void onRender(RenderEvent* ev);
-	virtual void onSelfRender(int, int) {}
+	void onRender(RenderEvent* ev);	//控件的渲染
+	virtual void onSelfRender(int, int) {}	//控件自身的渲染
 
-	void onDestroy();
+	void onDestroy();	//控件销毁
 
-	void updatePos();
+	void updatePos();	//更新位置
 
-	void createRenderTarget();
-	void destroyRenderTarget();
-	bool hasTarget();
-	LPTexture g_pTargetTexture = nullptr;
+	void createRenderTarget();	//使用RenderTarget，使得超出控件的部分不会被显示
+	void destroyRenderTarget();	//销毁RenderTarget
+	bool hasTarget();	//是否有RenderTarget
+	LPTexture g_pTargetTexture = nullptr;	//RenderTarget三件套
 	LPSurface g_pTargetSurface = nullptr;
 	TextureManager* targetManager = nullptr;
 
-	void setParent(Widget* parent);
-	void addChild(Widget* child);
-	void removeChild(Widget* child);
-	Widget* parent = nullptr;
-	std::vector<Widget*> childs;
+	void setParent(Widget* newParent);	//设置父控件
+	void addChild(Widget* child);		//添加子控件
+	void removeChild(Widget* child);	//移除子控件
+	Widget* parent = nullptr;		//父控件
+	std::vector<Widget*> childs;	//子控件
 
-	void resize(int w, int h);
-	int w = 10, h = 10;
+	void resize(int w, int h);	//改变大小
+	int w = 10, h = 10;		//宽高
 
-	void move(int x, int y);
-	int x = 0, y = 0;
-	int realX = 0, realY = 0;
-	int wndX = 0, wndY = 0;
+	void move(int x, int y);	//移动控件
+	int x = 0, y = 0;		//相对的xy
+	int realX = 0, realY = 0;	//对于父控件来说的xy
+	int wndX = 0, wndY = 0;		//对于窗口来说的xy
 
-	void setAlign(Align align);
-	Align align = Align::None;
+	void setAlign(Align align);		//设置对齐方式
+	Align align = Align::None;	//对齐方式
 
 };
