@@ -24,9 +24,6 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		MOUSE_CHECK(LBUTTON);
 		MOUSE_CHECK(MBUTTON);
 		MOUSE_CHECK(RBUTTON);
-	case WM_MOUSEMOVE:
-		
-		break;
 	case WM_KEYDOWN: {
 		int keyNum = wParam;
 		bool isAutoRepeat = false;

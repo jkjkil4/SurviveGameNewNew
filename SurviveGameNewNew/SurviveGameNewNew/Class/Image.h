@@ -14,8 +14,6 @@ public:
 			0, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_NONE, D3DX_FILTER_NONE, NULL,
 			&info, nullptr, &g_pTexture
 			);
-		if (FAILED(hr))
-			engine.showMsgBox(_T("a"), _T("Ê§°Ü"), MB_OK);
 		width = info.Width;
 		height = info.Height;
 	}

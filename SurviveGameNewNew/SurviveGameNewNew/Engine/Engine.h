@@ -123,6 +123,7 @@ public:
 	std::vector<EngineFunc> vecEvents;
 	#pragma endregion
 
+	void showMsgBox(std::wstring text);
 	void showMsgBox(std::wstring caption, std::wstring text, UINT btns);
 
 	#pragma region 获取和设定变量的函数

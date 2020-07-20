@@ -58,6 +58,8 @@ typedef D3DXIMAGE_INFO ImageInfo;
 
 #pragma region 一些宏定义
 
+#define repeat(id, times) for(int id = 0; id < times; id++)
+
 #define NEEDLOCK_GET_FUNC(mutexName, FuncName, varibleName, varibleType)\
     varibleType get##FuncName(){\
 		mutexName.lock();\

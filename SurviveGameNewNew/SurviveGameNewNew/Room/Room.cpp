@@ -3,16 +3,35 @@
 using namespace My;
 
 void Room::onLogic() {
-	//得到鼠标悬停在哪个控件上面
-	Widget* mouseAtWidget = nullptr;
-	int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
-	for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
-		Widget* widget = *it;
-		if (mouseX >= widget->wndX && mouseY <= widget->wndX + widget->w
-			&& mouseY >= widget->wndY && mouseY <= widget->wndY + widget->h) {	//如果鼠标在子控件范围内
-			widget->getMouseAtWidget(&mouseAtWidget, mouseX, mouseY);	//调用子控件的该函数
-			break;
+	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {
+		//得到鼠标悬停在哪个控件上面
+#ifdef DEBUG_WIDGET
+		if (mouseAtWidget)
+			mouseAtWidget->isMouseAtWidget = false;
+#endif
+		mouseAtWidget = nullptr;
+		int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
+		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
+			Widget* widget = *it;
+			if (mouseX >= widget->wndX && mouseX <= widget->wndX + widget->w
+				&& mouseY >= widget->wndY && mouseY <= widget->wndY + widget->h) {	//如果鼠标在控件范围内
+				widget->getMouseAtWidget(&mouseAtWidget, mouseX, mouseY);	//调用控件的getMouseAtWidget
+				break;
+			}
 		}
+		if (engine.isKeyPressed(VK_LBUTTON)) {
+			if (focusWidget)
+				focusWidget->isFocusWidget = false;
+			if (mouseAtWidget) {
+				focusWidget = mouseAtWidget;
+				focusWidget->isFocusWidget = true;
+			}
+			else focusWidget = nullptr;
+		}
+#ifdef DEBUG_WIDGET
+		if (mouseAtWidget)
+			mouseAtWidget->isMouseAtWidget = true;
+#endif
 	}
 
 

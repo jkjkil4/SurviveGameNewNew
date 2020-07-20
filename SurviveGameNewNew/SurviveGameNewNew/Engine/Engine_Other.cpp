@@ -35,6 +35,10 @@ void Engine::evResized() {
 }
 
 
+void Engine::showMsgBox(wstring text) {
+	MessageBox(g_hWnd, text.c_str(), _T(""), MB_OK);
+}
+
 void Engine::showMsgBox(wstring caption, wstring text, UINT btns) {
 	MessageBox(g_hWnd, text.c_str(), caption.c_str(), btns);
 }

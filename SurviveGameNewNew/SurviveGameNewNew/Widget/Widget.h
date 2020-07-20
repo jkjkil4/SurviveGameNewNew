@@ -13,6 +13,8 @@ namespace My {
 	class Widget;
 }
 
+#define DEBUG_WIDGET
+
 class My::Widget : public Object
 {
 public:
@@ -53,5 +55,10 @@ public:
 
 	void setAlign(Align align);		//设置对齐方式
 	Align align = Align::None;	//对齐方式
+
+#ifdef DEBUG_WIDGET
+	bool isMouseAtWidget = false;
+	bool isFocusWidget = false;
+#endif
 
 };

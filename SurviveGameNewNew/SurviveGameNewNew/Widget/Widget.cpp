@@ -34,12 +34,22 @@ void Widget::onRender(RenderEvent* ev) {
 		engine.g_pDevice->SetRenderTarget(0, g_pTargetSurface);
 		engine.g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 		engine.g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
-	
+
 		ev->targetX = wndX;
 		ev->targetY = wndY;
 	}
 
 	onSelfRender(wndX - ev->targetX, wndY - ev->targetY);
+#ifdef DEBUG_WIDGET
+	if (isMouseAtWidget) {
+		engine.drawRestart();
+		engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x44dd2222, 0x44dd2222, 0x44dd2222, 0x44dd2222);
+	}
+	if (isFocusWidget) {
+		engine.drawRestart();
+		engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x4422dd22, 0x4422dd22, 0x4422dd22, 0x4422dd22);
+	}
+#endif
 	
 	//子控件的绘制
 	for (Widget* child : childs)
@@ -67,7 +77,7 @@ void Widget::onDestroy() {
 void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {	//反向遍历子控件
 		Widget* child = *it;
-		if (mouseX >= child->wndX && mouseY <= child->wndX + child->w
+		if (mouseX >= child->wndX && mouseX <= child->wndX + child->w
 			&& mouseY >= child->wndY && mouseY <= child->wndY + child->h) {	//如果鼠标在子控件范围内
 			child->getMouseAtWidget(pMouseAtWidget, mouseX, mouseY);	//调用子控件的该函数
 			return;

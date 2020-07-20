@@ -27,4 +27,5 @@ public:
 	std::vector<Widget*> widgets;
 
 	Widget* focusWidget = nullptr;	//焦点控件
+	Widget* mouseAtWidget = nullptr;	//鼠标悬停的控件
 };
