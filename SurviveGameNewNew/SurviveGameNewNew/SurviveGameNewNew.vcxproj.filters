@@ -63,6 +63,12 @@
     <ClCompile Include="Widget\TextLabel\TextLabel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Button\Button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SurviveGameNewNew.rc">
@@ -127,6 +133,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Widget\TextLabel\TextLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\AbstractButton\AbstractButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Button\Button.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

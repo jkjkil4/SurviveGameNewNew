@@ -166,6 +166,8 @@
     <ClCompile Include="Engine\Engine_ThreadFunc.cpp" />
     <ClCompile Include="Engine\Engine_WndProcFunc.cpp" />
     <ClCompile Include="Game\Data.cpp" />
+    <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp" />
+    <ClCompile Include="Widget\Button\Button.cpp" />
     <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomTitle.cpp" />
@@ -193,6 +195,8 @@
     <ClInclude Include="Class\Delayer.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Game\Data.h" />
+    <ClInclude Include="Widget\AbstractButton\AbstractButton.h" />
+    <ClInclude Include="Widget\Button\Button.h" />
     <ClInclude Include="Widget\ImageLabel\ImageLabel.h" />
     <ClInclude Include="NameSpace.h" />
     <ClInclude Include="resource.h" />

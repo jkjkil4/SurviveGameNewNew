@@ -60,9 +60,11 @@ public:
 	void setAlign(Align align);		//设置对齐方式
 	Align align = Align::None;	//对齐方式
 
-#ifdef DEBUG_WIDGET
+	NEEDLOCK_VARIBLE_FUNC(IsMouseAtWidget, isMouseAtWidget, bool)
+	NEEDLOCK_VARIBLE_FUNC(IsFocusWidget, isFocusWidget, bool)
+
+private:
 	bool isMouseAtWidget = false;
 	bool isFocusWidget = false;
-#endif
 
 };

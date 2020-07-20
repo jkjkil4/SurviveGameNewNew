@@ -50,10 +50,8 @@ void Room::onLogic() {
 
 	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {	//如果没有按下左键，或者刚按下左键
 		//得到鼠标悬停在哪个控件上面
-#ifdef DEBUG_WIDGET
 		if (mouseAtWidget)
-			mouseAtWidget->isMouseAtWidget = false;
-#endif
+			mouseAtWidget->setIsMouseAtWidget(false);
 		mouseAtWidget = nullptr;
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
 			Widget* widget = *it;
@@ -65,17 +63,15 @@ void Room::onLogic() {
 		}
 		if (engine.isKeyPressed(VK_LBUTTON)) {
 			if (focusWidget)
-				focusWidget->isFocusWidget = false;
+				focusWidget->setIsFocusWidget(false);
 			if (mouseAtWidget) {
 				focusWidget = mouseAtWidget;
-				focusWidget->isFocusWidget = true;
+				focusWidget->setIsFocusWidget(true);
 			}
 			else focusWidget = nullptr;
 		}
-#ifdef DEBUG_WIDGET
 		if (mouseAtWidget)
-			mouseAtWidget->isMouseAtWidget = true;
-#endif
+			mouseAtWidget->setIsMouseAtWidget(true);
 	}
 
 
