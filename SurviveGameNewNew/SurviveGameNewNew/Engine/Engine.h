@@ -73,9 +73,9 @@ public:
 	LPSprite g_pSpriteRender = nullptr;	//D3D的精灵指针，用来渲染到纹理
 
 	//字体
-	LPD3DXFONT g_pFont = nullptr;
-	LPD3DXFONT g_pFontSmall = nullptr;
-	LPD3DXFONT g_pFontVerySmall = nullptr;
+	LPFont g_pFont = nullptr;
+	LPFont g_pFontSmall = nullptr;
+	LPFont g_pFontVerySmall = nullptr;
 
 	//管理Texture
 	TextureManager* renderTextureManager = nullptr;

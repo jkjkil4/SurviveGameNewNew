@@ -169,6 +169,7 @@
     <ClCompile Include="Room\RoomTitle.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
+    <ClCompile Include="Widget\TextLabel\TextLabel.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +197,7 @@
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="Room\RoomTitle.h" />
     <ClInclude Include="utility.h" />
+    <ClInclude Include="Widget\TextLabel\TextLabel.h" />
     <ClInclude Include="Widget\Widget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

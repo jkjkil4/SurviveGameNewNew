@@ -48,6 +48,7 @@ struct Vertex
 typedef LPDIRECT3DTEXTURE9 LPTexture;
 typedef LPDIRECT3DSURFACE9 LPSurface;
 typedef LPD3DXSPRITE LPSprite;
+typedef LPD3DXFONT LPFont;
 
 typedef LPDIRECT3D9 LPDirectx;
 typedef LPDIRECT3DDEVICE9 LPDevice;

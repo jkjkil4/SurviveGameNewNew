@@ -60,6 +60,9 @@
     <ClCompile Include="Game\Data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\TextLabel\TextLabel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SurviveGameNewNew.rc">
@@ -121,6 +124,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Game\Data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\TextLabel\TextLabel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
