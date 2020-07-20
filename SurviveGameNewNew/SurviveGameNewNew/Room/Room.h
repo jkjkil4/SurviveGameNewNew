@@ -28,4 +28,6 @@ public:
 
 	Widget* focusWidget = nullptr;	//焦点控件
 	Widget* mouseAtWidget = nullptr;	//鼠标悬停的控件
+	
+	int mouseXBefore = -1, mouseYBefore = -1;
 };

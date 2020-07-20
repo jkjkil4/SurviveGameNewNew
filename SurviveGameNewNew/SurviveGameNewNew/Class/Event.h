@@ -1,14 +1,23 @@
 #pragma once
 
+#include "../NameSpace.h"
 
 namespace My {
 	class RenderEvent;
+	class MouseMoveEvent;
 }
 
 
 class My::RenderEvent {
 public:
 	int targetX = 0, targetY = 0;
+};
+
+
+class My::MouseMoveEvent {
+public:
+	Mouse button = Mouse::None;
+	int mouseX = -1, mouseY = -1;
 };
 
 

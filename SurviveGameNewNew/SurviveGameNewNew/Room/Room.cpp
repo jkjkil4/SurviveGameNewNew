@@ -3,14 +3,15 @@
 using namespace My;
 
 void Room::onLogic() {
-	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {
+	int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
+
+	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {	//如果没有按下左键，或者刚按下左键
 		//得到鼠标悬停在哪个控件上面
 #ifdef DEBUG_WIDGET
 		if (mouseAtWidget)
 			mouseAtWidget->isMouseAtWidget = false;
 #endif
 		mouseAtWidget = nullptr;
-		int mouseX = engine.mouseX, mouseY = engine.mouseY;	//得到鼠标xy
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
 			Widget* widget = *it;
 			if (mouseX >= widget->wndX && mouseX <= widget->wndX + widget->w
@@ -34,6 +35,28 @@ void Room::onLogic() {
 #endif
 	}
 
+	if (mouseAtWidget) {
+		//onMouseMove
+		if (mouseX != mouseXBefore || mouseY != mouseYBefore) {
+			Mouse mouse = Mouse::None;
+			if (engine.isKey(VK_LBUTTON))
+				mouse = mouse | Mouse::Left;
+			if (engine.isKey(VK_MBUTTON))
+				mouse = mouse | Mouse::Middle;
+			if (engine.isKey(VK_RBUTTON))
+				mouse = mouse | Mouse::Right;
+
+			MouseMoveEvent ev;
+			ev.button = mouse;
+			ev.mouseX = mouseX - mouseAtWidget->wndX;
+			ev.mouseY = mouseY - mouseAtWidget->wndY;
+			if (mouse != Mouse::None || mouseAtWidget->isMouseTracking)
+				mouseAtWidget->onMouseMove(&ev);
+		}
+	}
+	mouseXBefore = mouseX;
+	mouseYBefore = mouseY;
+
 
 	//调用控件的onLogic
 	for (Widget* widget : widgets)
@@ -48,7 +71,10 @@ void Room::onRender() {
 }
 
 void Room::onDestroy() {
-
+	for (Widget* widget : widgets) {
+		widget->onDestroy();
+		delete widget;
+	}
 }
 
 

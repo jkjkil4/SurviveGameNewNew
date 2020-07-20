@@ -71,6 +71,10 @@ void Widget::onRender(RenderEvent* ev) {
 
 void Widget::onDestroy() {
 	destroyRenderTarget();	//销毁RenderTarget
+	for (Widget* child : childs) {	//销毁子控件
+		child->onDestroy();
+		delete child;
+	}
 }
 
 
@@ -84,6 +88,10 @@ void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
 		}
 	}
 	*pMouseAtWidget = this;	//将鼠标悬停的控件设置为自己
+}
+
+void Widget::onMouseMove(MouseMoveEvent* ev) {
+	std::cout << "[MouseMoveEvnet]  mouseX:" << ev->mouseX << "  mouseY:" << ev->mouseY << "  wid:" << this << std::endl;
 }
 
 
