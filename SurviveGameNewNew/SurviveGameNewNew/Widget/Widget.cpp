@@ -41,13 +41,12 @@ void Widget::onRender(RenderEvent* ev) {
 
 	onSelfRender(wndX - ev->targetX, wndY - ev->targetY);
 #ifdef DEBUG_WIDGET
-	if (isMouseAtWidget) {
+	if (isMouseAtWidget || isFocusWidget) {
 		engine.drawRestart();
-		engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x44dd2222, 0x44dd2222, 0x44dd2222, 0x44dd2222);
-	}
-	if (isFocusWidget) {
-		engine.drawRestart();
-		engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x4422dd22, 0x4422dd22, 0x4422dd22, 0x4422dd22);
+		if (isMouseAtWidget)
+			engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x44dd2222, 0x44dd2222, 0x44dd2222, 0x44dd2222);
+		if (isFocusWidget)
+			engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x4422dd22, 0x4422dd22, 0x4422dd22, 0x4422dd22);
 	}
 #endif
 	

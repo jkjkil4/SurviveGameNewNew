@@ -13,7 +13,7 @@ namespace My {
 	class Widget;
 }
 
-#define DEBUG_WIDGET
+//#define DEBUG_WIDGET
 
 class My::Widget : public Object
 {
