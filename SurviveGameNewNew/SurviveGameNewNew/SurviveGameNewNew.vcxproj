@@ -191,6 +191,7 @@
     <ClInclude Include="Class\Event.h" />
     <ClInclude Include="Class\Image.h" />
     <ClInclude Include="Class\LimitSizeVector.h" />
+    <ClInclude Include="Class\OperationClass.h" />
     <ClInclude Include="Class\TextureManager.h" />
     <ClInclude Include="Class\Delayer.h" />
     <ClInclude Include="Engine\Engine.h" />

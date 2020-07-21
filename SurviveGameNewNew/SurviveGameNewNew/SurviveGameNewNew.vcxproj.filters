@@ -141,5 +141,8 @@
     <ClInclude Include="Widget\Button\Button.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Class\OperationClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

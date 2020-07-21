@@ -2,6 +2,7 @@
 
 #include "../NameSpace.h"
 #include "../Class/Event.h"
+#include "../Class/OperationClass.h"
 
 #include "../Class/TextureManager.h"
 
@@ -22,6 +23,8 @@ public:
 	~Widget() override = default;
 
 	virtual void onLogic();	//控件的逻辑处理
+	void setNeedLogic(bool flag);
+	bool needLogic = false;
 
 	void onRender(RenderEvent* ev);	//控件的渲染
 	virtual void onSelfRender(int, int) {}	//控件自身的渲染
@@ -33,6 +36,11 @@ public:
 	virtual void onMouseMove(MouseMoveEvent* ev) {}
 	virtual void onMouseReleased(MouseEvent* ev) {}
 	bool isMouseTracking = false;
+
+	void setVisibleOperation(OperationClass* oper, int* pVisibleNum);
+	bool isVisible();
+	OperationClass* oper = nullptr;
+	int* pVisibleNum = nullptr;
 
 	void updatePos();	//更新位置
 

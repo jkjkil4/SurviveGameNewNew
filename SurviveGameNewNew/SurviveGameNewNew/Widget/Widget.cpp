@@ -19,7 +19,19 @@ void Widget::onLogic() {
 		child->onLogic();
 }
 
+void Widget::setNeedLogic(bool flag) {
+	needLogic = flag;
+	if (flag && parent) {
+		parent->setNeedLogic(true);
+	}
+}
+
+
 void Widget::onRender(RenderEvent* ev) {
+	//如果该控件不可见，则return
+	if (!isVisible())
+		return;
+
 	//如果该控件完全在父控件之外，则return
 	if (parent)
 		if (wndX + w < parent->wndX || wndX > parent->wndX + parent->w || wndY + h < parent->wndY || wndY > parent->wndY + parent->h)
@@ -87,6 +99,18 @@ void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
 		}
 	}
 	*pMouseAtWidget = this;	//将鼠标悬停的控件设置为自己
+}
+
+
+void Widget::setVisibleOperation(OperationClass* oper, int* pVisibleNum) {
+	this->oper = oper;
+	this->pVisibleNum = pVisibleNum;
+}
+
+bool Widget::isVisible() {
+	if (oper)
+		return oper->check(pVisibleNum);
+	return true;
 }
 
 
