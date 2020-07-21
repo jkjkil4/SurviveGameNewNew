@@ -2,12 +2,10 @@
 
 using namespace My;
 
-void AbstractButton::onLogic() {
-	if (engine.isKeyReleased(VK_LBUTTON) && isChecking()) {
-		std::cout << "°´Å¥ " << this << " ±»°´ÏÂ" << std::endl;
+void AbstractButton::onMouseReleased(MouseEvent* ev) {
+	if (ev->button == Mouse::Left && isChecking()) {
+		std::cout << "æŒ‰é’® " << this << " è¢«æŒ‰ä¸‹" << std::endl;
 	}
-
-	Widget::onLogic();
 }
 
 bool AbstractButton::isChecking() {
