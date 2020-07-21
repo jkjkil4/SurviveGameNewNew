@@ -2,6 +2,7 @@
 
 #include "../Widget/ImageLabel/ImageLabel.h"
 #include "../Widget/TextLabel/TextLabel.h"
+#include "../Widget/Button/Button.h"
 
 #include "../utility.h"
 

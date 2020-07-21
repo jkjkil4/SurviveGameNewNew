@@ -4,9 +4,17 @@ using namespace My;
 
 void AbstractButton::onMouseReleased(MouseEvent* ev) {
 	if (ev->button == Mouse::Left && isChecking()) {
-		std::cout << "按钮 " << this << " 被按下" << std::endl;
+		if (slot)
+			(slot->*slotFunc)(this);
 	}
 }
+
+
+void AbstractButton::setSlot(Object* slot, PushButtonFunc slotFunc) {
+	this->slot = slot;
+	this->slotFunc = slotFunc;
+}
+
 
 bool AbstractButton::isChecking() {
 	int mouseX = engine.mouseX, mouseY = engine.mouseY;

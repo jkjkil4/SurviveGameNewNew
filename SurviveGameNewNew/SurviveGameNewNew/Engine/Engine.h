@@ -11,6 +11,7 @@ namespace My {
 	struct Key;
 
 	class Engine;
+	typedef void(Engine::* EngineFunc)();
 
 	class Room;
 }
@@ -29,8 +30,6 @@ public:
 };
 
 
-
-typedef void(My::Engine::* EngineFunc)();
 
 class My::Engine {
 public:

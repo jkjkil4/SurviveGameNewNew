@@ -21,6 +21,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 
 #ifdef DEBUG_MEMSIZE
 	cout << "----MemSize----" << endl;
+	cout << "Engine:\t" << sizeof(Engine) << endl;
 	cout << "Room:\t" << sizeof(Room) << endl;
 	cout << "Widget:\t" << sizeof(Widget) << endl;
 	cout << "---------------" << endl;

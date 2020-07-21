@@ -12,6 +12,12 @@ Room_Title::Room_Title() {
 		sum += rand() % 35;
 		addWidget(w);
 	}
+	repeat(i, 10) {
+		Button* btn = new Button(gameData.testImage2, _T("²âÊÔ"), engine.g_pFontSmall, DT_CENTER | DT_VCENTER, Align::Left | Align::Top);
+		btn->move(rand() % 400, rand() % 400);
+		btn->setSlot(this, (PushButtonFunc)&Room_Title::test);
+		addWidget(btn);
+	}
 }
 
 void Room_Title::onLogic() {

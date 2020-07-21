@@ -11,6 +11,7 @@ public:
 	void onInit();
 	void onDestroy();
 	Image* testImage1;
+	Image* testImage2;
 };
 
 namespace My {
