@@ -13,7 +13,7 @@ public:
 		: Widget(w, h, align, parent) {}
 	~AbstractButton() override = default;
 
-	void onLogic() override;
+	void onMouseReleased(MouseEvent* ev) override;
 
 	bool isChecking();
 	bool isHolding();
