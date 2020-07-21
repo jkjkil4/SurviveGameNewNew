@@ -2,6 +2,8 @@
 
 #include "Room.h"
 
+#include "../Class/OperationClass.h"
+
 namespace My {
 	class Room_Title;
 }
@@ -10,6 +12,13 @@ namespace My {
 class My::Room_Title : public Room
 {
 public:
+	enum VisibleFlags { 
+		VF_Title, 
+		VF_SaveSelect, VF_SaveCreate,
+		VF_Multiplayer,
+		VF_Settings
+	};
+
 	Room_Title();
 	~Room_Title() override = default;
 
@@ -17,5 +26,10 @@ public:
 
 	void onRender() override;
 
-	void test(AbstractButton* btn) { std::cout << "按钮 " << btn << " 被按下" << std::endl; }
+	void onBtnSigleplayerClicked(AbstractButton*) { visibleNum = VF_SaveSelect; }
+	void onBtnMultiplayerClicked(AbstractButton*) { visibleNum = VF_Multiplayer; }
+	void onBtnSettingsClicked(AbstractButton*) { visibleNum = VF_Settings; }
+	void onBtnExitClicked(AbstractButton*) { throw RoomGoto(nullptr); }
+
+	int visibleNum = VF_Title;
 };

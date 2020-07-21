@@ -12,6 +12,8 @@ public:
 	void onDestroy();
 	Image* testImage1;
 	Image* testImage2;
+
+	Image* btnVerySmall, * btnSmall, * btnMedium, * btnBig;
 };
 
 namespace My {

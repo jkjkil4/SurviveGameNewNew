@@ -4,15 +4,15 @@ using namespace My;
 
 void AbstractButton::onMouseReleased(MouseEvent* ev) {
 	if (ev->button == Mouse::Left && isChecking()) {
-		if (slot)
-			(slot->*slotFunc)(this);
+		if (slotMemberFunc)
+			(slot->*slotMemberFunc)(this);
 	}
 }
 
 
-void AbstractButton::setSlot(Object* slot, PushButtonFunc slotFunc) {
+void AbstractButton::setSlot(Object* slot, ButtonFunc slotMemberFunc) {
 	this->slot = slot;
-	this->slotFunc = slotFunc;
+	this->slotMemberFunc = slotMemberFunc;
 }
 
 

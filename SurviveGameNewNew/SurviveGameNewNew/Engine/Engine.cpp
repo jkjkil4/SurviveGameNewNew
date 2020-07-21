@@ -50,7 +50,12 @@ void Engine::onLogic() {
 			currentRoom->onLogic();
 		}
 		catch (RoomGoto roomGoto) {
-			setCurrentRoom(roomGoto.room);
+			if (roomGoto.room) {
+				setCurrentRoom(roomGoto.room);
+			}
+			else {
+				SendMessage(g_hWnd, WM_CLOSE, 0, 0);
+			}
 		}
 	}
 

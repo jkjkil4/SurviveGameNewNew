@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "../Room/Room.h"
+
 using namespace My;
 using namespace std;
 
@@ -165,4 +167,7 @@ void Engine::onDestroy() {
 
 	safeRelease(g_pDevice);
 	safeRelease(g_pD3D);
+
+	if (currentRoom)
+		currentRoom->onDestroy();
 }

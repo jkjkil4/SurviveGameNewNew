@@ -82,6 +82,8 @@ void Widget::onRender(RenderEvent* ev) {
 
 void Widget::onDestroy() {
 	destroyRenderTarget();	//销毁RenderTarget
+	safeDelete(oper);
+
 	for (Widget* child : childs) {	//销毁子控件
 		child->onDestroy();
 		delete child;
