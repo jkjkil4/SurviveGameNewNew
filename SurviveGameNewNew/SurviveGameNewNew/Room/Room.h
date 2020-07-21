@@ -31,4 +31,7 @@ public:
 	Widget* mouseAtWidget = nullptr;	//Êó±êĞüÍ£µÄ¿Ø¼ş
 	
 	int mouseXBefore = -1, mouseYBefore = -1;
+
+	virtual void setVisibleNum(int num) { visibleNum = num; }
+	int visibleNum = -1;
 };

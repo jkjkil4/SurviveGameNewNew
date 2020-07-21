@@ -55,6 +55,8 @@ void Room::onLogic() {
 		mouseAtWidget = nullptr;
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
 			Widget* widget = *it;
+			if (!widget->isVisible())
+				continue;
 			if (mouseX >= widget->wndX && mouseX <= widget->wndX + widget->w
 				&& mouseY >= widget->wndY && mouseY <= widget->wndY + widget->h) {	//如果鼠标在控件范围内
 				widget->getMouseAtWidget(&mouseAtWidget, mouseX, mouseY);	//调用控件的getMouseAtWidget

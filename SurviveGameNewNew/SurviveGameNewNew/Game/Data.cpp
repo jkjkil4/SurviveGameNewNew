@@ -12,6 +12,9 @@ void Data::onInit() {
 	btnSmall = new Image(_T("data/texture/gui/button/btnSmall.png"));
 	btnMedium = new Image(_T("data/texture/gui/button/btnMedium.png"));
 	btnBig = new Image(_T("data/texture/gui/button/btnBig.png"));
+
+	saveSelect = new Image(_T("data/texture/gui/menu/SaveSelect.png"));
+	saveCreate = new Image(_T("data/texture/gui/menu/SaveCreate.png"));
 }
 
 void Data::onDestroy() {
@@ -22,4 +25,7 @@ void Data::onDestroy() {
 	safeDelete(btnSmall);
 	safeDelete(btnMedium);
 	safeDelete(btnBig);
+
+	safeDelete(saveSelect);
+	safeDelete(saveCreate);
 }

@@ -13,7 +13,11 @@ public:
 	Image* testImage1;
 	Image* testImage2;
 
+	//°´Å¥
 	Image* btnVerySmall, * btnSmall, * btnMedium, * btnBig;
+
+	//GUI
+	Image* saveSelect, * saveCreate;
 };
 
 namespace My {

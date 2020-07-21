@@ -26,10 +26,12 @@ public:
 
 	void onRender() override;
 
-	void onBtnSigleplayerClicked(AbstractButton*) { visibleNum = VF_SaveSelect; }
-	void onBtnMultiplayerClicked(AbstractButton*) { visibleNum = VF_Multiplayer; }
-	void onBtnSettingsClicked(AbstractButton*) { visibleNum = VF_Settings; }
+	void onBtnSigleplayerClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
+	void onBtnMultiplayerClicked(AbstractButton*) { setVisibleNum(VF_Multiplayer); }
+	void onBtnSettingsClicked(AbstractButton*) { setVisibleNum(VF_Settings); }
 	void onBtnExitClicked(AbstractButton*) { throw RoomGoto(nullptr); }
 
-	int visibleNum = VF_Title;
+	void onBtnBackClicked(AbstractButton*) { setVisibleNum(VF_Title); }
+
+	
 };

@@ -94,6 +94,8 @@ void Widget::onDestroy() {
 void Widget::getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY) {
 	for (auto it = childs.rbegin(); it < childs.rend(); it++) {	//反向遍历子控件
 		Widget* child = *it;
+		if (!child->isVisible())
+			continue;
 		if (mouseX >= child->wndX && mouseX <= child->wndX + child->w
 			&& mouseY >= child->wndY && mouseY <= child->wndY + child->h) {	//如果鼠标在子控件范围内
 			child->getMouseAtWidget(pMouseAtWidget, mouseX, mouseY);	//调用子控件的该函数
