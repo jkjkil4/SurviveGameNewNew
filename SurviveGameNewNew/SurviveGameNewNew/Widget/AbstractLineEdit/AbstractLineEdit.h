@@ -4,7 +4,7 @@
 
 namespace My {
 	//输入框的抽象类，继承该类重写onSelfRender来进行绘制
-	//调用该类的renderText来绘制文字
+	//调用该类的drawText来绘制文字
 	class AbstractLineEdit;
 }
 
@@ -25,6 +25,9 @@ public:
 	void onMousePressed(MouseEvent* ev) override;
 	void onMouseMove(MouseEvent* ev) override;
 
+	void onKeyPressed(KeyEvent* ev) override;
+
+	void setCursorEnable();
 	void updateOffsetByIndex(int index);
 
 	int getTextWidth();

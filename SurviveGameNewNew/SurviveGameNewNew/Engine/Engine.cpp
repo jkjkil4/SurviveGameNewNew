@@ -57,11 +57,10 @@ void Engine::onLogic() {
 				SendMessage(g_hWnd, WM_CLOSE, 0, 0);
 			}
 		}
-	}
-
-	//调用控件的按键处理函数
-	for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
-		//TODO: 调用控件的按键处理函数
+		//调用控件的按键处理函数
+		for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
+			currentRoom->evKey(&*it);
+		}
 	}
 	//清空KeyBuffer
 	vecKeyBuffer.clear();

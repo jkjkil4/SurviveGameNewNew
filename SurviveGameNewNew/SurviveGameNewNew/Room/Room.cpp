@@ -112,6 +112,15 @@ void Room::evResized() {
 		widget->updatePos();
 }
 
+void Room::evKey(KeyEvent* ev) {
+	if (focusWidget) {
+		ev->state == KeyEvent::State::Press ? focusWidget->onKeyPressed(ev) : focusWidget->onKeyReleased(ev);
+	}
+	else {
+		ev->state == KeyEvent::State::Press ? onKeyPressed(ev) : onKeyReleased(ev);
+	}
+}
+
 
 void Room::addWidget(Widget* widget) {
 	widgets.push_back(widget);

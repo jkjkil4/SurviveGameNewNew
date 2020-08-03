@@ -20,6 +20,9 @@ public:
 	virtual void onDestroy();	//销毁
 
 	void evResized();	//窗口大小改变事件
+	void evKey(KeyEvent* ev);
+	virtual void onKeyPressed(KeyEvent* ev) {}
+	virtual void onKeyReleased(KeyEvent* ev) {}
 
 	void addWidget(Widget* widget);
 	void removeWidget(Widget* widget);

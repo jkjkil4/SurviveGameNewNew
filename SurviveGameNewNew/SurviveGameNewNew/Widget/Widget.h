@@ -38,6 +38,9 @@ public:
 	virtual void onMouseReleased(MouseEvent* ev) {}
 	bool isMouseTracking = false;
 
+	virtual void onKeyPressed(KeyEvent* ev) {}
+	virtual void onKeyReleased(KeyEvent* ev) {}
+
 	void setVisibleOperation(OperationClass* oper, int* pVisibleNum);
 	bool isVisible();
 	OperationClass* oper = nullptr;

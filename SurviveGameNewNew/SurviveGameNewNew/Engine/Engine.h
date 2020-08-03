@@ -9,6 +9,7 @@
 
 namespace My {
 	struct Key;
+	typedef Key KeyEvent;
 
 	class Engine;
 	typedef void(Engine::* EngineFunc)();

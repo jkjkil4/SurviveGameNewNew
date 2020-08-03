@@ -37,13 +37,40 @@ void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 	cursorEnd = cursorBegin;
 
 	//将光标设置为可见状态
-	cursorShowCountTimes = 0;
-	isCursorShow = true;
+	setCursorEnable();
 }
 
 void AbstractLineEdit::onMouseMove(MouseEvent* ev) {
 	//光标位置
 	cursorEnd = getCursorIndex(ev->mouseX);
+}
+
+void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
+	switch (ev->key) {
+	case VK_BACK:
+		if (cursorBegin == cursorEnd) {
+			if (cursorEnd > 0) {
+				cursorBegin--;
+				cursorEnd--;
+				text.erase(text.begin() + cursorEnd);
+			}
+		}
+		else {
+			text.erase(text.begin() + min(cursorBegin, cursorEnd), text.begin() + max(cursorBegin, cursorEnd));
+
+			int res = min(cursorBegin, cursorEnd);
+			cursorBegin = res;
+			cursorEnd = res;
+		}
+		setCursorEnable();
+		break;
+	}
+}
+
+
+void AbstractLineEdit::setCursorEnable() {
+	cursorShowCountTimes = 0;
+	isCursorShow = true;
 }
 
 void AbstractLineEdit::updateOffsetByIndex(int index) {
