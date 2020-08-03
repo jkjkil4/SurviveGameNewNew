@@ -134,6 +134,9 @@ public:
 	std::vector<EngineFunc> vecEvents;
 	#pragma endregion
 
+	std::mutex inputWStrMutex;
+	std::wstring inputWStr;
+
 	void setCursorShape(LPCWSTR shape);
 	LPCWSTR curCursorShape = IDC_ARROW;
 

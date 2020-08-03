@@ -27,6 +27,8 @@ public:
 
 	void onKeyPressed(KeyEvent* ev) override;
 
+	void onTextInput(std::wstring& input) override;
+
 	void setCursorEnable();
 	void updateOffsetByIndex(int index);
 

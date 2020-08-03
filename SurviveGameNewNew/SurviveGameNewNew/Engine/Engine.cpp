@@ -32,8 +32,7 @@ void Engine::onLogic() {
 		if (!key.isAutoRepeat) {
 			if (key.state == Key::State::Press)
 				setKeyPressed(key.key);
-			else
-				setKeyReleased(key.key);
+			else setKeyReleased(key.key);
 		}
 	}
 
@@ -53,14 +52,20 @@ void Engine::onLogic() {
 			if (roomGoto.room) {
 				setCurrentRoom(roomGoto.room);
 			}
-			else {
-				SendMessage(g_hWnd, WM_CLOSE, 0, 0);
-			}
+			else SendMessage(g_hWnd, WM_CLOSE, 0, 0);
 		}
 		//调用控件的按键处理函数
 		for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
 			currentRoom->evKey(&*it);
 		}
+
+		//调用控件的文字输入函数
+		inputWStrMutex.lock();
+		if (inputWStr.length() != 0) {
+			currentRoom->evTextInput(inputWStr);
+			inputWStr = _T("");
+		}
+		inputWStrMutex.unlock();
 	}
 	//清空KeyBuffer
 	vecKeyBuffer.clear();

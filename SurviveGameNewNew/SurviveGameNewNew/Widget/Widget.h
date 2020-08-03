@@ -33,13 +33,15 @@ public:
 	void onDestroy();	//控件销毁
 
 	void getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY);	//得到鼠标悬停的控件
-	virtual void onMousePressed(MouseEvent* ev) {}
-	virtual void onMouseMove(MouseEvent* ev) {}
-	virtual void onMouseReleased(MouseEvent* ev) {}
+	virtual void onMousePressed(MouseEvent*) {}
+	virtual void onMouseMove(MouseEvent*) {}
+	virtual void onMouseReleased(MouseEvent*) {}
 	bool isMouseTracking = false;
 
-	virtual void onKeyPressed(KeyEvent* ev) {}
-	virtual void onKeyReleased(KeyEvent* ev) {}
+	virtual void onKeyPressed(KeyEvent*) {}
+	virtual void onKeyReleased(KeyEvent*) {}
+
+	virtual void onTextInput(std::wstring&) {}
 
 	void setVisibleOperation(OperationClass* oper, int* pVisibleNum);
 	bool isVisible();

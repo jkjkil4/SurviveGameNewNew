@@ -58,6 +58,11 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		}
 		break;
 	}
+	case WM_CHAR:
+		inputWStrMutex.lock();
+		inputWStr += (WCHAR)wParam;
+		inputWStrMutex.unlock();
+		break;
 	case WM_CLOSE: {
 		setClosed(true);
 		DestroyWindow(hWnd);

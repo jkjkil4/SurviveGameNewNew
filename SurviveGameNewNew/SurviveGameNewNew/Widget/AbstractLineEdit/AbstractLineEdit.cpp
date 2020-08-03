@@ -1,6 +1,7 @@
 #include "AbstractLineEdit.h"
 
 using namespace My;
+using namespace std;
 
 //得到单个字符的宽度
 #define GET_WCHAR_WIDTH(resultVaribleName, wchar) {\
@@ -65,6 +66,34 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 		setCursorEnable();
 		break;
 	}
+}
+
+void AbstractLineEdit::onTextInput(wstring& input) {
+	wstring insertText;
+	//insertText.resize(input.length());
+
+	int res;
+	for (auto iter = input.begin(); iter < input.end(); iter++) {
+		WCHAR wch = *iter;
+		if (wch < 0x0020) continue;	//除去控制字符
+		insertText += wch;
+	}
+	if (insertText.length() == 0)
+		return;
+	if (cursorBegin == cursorEnd) {
+		res = cursorEnd + insertText.length();
+		text.insert(cursorEnd, insertText.c_str());
+		
+	}
+	else {
+		res = min(cursorBegin, cursorEnd) + insertText.length();
+		text.erase(text.begin() + min(cursorBegin, cursorEnd), text.begin() + max(cursorBegin, cursorEnd));
+		text.insert(min(cursorBegin, cursorEnd), insertText.c_str());
+	}
+	cursorBegin = res;
+	cursorEnd = res;
+
+	setCursorEnable();
 }
 
 

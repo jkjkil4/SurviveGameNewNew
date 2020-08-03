@@ -77,7 +77,7 @@ void Room::onLogic() {
 			mouseAtWidget->isMouseAtWidget = true;
 	}
 
-	if (mouseAtWidget != mouseAtWidgetPrev) {
+	if (mouseAtWidget != mouseAtWidgetPrev) {	//设置鼠标样式
 		engine.setCursorShape(mouseAtWidget ? mouseAtWidget->cursorShape : IDC_ARROW);
 	}
 
@@ -118,6 +118,12 @@ void Room::evKey(KeyEvent* ev) {
 	}
 	else {
 		ev->state == KeyEvent::State::Press ? onKeyPressed(ev) : onKeyReleased(ev);
+	}
+}
+
+void Room::evTextInput(std::wstring& input) {
+	if (focusWidget) {
+		focusWidget->onTextInput(input);
 	}
 }
 
