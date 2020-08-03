@@ -48,7 +48,7 @@ void AbstractLineEdit::onMouseMove(MouseEvent* ev) {
 
 void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 	switch (ev->key) {
-	case VK_BACK:
+	case VK_BACK:	//ÍË¸ñ¼ü(É¾³ıÎÄ×Ö)
 		if (cursorBegin == cursorEnd) {
 			if (cursorEnd > 0) {
 				cursorBegin--;
@@ -60,6 +60,34 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			text.erase(text.begin() + min(cursorBegin, cursorEnd), text.begin() + max(cursorBegin, cursorEnd));
 
 			int res = min(cursorBegin, cursorEnd);
+			cursorBegin = res;
+			cursorEnd = res;
+		}
+		setCursorEnable();
+		break;
+	case VK_LEFT:	//¼üÅÌÏò×ó¼ü(¹â±ê×óÒÆ)
+		if (cursorBegin == cursorEnd) {
+			if (cursorEnd > 0) {
+				cursorBegin--;
+				cursorEnd--;
+			}
+		}
+		else {
+			int res = min(cursorBegin, cursorEnd);
+			cursorBegin = res;
+			cursorEnd = res;
+		}
+		setCursorEnable();
+		break;
+	case VK_RIGHT:	//¼üÅÌÏòÓÒ¼ü(¹â±êÓÒÒÆ)
+		if (cursorBegin == cursorEnd) {
+			if (cursorEnd < (int)text.length()) {
+				cursorBegin++;
+				cursorEnd++;
+			}
+		}
+		else {
+			int res = max(cursorBegin, cursorEnd);
 			cursorBegin = res;
 			cursorEnd = res;
 		}
