@@ -3,11 +3,11 @@
 using namespace My;
 using namespace std;
 
-#define THREAD_COUNT(oper) mutexThreadCount.lock(); threadCount##oper; mutexThreadCount.unlock();
+//#define THREAD_COUNT(oper) mutexThreadCount.lock(); threadCount##oper; mutexThreadCount.unlock();
 #define DELAY_MICRO 16667
 
 void Engine::funcLogic() {	//逻辑处理线程 的 函数
-	THREAD_COUNT(++);
+	//THREAD_COUNT(++);
 
 	timeBeginPeriod(1);
 	Counter counter;
@@ -46,11 +46,11 @@ void Engine::funcLogic() {	//逻辑处理线程 的 函数
 	Sleep(1);
 	timeEndPeriod(1);
 
-	THREAD_COUNT(--);
+	//THREAD_COUNT(--);
 }
 
 void Engine::funcRender() {	//渲染线程 的 函数
-	THREAD_COUNT(++);
+	//THREAD_COUNT(++);
 
 	initDirectx();
 	setDirectxInited(true);
@@ -101,5 +101,5 @@ void Engine::funcRender() {	//渲染线程 的 函数
 	Sleep(1);
 	timeEndPeriod(1);
 
-	THREAD_COUNT(--);
+	//THREAD_COUNT(--);
 }

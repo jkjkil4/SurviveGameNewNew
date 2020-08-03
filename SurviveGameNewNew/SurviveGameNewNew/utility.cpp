@@ -2,6 +2,28 @@
 
 using namespace std;
 
+wstring stringToWstring(const string& orig) {
+	wstring result;
+	int slength = (int)orig.length() + 1;
+	wchar_t* m_wchar;
+	int len = MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, NULL, 0);
+	m_wchar = new wchar_t[len + 1];
+	MultiByteToWideChar(CP_ACP, 0, orig.c_str(), slength, m_wchar, len);
+	m_wchar[len] = '0';
+	result.append(m_wchar);
+	delete[] m_wchar;
+	return result;
+}
+string wstringToString(const std::wstring& str) {// wstringתstring
+	unsigned len = str.size() * 4;
+	setlocale(LC_CTYPE, "");
+	char* p = new char[len];
+	wcstombs(p, str.c_str(), len);
+	std::string str1(p);
+	delete[] p;
+	return str1;
+}
+
 inline void My::createTextureFromFile(LPDevice g_pDevice, wstring& path, UINT w, UINT h, ImageInfo* imageInfo, LPTexture* g_pTexture) {
     D3DXCreateTextureFromFileEx(
         g_pDevice,

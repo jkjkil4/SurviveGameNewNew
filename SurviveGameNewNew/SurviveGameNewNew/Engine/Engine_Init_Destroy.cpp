@@ -11,13 +11,13 @@ void Engine::onInit(HINSTANCE hInstance) {
 	initWnd();	//初始化窗口
 
 	thRender = new thread(&Engine::funcRender, this);	//渲染线程
-	thRender->detach();
+	//thRender->detach();
 
 	while (!getDirectxInited())
 		Sleep(10);
 
 	thLogic = new thread(&Engine::funcLogic, this);	//逻辑处理线程
-	thLogic->detach();
+	//thLogic->detach();
 }
 
 void Engine::initWnd() {
@@ -138,9 +138,10 @@ void Engine::initDirectx() {
 
 void Engine::onDestroy() {
 	setNeedExit(true);
-
-	while (getThreadCount() != 0)
-		Sleep(10);
+	thLogic->join();
+	thRender->join();
+	//while (getThreadCount() != 0)
+	//	Sleep(10);
 
 #ifdef DEBUG_CONSOLE
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);

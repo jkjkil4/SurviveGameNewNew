@@ -161,18 +161,21 @@
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Engine_DrawFunc.cpp" />
     <ClCompile Include="Engine\Engine_Init_Destroy.cpp" />
-    <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp" />
     <ClCompile Include="Engine\Engine_Other.cpp" />
+    <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp" />
     <ClCompile Include="Engine\Engine_ThreadFunc.cpp" />
     <ClCompile Include="Engine\Engine_WndProcFunc.cpp" />
     <ClCompile Include="Game\Data.cpp" />
-    <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp" />
-    <ClCompile Include="Widget\Button\Button.cpp" />
-    <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp" />
+    <ClCompile Include="Game\Shader.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomTitle.cpp" />
     <ClCompile Include="SurviveGameNewNew.cpp" />
     <ClCompile Include="utility.cpp" />
+    <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp" />
+    <ClCompile Include="Widget\Button\Button.cpp" />
+    <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp" />
+    <ClCompile Include="Widget\AbstractLineEdit\AbstractLineEdit.cpp" />
+    <ClCompile Include="Widget\LineEdit\LineEdit.cpp" />
     <ClCompile Include="Widget\TextLabel\TextLabel.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
   </ItemGroup>
@@ -188,22 +191,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\Counter.h" />
+    <ClInclude Include="Class\Delayer.h" />
+    <ClInclude Include="Class\Dir.h" />
     <ClInclude Include="Class\Event.h" />
     <ClInclude Include="Class\Image.h" />
     <ClInclude Include="Class\LimitSizeVector.h" />
     <ClInclude Include="Class\OperationClass.h" />
     <ClInclude Include="Class\TextureManager.h" />
-    <ClInclude Include="Class\Delayer.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Game\Data.h" />
-    <ClInclude Include="Widget\AbstractButton\AbstractButton.h" />
-    <ClInclude Include="Widget\Button\Button.h" />
-    <ClInclude Include="Widget\ImageLabel\ImageLabel.h" />
+    <ClInclude Include="Game\Shader.h" />
     <ClInclude Include="NameSpace.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="Room\RoomTitle.h" />
     <ClInclude Include="utility.h" />
+    <ClInclude Include="Widget\AbstractButton\AbstractButton.h" />
+    <ClInclude Include="Widget\Button\Button.h" />
+    <ClInclude Include="Widget\ImageLabel\ImageLabel.h" />
+    <ClInclude Include="Widget\AbstractLineEdit\AbstractLineEdit.h" />
+    <ClInclude Include="Widget\LineEdit\LineEdit.h" />
     <ClInclude Include="Widget\TextLabel\TextLabel.h" />
     <ClInclude Include="Widget\Widget.h" />
   </ItemGroup>

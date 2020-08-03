@@ -2,9 +2,48 @@
 
 using namespace My;
 
+#include "../Game/Shader.h"
+
+
+void Engine::setBlendMode(D3DBLEND srcBlend, D3DBLEND destBlend) {
+	g_pDevice->SetRenderState(D3DRS_SRCBLEND, srcBlend);
+	g_pDevice->SetRenderState(D3DRS_DESTBLEND, destBlend);
+}
+
+void Engine::setPixelShader(PixelShader_Table* pst) {
+	pCurPST = pst;
+	if (pst) {
+		g_pDevice->SetPixelShader(pst->g_pPixelShader);
+	}
+	else {
+		g_pSprite->End();
+		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	}
+}
+
+void Engine::setVertexShader(VertexShader_Table* vst) {
+	pCurVST = vst;
+	if (vst) {
+		g_pDevice->SetVertexShader(vst->g_pVertexShader);
+	}
+	else {
+		g_pSprite->End();
+		g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	}
+}
+
+void Engine::drawBegin() {
+	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	if (pCurPST) setPixelShader(pCurPST);
+}
+
 void Engine::drawRestart() {
 	g_pSprite->End();
-	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	drawBegin();
+}
+
+void Engine::drawRect(int x, int y, int w, int h, DWORD col) {
+	drawRect(x, y, w, h, col, col, col, col);
 }
 
 void Engine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4) {
@@ -26,11 +65,11 @@ void Engine::drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD 
 
 void Engine::drawBorder(int x, int y, int w, int h, int size, DWORD col) {
 	//×ó²à
-	drawRect(x, y, size, h, col, col, col, col);
+	drawRect(x, y, size, h, col);
 	//ÓÒ²à
-	drawRect(x + w - size, y, size, h, col, col, col, col);
+	drawRect(x + w - size, y, size, h, col);
 	//¶¥²¿
-	drawRect(x + size, y, w - 2 * size, size, col, col, col, col);
+	drawRect(x + size, y, w - 2 * size, size, col);
 	//µ×²¿
-	drawRect(x + size, y + h - size, w - 2 * size, size, col, col, col, col);
+	drawRect(x + size, y + h - size, w - 2 * size, size, col);
 }

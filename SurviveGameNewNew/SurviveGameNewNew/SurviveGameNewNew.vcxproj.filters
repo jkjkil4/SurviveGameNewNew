@@ -21,52 +21,61 @@
     <ClCompile Include="utility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Class\TextureManager.cpp">
+    <ClCompile Include="Game\Data.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Room\Room.cpp">
+    <ClCompile Include="Class\TextureManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Engine_ThreadFunc.cpp">
+    <ClCompile Include="Engine\Engine_DrawFunc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Engine_Init_Destroy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Engine_DrawFunc.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Engine_WndProcFunc.cpp">
+    <ClCompile Include="Engine\Engine_Other.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Engine_ProcKeyFunc.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Engine_ThreadFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine_WndProcFunc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\Room.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="Room\RoomTitle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Engine_Other.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\Widget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Data.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Widget\TextLabel\TextLabel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Widget\Button\Button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\TextLabel\TextLabel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\Widget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\AbstractLineEdit\AbstractLineEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Widget\LineEdit\LineEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,46 +102,40 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Class\TextureManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\Delayer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\Counter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Room\Room.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\LimitSizeVector.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Engine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="NameSpace.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Room\RoomTitle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\Event.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Widget\Widget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Widget\ImageLabel\ImageLabel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Class\Image.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Game\Data.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Widget\TextLabel\TextLabel.h">
+    <ClInclude Include="Class\Counter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Delayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\LimitSizeVector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\OperationClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\TextureManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\Room.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\RoomTitle.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Widget\AbstractButton\AbstractButton.h">
@@ -141,7 +144,25 @@
     <ClInclude Include="Widget\Button\Button.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Class\OperationClass.h">
+    <ClInclude Include="Widget\ImageLabel\ImageLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\TextLabel\TextLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\Widget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\AbstractLineEdit\AbstractLineEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\LineEdit\LineEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\Dir.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

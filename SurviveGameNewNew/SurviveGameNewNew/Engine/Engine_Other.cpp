@@ -35,6 +35,14 @@ void Engine::evResized() {
 }
 
 
+void Engine::setCursorShape(LPCWSTR shape) {
+	if (curCursorShape != shape) {
+		SetClassLong(g_hWnd, GCL_HCURSOR, (long)LoadCursor(NULL, shape));
+		curCursorShape = shape;
+	}
+}
+
+
 void Engine::showMsgBox(wstring text) {
 	MessageBox(g_hWnd, text.c_str(), _T(""), MB_OK);
 }

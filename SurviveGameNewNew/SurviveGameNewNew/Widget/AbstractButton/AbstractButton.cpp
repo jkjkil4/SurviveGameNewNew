@@ -18,9 +18,9 @@ void AbstractButton::setSlot(Object* slot, ButtonFunc slotMemberFunc) {
 
 bool AbstractButton::isChecking() {
 	int mouseX = engine.mouseX, mouseY = engine.mouseY;
-	return getIsMouseAtWidget() && mouseX >= wndX && mouseX <= wndX + w && mouseY >= wndY && mouseY <= wndY + h;
+	return isMouseAtWidget && mouseX >= wndX && mouseX <= wndX + w && mouseY >= wndY && mouseY <= wndY + h;
 }
 
 bool AbstractButton::isHolding() {
-	return getIsMouseAtWidget() && engine.isKey(VK_LBUTTON);
+	return isMouseAtWidget && engine.isKey(VK_LBUTTON);
 }

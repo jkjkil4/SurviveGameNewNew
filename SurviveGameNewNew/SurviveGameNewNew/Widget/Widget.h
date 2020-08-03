@@ -6,9 +6,10 @@
 
 #include "../Class/TextureManager.h"
 
-#include "../Game/Data.h"
-
 #include "../utility.h"
+
+#include "../Game/Data.h"
+#include "../Game/Shader.h"
 
 namespace My {
 	class Widget;
@@ -33,7 +34,7 @@ public:
 
 	void getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY);	//得到鼠标悬停的控件
 	virtual void onMousePressed(MouseEvent* ev) {}
-	virtual void onMouseMove(MouseMoveEvent* ev) {}
+	virtual void onMouseMove(MouseEvent* ev) {}
 	virtual void onMouseReleased(MouseEvent* ev) {}
 	bool isMouseTracking = false;
 
@@ -68,10 +69,8 @@ public:
 	void setAlign(Align align);		//设置对齐方式
 	Align align = Align::None;	//对齐方式
 
-	NEEDLOCK_VARIBLE_FUNC(IsMouseAtWidget, isMouseAtWidget, bool)
-	NEEDLOCK_VARIBLE_FUNC(IsFocusWidget, isFocusWidget, bool)
+	LPCWSTR cursorShape = IDC_ARROW;	//鼠标样式
 
-private:
 	bool isMouseAtWidget = false;
 	bool isFocusWidget = false;
 

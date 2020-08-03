@@ -34,6 +34,8 @@ namespace My {
 
 	enum class Mouse { None = 0, Left = 0b1, Middle = 0b10, Right = 0b100 };
 	EnumClassOperator(Mouse)
+
+	enum class TextAlign { Left, Center, Scroll };
 }
 
 #undef EnumClassOperator

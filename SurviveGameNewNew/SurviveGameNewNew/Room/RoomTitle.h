@@ -4,6 +4,11 @@
 
 #include "../Class/OperationClass.h"
 
+#include "../Widget/ImageLabel/ImageLabel.h"
+#include "../Widget/TextLabel/TextLabel.h"
+#include "../Widget/Button/Button.h"
+#include "../Widget/LineEdit/LineEdit.h"
+
 namespace My {
 	class Room_Title;
 }
@@ -14,7 +19,7 @@ class My::Room_Title : public Room
 public:
 	enum VisibleFlags { 
 		VF_Title, 
-		VF_SaveSelect, VF_SaveCreate,
+		VF_SaveSelect, VF_SaveCreate, VF_SaveRename,
 		VF_Multiplayer,
 		VF_Settings
 	};
@@ -32,6 +37,11 @@ public:
 	void onBtnExitClicked(AbstractButton*) { throw RoomGoto(nullptr); }
 
 	void onBtnBackClicked(AbstractButton*) { setVisibleNum(VF_Title); }
+	void onBtnCreateClicked(AbstractButton*) { setVisibleNum(VF_SaveCreate); }
+	void onBtnSigleplayerJoinClicked(AbstractButton*) {  }
+	void onBtnSaveRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
+	void onBtnSaveDeleteClicked(AbstractButton*) {  }
+	void onBtnBackToSelectClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 
 	
 };

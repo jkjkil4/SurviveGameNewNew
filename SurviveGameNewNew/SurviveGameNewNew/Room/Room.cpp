@@ -36,8 +36,8 @@ void Room::onLogic() {
 			if (engine.isKey(VK_RBUTTON))
 				mouse = mouse | Mouse::Right;
 
-			MouseMoveEvent ev;
-			ev.buttons = mouse;
+			MouseEvent ev;
+			ev.button = mouse;
 			ev.mouseX = mouseX - mouseAtWidget->wndX;
 			ev.mouseY = mouseY - mouseAtWidget->wndY;
 			if (mouse != Mouse::None || mouseAtWidget->isMouseTracking)
@@ -47,11 +47,12 @@ void Room::onLogic() {
 	mouseXBefore = mouseX;
 	mouseYBefore = mouseY;
 
+	Widget* mouseAtWidgetPrev = mouseAtWidget;
 
 	if (!engine.isKey(VK_LBUTTON) || engine.isKeyPressed(VK_LBUTTON)) {	//如果没有按下左键，或者刚按下左键
 		//得到鼠标悬停在哪个控件上面
 		if (mouseAtWidget)
-			mouseAtWidget->setIsMouseAtWidget(false);
+			mouseAtWidget->isMouseAtWidget = false;
 		mouseAtWidget = nullptr;
 		for (auto it = widgets.rbegin(); it < widgets.rend(); it++) {	//反向遍历控件
 			Widget* widget = *it;
@@ -65,15 +66,19 @@ void Room::onLogic() {
 		}
 		if (engine.isKeyPressed(VK_LBUTTON)) {
 			if (focusWidget)
-				focusWidget->setIsFocusWidget(false);
+				focusWidget->isFocusWidget = false;
 			if (mouseAtWidget) {
 				focusWidget = mouseAtWidget;
-				focusWidget->setIsFocusWidget(true);
+				focusWidget->isFocusWidget = true;
 			}
 			else focusWidget = nullptr;
 		}
 		if (mouseAtWidget)
-			mouseAtWidget->setIsMouseAtWidget(true);
+			mouseAtWidget->isMouseAtWidget = true;
+	}
+
+	if (mouseAtWidget != mouseAtWidgetPrev) {
+		engine.setCursorShape(mouseAtWidget ? mouseAtWidget->cursorShape : IDC_ARROW);
 	}
 
 
@@ -87,8 +92,11 @@ void Room::onLogic() {
 void Room::onRender() {
 	//调用控件的onRender
 	RenderEvent ev;
-	for (Widget* widget : widgets)
+	for (Widget* widget : widgets) {
+		if (!widget->isVisible())
+			continue;
 		widget->onRender(&ev);
+	}
 }
 
 void Room::onDestroy() {

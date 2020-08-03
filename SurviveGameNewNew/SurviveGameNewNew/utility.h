@@ -8,6 +8,7 @@
 #include <mmsystem.h>
 #pragma comment(lib,"Winmm.lib")
 
+
 inline RECT mkRect(int x, int y, int w, int h) {
     RECT rect;
     rect.left = x;
@@ -16,6 +17,8 @@ inline RECT mkRect(int x, int y, int w, int h) {
     rect.bottom = y + h;
     return rect;
 }
+inline LONG rectWidth(RECT rect) { return rect.right - rect.left; }
+inline LONG rectHeight(RECT rect) { return rect.bottom - rect.top; }
 
 #define _T TEXT
 
@@ -49,6 +52,9 @@ typedef LPDIRECT3DTEXTURE9 LPTexture;
 typedef LPDIRECT3DSURFACE9 LPSurface;
 typedef LPD3DXSPRITE LPSprite;
 typedef LPD3DXFONT LPFont;
+typedef LPDIRECT3DVERTEXSHADER9 LPVertexShader;
+typedef LPDIRECT3DPIXELSHADER9 LPPixelShader;
+typedef LPD3DXCONSTANTTABLE LPConstantTable;
 
 typedef LPDIRECT3D9 LPDirectx;
 typedef LPDIRECT3DDEVICE9 LPDevice;
@@ -81,6 +87,18 @@ typedef D3DXIMAGE_INFO ImageInfo;
     NEEDLOCK_SET_FUNC(mutex##FuncName, FuncName, varibleName, varibleType)\
 
 #pragma endregion
+
+//#pragma region 数据结构的运算符重载
+//
+//template<typename T>inline const std::vector<T>& operator<<(const std::vector<T>& vec, const T& element) {
+//    vec.push_back(element);
+//    return vec;
+//}
+//
+//#pragma endregion
+
+std::wstring stringToWstring(const std::string& orig);
+std::string wstringToString(const std::wstring& str);
 
 namespace My {
     inline void createTextureFromFile(LPDevice g_pDevice, std::wstring& path, UINT w, UINT h, ImageInfo* imageInfo, LPTexture* g_pTexture);

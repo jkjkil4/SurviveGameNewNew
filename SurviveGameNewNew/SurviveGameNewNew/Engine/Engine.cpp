@@ -75,10 +75,12 @@ void Engine::onRender() {
 
 
 void Engine::onRenderStart() {
+	pCurPST = nullptr;
+	pCurVST = nullptr;
 	//Ìî³ä
 	g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, clearColor, 1.0f, 0);
 	//¿ªÊ¼»æÖÆ
-	g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	engine.drawBegin();
 }
 
 void Engine::onRenderEnd(RenderError& err) {

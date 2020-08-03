@@ -6,7 +6,6 @@ namespace My {
 	class RenderEvent;
 
 	class MouseEvent;
-	class MouseMoveEvent;
 }
 
 
@@ -19,12 +18,6 @@ public:
 class My::MouseEvent {
 public:
 	Mouse button = Mouse::None;
-	int mouseX = -1, mouseY = -1;
-};
-
-class My::MouseMoveEvent {
-public:
-	Mouse buttons = Mouse::None;
 	int mouseX = -1, mouseY = -1;
 };
 

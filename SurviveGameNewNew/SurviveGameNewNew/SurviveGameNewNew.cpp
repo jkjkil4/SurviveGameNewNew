@@ -34,6 +34,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 
 	engine.onInit(hInstance);
 	gameData.onInit();
+	pixelShaderMap.onInit(_T("data/shader/PixelShader"));
+	vertexShaderMap.onInit(_T("data/shader/VertexShader"));
 	engine.setCurrentRoom(new Room_Title);
 
 #ifdef DEBUG_CONSOLE
@@ -58,6 +60,8 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 #endif
 
 	gameData.onDestroy();
+	pixelShaderMap.onDestroy();
+	vertexShaderMap.onDestroy();
 	engine.onDestroy();
 
 #ifdef DEBUG_CONSOLE

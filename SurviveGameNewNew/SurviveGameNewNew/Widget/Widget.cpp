@@ -28,10 +28,6 @@ void Widget::setNeedLogic(bool flag) {
 
 
 void Widget::onRender(RenderEvent* ev) {
-	//如果该控件不可见，则return
-	if (!isVisible())
-		return;
-
 	//如果该控件完全在父控件之外，则return
 	if (parent)
 		if (wndX + w < parent->wndX || wndX > parent->wndX + parent->w || wndY + h < parent->wndY || wndY > parent->wndY + parent->h)
@@ -44,7 +40,7 @@ void Widget::onRender(RenderEvent* ev) {
 		engine.g_pSprite->End();
 		engine.g_pDevice->GetRenderTarget(0, &g_pOldTarget);
 		engine.g_pDevice->SetRenderTarget(0, g_pTargetSurface);
-		engine.g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+		engine.drawBegin();
 		engine.g_pDevice->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 
 		ev->targetX = wndX;
@@ -61,10 +57,13 @@ void Widget::onRender(RenderEvent* ev) {
 			engine.drawRect(wndX - ev->targetX, wndY - ev->targetY, w, h, 0x4422dd22, 0x4422dd22, 0x4422dd22, 0x4422dd22);
 	}
 #endif
-	
+
 	//子控件的绘制
-	for (Widget* child : childs)
+	for (Widget* child : childs) {
+		if (!child->isVisible())
+			continue;
 		child->onRender(ev);
+	}
 
 	//还原Target
 	if (g_pOldTarget) {
@@ -73,7 +72,7 @@ void Widget::onRender(RenderEvent* ev) {
 
 		engine.g_pSprite->End();
 		engine.g_pDevice->SetRenderTarget(0, g_pOldTarget);
-		engine.g_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+		engine.drawBegin();
 		engine.g_pSprite->Draw(g_pTargetTexture, nullptr, &D3DXVECTOR3(0, 0, 0),
 			&D3DXVECTOR3((float)(wndX - ev->targetX), (float)(wndY - ev->targetY), 0), 0xffffffff);
 	}
