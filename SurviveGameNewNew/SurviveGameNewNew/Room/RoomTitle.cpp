@@ -7,7 +7,7 @@ using namespace std;
 
 Room_Title::Room_Title() {
 	visibleNum = VF_Title;
-
+	/*
 	{//标题界面
 		SC int offY = 40;
 
@@ -89,15 +89,14 @@ Room_Title::Room_Title() {
 	btnBack->setVisibleOperation(new OperationClass_AnyEqual(vector<int>{VF_Multiplayer, VF_Settings}), &visibleNum);
 	btnBack->setSlot(this, (ButtonFunc)&Room_Title::onBtnBackClicked);
 	addWidget(btnBack);
-
-	LineEdit* lineEdit1 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
+	*/
+	LineEdit* lineEdit1 = new LineEdit(engine.g_pFontSmall, TextAlign::Center, 350, 40, Align::Left | Align::Top);
 	lineEdit1->text = _T("测试文字 a a");
 	lineEdit1->move(50, 50);
 	addWidget(lineEdit1);
 
-	LineEdit* lineEdit2 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
+	LineEdit* lineEdit2 = new LineEdit(engine.g_pFontSmall, TextAlign::Left, 350, 40, Align::Left | Align::Top);
 	lineEdit2->text = _T("测试文字 aa                    ");
-	lineEdit2->textColor = 0xffcc4444;
 	lineEdit2->move(50, 100);
 	addWidget(lineEdit2);
 
@@ -113,7 +112,6 @@ void Room_Title::onLogic() {
 }
 
 void Room_Title::onRender() {
-	engine.drawBorder(250, 250, 200, 200, 3, 0xff00ff00);
-
+	
 	Room::onRender();
 }

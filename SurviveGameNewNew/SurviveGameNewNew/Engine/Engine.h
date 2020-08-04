@@ -104,6 +104,9 @@ public:
 	#pragma endregion
 
 	#pragma region °´¼ü´¦Àí
+	void setCountCapture();
+	void releaseCountCapture();
+	int captureCount = 0;
 	bool isKeyPressed(int num);
 	bool isKey(int num);
 	bool isKeyReleased(int num);

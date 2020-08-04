@@ -10,10 +10,12 @@ LRESULT CALLBACK Engine::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 #define MOUSE_CHECK(btn)\
 	case WM_##btn##DOWN:\
+		setCountCapture();\
 		setKey(VK_##btn);\
 		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Press, false));\
 		break;\
 	case WM_##btn##UP:\
+		releaseCountCapture();\
 		setKey(VK_##btn, false);\
 		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Release, false));\
 		break

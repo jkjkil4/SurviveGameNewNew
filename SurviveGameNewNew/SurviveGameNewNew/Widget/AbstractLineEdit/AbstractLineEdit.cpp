@@ -29,9 +29,9 @@ void AbstractLineEdit::onLogic() {
 		isCursorShow = !isCursorShow;
 	}
 
-	if (textAlign == TextAlign::Scroll && isFocusWidget && engine.isKey(VK_LBUTTON)) {
+	if (isFocusWidget && engine.isKey(VK_LBUTTON)) {
 		cursorEnd = getCursorIndex(engine.mouseX - wndX);
-		updateOffsetByIndex(cursorEnd);
+		if(textAlign == TextAlign::Scroll) updateOffsetByIndex(cursorEnd);
 	}
 
 	Widget::onLogic();
@@ -51,7 +51,7 @@ void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 
 void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 	switch (ev->key) {
-	case VK_BACK:	//退格键(删除文字)
+	case VK_BACK:	//退格键(向左删除文字)
 		if (cursorBegin == cursorEnd) {
 			if (cursorEnd > 0) {
 				cursorBegin--;
@@ -70,14 +70,15 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			updateOffsetByIndex(cursorEnd);
 		setCursorEnable();
 		break;
-	case VK_LEFT:	//键盘向左键(光标左移)
+	case VK_DELETE:	//DEL键(向右删除文字)
 		if (cursorBegin == cursorEnd) {
-			if (cursorEnd > 0) {
-				cursorBegin--;
-				cursorEnd--;
+			if (cursorEnd < text.length()) {
+				text.erase(text.begin() + cursorEnd);
 			}
 		}
 		else {
+			text.erase(text.begin() + min(cursorBegin, cursorEnd), text.begin() + max(cursorBegin, cursorEnd));
+
 			int res = min(cursorBegin, cursorEnd);
 			cursorBegin = res;
 			cursorEnd = res;
@@ -86,17 +87,45 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			updateOffsetByIndex(cursorEnd);
 		setCursorEnable();
 		break;
-	case VK_RIGHT:	//键盘向右键(光标右移)
-		if (cursorBegin == cursorEnd) {
-			if (cursorEnd < (int)text.length()) {
-				cursorBegin++;
-				cursorEnd++;
-			}
+	case VK_LEFT:	//键盘向左键(光标左移)
+		if (engine.isKey(VK_SHIFT)) {
+			if (cursorEnd > 0)
+				cursorEnd--;
 		}
 		else {
-			int res = max(cursorBegin, cursorEnd);
-			cursorBegin = res;
-			cursorEnd = res;
+			if (cursorBegin == cursorEnd) {
+				if (cursorEnd > 0) {
+					cursorBegin--;
+					cursorEnd--;
+				}
+			}
+			else {
+				int res = min(cursorBegin, cursorEnd);
+				cursorBegin = res;
+				cursorEnd = res;
+			}
+		}
+		if (textAlign == TextAlign::Scroll)
+			updateOffsetByIndex(cursorEnd);
+		setCursorEnable();
+		break;
+	case VK_RIGHT:	//键盘向右键(光标右移)
+		if (engine.isKey(VK_SHIFT)) {
+			if (cursorEnd < (int)text.length())
+				cursorEnd++;
+		}
+		else {
+			if (cursorBegin == cursorEnd) {
+				if (cursorEnd < (int)text.length()) {
+					cursorBegin++;
+					cursorEnd++;
+				}
+			}
+			else {
+				int res = max(cursorBegin, cursorEnd);
+				cursorBegin = res;
+				cursorEnd = res;
+			}
 		}
 		if (textAlign == TextAlign::Scroll)
 			updateOffsetByIndex(cursorEnd);
@@ -106,8 +135,9 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 }
 
 void AbstractLineEdit::onTextInput(wstring& input) {
+	if (engine.isKey(VK_LBUTTON))
+		return;
 	wstring insertText;
-
 	int res;
 	for (auto iter = input.begin(); iter < input.end(); iter++) {
 		WCHAR wch = *iter;

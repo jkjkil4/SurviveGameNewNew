@@ -2,6 +2,18 @@
 
 using namespace My;
 
+void Engine::setCountCapture() {
+	if (captureCount == 0)
+		SetCapture(g_hWnd);
+	captureCount++;
+}
+
+void Engine::releaseCountCapture() {
+	captureCount--;
+	if (captureCount == 0)
+		ReleaseCapture();
+}
+
 bool Engine::isKeyPressed(int num) {
 	int index = num - 1;
 	if (index >= 0 && index < keyNumber) {
