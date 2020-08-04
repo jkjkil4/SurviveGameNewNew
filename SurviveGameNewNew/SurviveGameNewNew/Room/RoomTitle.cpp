@@ -90,18 +90,18 @@ Room_Title::Room_Title() {
 	btnBack->setSlot(this, (ButtonFunc)&Room_Title::onBtnBackClicked);
 	addWidget(btnBack);
 
-	LineEdit* lineEdit1 = new LineEdit(engine.g_pFontSmall, TextAlign::Left, 350, 40, Align::Left | Align::Top);
+	LineEdit* lineEdit1 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
 	lineEdit1->text = _T("²âÊÔÎÄ×Ö a a");
 	lineEdit1->move(50, 50);
 	addWidget(lineEdit1);
 
-	LineEdit* lineEdit2 = new LineEdit(engine.g_pFontSmall, TextAlign::Left, 350, 40, Align::Left | Align::Top);
+	LineEdit* lineEdit2 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
 	lineEdit2->text = _T("²âÊÔÎÄ×Ö aa                    ");
 	lineEdit2->textColor = 0xffcc4444;
 	lineEdit2->move(50, 100);
 	addWidget(lineEdit2);
 
-	LineEdit* lineEdit3 = new LineEdit(engine.g_pFontSmall, TextAlign::Left, 350, 40, Align::Left | Align::Top);
+	LineEdit* lineEdit3 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
 	lineEdit3->text = _T("²âÊÔÎÄ×Ö aa          ABCabc____");
 	lineEdit3->move(50, 150);
 	addWidget(lineEdit3);

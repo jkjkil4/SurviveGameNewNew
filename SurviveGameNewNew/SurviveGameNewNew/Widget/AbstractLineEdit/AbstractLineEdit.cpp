@@ -37,6 +37,9 @@ void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 	cursorBegin = getCursorIndex(ev->mouseX);
 	cursorEnd = cursorBegin;
 
+	if (textAlign == TextAlign::Scroll)
+		updateOffsetByIndex(cursorEnd);
+
 	//将光标设置为可见状态
 	setCursorEnable();
 }
@@ -44,6 +47,9 @@ void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 void AbstractLineEdit::onMouseMove(MouseEvent* ev) {
 	//光标位置
 	cursorEnd = getCursorIndex(ev->mouseX);
+
+	if (textAlign == TextAlign::Scroll)
+		updateOffsetByIndex(cursorEnd);
 }
 
 void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
@@ -63,6 +69,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			cursorBegin = res;
 			cursorEnd = res;
 		}
+		if (textAlign == TextAlign::Scroll)
+			updateOffsetByIndex(cursorEnd);
 		setCursorEnable();
 		break;
 	case VK_LEFT:	//键盘向左键(光标左移)
@@ -77,6 +85,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			cursorBegin = res;
 			cursorEnd = res;
 		}
+		if (textAlign == TextAlign::Scroll)
+			updateOffsetByIndex(cursorEnd);
 		setCursorEnable();
 		break;
 	case VK_RIGHT:	//键盘向右键(光标右移)
@@ -91,6 +101,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			cursorBegin = res;
 			cursorEnd = res;
 		}
+		if (textAlign == TextAlign::Scroll)
+			updateOffsetByIndex(cursorEnd);
 		setCursorEnable();
 		break;
 	}
@@ -98,7 +110,6 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 
 void AbstractLineEdit::onTextInput(wstring& input) {
 	wstring insertText;
-	//insertText.resize(input.length());
 
 	int res;
 	for (auto iter = input.begin(); iter < input.end(); iter++) {
@@ -121,6 +132,9 @@ void AbstractLineEdit::onTextInput(wstring& input) {
 	cursorBegin = res;
 	cursorEnd = res;
 
+	if (textAlign == TextAlign::Scroll)
+		updateOffsetByIndex(cursorEnd);
+
 	setCursorEnable();
 }
 
@@ -131,7 +145,41 @@ void AbstractLineEdit::setCursorEnable() {
 }
 
 void AbstractLineEdit::updateOffsetByIndex(int index) {
+	if (index <= strPos) {
+		strPos = index;
+		charOffset = 0;
+	}
+	else {
+		int strX = margin - charOffset;
 
+		//得到index和strPos的距离
+		bool isReplacedSpace = false;
+		if (text[index - 1] == _T(' ')) {
+			text[index - 1] = _T('_');
+			isReplacedSpace = true;
+		}
+		RECT tmpRect;
+		font->DrawText(engine.g_pSprite, text.c_str() + strPos, index - strPos, &tmpRect, DT_CALCRECT, 0);
+		int distance = rectWidth(tmpRect);
+		if (isReplacedSpace)
+			text[index - 1] = _T(' ');
+
+		int indexPos = strX + distance;
+		int boxRight = w + boxOffset.wOffset - margin;
+		if (indexPos > boxRight) {	//如果index不在输入框内
+			indexPos = boxRight;
+			for (int i = index - 1; i >= 0; i--) {
+				int wchWidth;
+				GET_WCHAR_WIDTH(wchWidth, text[i]);
+				indexPos -= wchWidth;
+				if (indexPos <= margin) {
+					strPos = i;
+					charOffset = margin - indexPos;
+					break;
+				}
+			}
+		}
+	}
 }
 
 int AbstractLineEdit::getTextWidth() {
@@ -361,8 +409,18 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 	}
 
 #ifdef DEBUG_LINEEDIT
-	//调试
-	engine.g_pFontVerySmall->DrawText(engine.g_pSprite, (_T("cursorBegin: ") + std::to_wstring(cursorBegin) + _T("  cursorEnd: ") + std::to_wstring(cursorEnd)).c_str(),
-		-1, &mkRect(renderX + boxOffset.xOffset, renderY + boxOffset.yOffset, w + boxOffset.wOffset, h + boxOffset.hOffset), DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);
+	wstring textAlignText;
+	switch (textAlign) {
+	case TextAlign::Center: textAlignText = _T("Center"); break;
+	case TextAlign::Left: textAlignText = _T("Left"); break;
+	case TextAlign::Scroll: textAlignText = _T("Scroll"); break;
+	}
+	wstring deText = _T("TA: ") + textAlignText + 
+		_T("  Begin: ") + std::to_wstring(cursorBegin) + _T("  End: ") + std::to_wstring(cursorEnd);
+	if (textAlign == TextAlign::Scroll)
+		deText += _T("  SP: ") + std::to_wstring(strPos) + _T("  CO: ") + std::to_wstring(charOffset);
+	engine.g_pFontVerySmall->DrawText(engine.g_pSprite, deText.c_str(), -1,
+		&mkRect(renderX + boxOffset.xOffset, renderY + boxOffset.yOffset, w + boxOffset.wOffset, h + boxOffset.hOffset), 
+		DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);
 #endif
 }

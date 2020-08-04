@@ -8,7 +8,7 @@ namespace My {
 	class AbstractLineEdit;
 }
 
-//#define DEBUG_LINEEDIT
+#define DEBUG_LINEEDIT
 
 class My::AbstractLineEdit : public Widget
 {
