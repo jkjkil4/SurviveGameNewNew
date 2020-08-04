@@ -29,6 +29,11 @@ void AbstractLineEdit::onLogic() {
 		isCursorShow = !isCursorShow;
 	}
 
+	if (textAlign == TextAlign::Scroll && isFocusWidget && engine.isKey(VK_LBUTTON)) {
+		cursorEnd = getCursorIndex(engine.mouseX - wndX);
+		updateOffsetByIndex(cursorEnd);
+	}
+
 	Widget::onLogic();
 }
 
@@ -42,14 +47,6 @@ void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 
 	//将光标设置为可见状态
 	setCursorEnable();
-}
-
-void AbstractLineEdit::onMouseMove(MouseEvent* ev) {
-	//光标位置
-	cursorEnd = getCursorIndex(ev->mouseX);
-
-	if (textAlign == TextAlign::Scroll)
-		updateOffsetByIndex(cursorEnd);
 }
 
 void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
@@ -384,7 +381,7 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 		if (cursorBegin == cursorEnd) {
 			if (isCursorShow) {
 				int xPos = getIndexX(cursorBegin);
-				RECT drawRect = mkRect(xPos, boxOffset.yOffset + (h + boxOffset.hOffset - textMetric.tmHeight) / 2 - 2, 2, textMetric.tmHeight + 4);
+				RECT drawRect = mkRect(max(0, xPos), boxOffset.yOffset + (h + boxOffset.hOffset - textMetric.tmHeight) / 2 - 2, 2, textMetric.tmHeight + 4);
 				
 				engine.drawRestart();
 				engine.setPixelShader(&pixelShaderMap[_T("ReverseColor")]);
@@ -398,7 +395,7 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 			int endX = getIndexX(cursorEnd);
 			int leftX = min(beginX, endX);
 			int rightX = max(beginX, endX);
-			RECT drawRect = mkRect(leftX, boxOffset.yOffset + (h + boxOffset.hOffset - textMetric.tmHeight) / 2 - 2, rightX - leftX, textMetric.tmHeight + 4);
+			RECT drawRect = mkRect(max(0, leftX), boxOffset.yOffset + (h + boxOffset.hOffset - textMetric.tmHeight) / 2 - 2, min(w, rightX - leftX), textMetric.tmHeight + 4);
 
 			engine.drawRestart();
 			engine.setPixelShader(&pixelShaderMap[_T("ReverseColor")]);
@@ -418,7 +415,7 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 	wstring deText = _T("TA: ") + textAlignText + 
 		_T("  Begin: ") + std::to_wstring(cursorBegin) + _T("  End: ") + std::to_wstring(cursorEnd);
 	if (textAlign == TextAlign::Scroll)
-		deText += _T("  SP: ") + std::to_wstring(strPos) + _T("  CO: ") + std::to_wstring(charOffset);
+		deText += _T("  Pos: ") + std::to_wstring(strPos) + _T("  Offset: ") + std::to_wstring(charOffset);
 	engine.g_pFontVerySmall->DrawText(engine.g_pSprite, deText.c_str(), -1,
 		&mkRect(renderX + boxOffset.xOffset, renderY + boxOffset.yOffset, w + boxOffset.wOffset, h + boxOffset.hOffset), 
 		DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);

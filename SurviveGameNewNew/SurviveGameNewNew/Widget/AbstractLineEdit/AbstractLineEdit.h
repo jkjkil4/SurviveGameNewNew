@@ -23,7 +23,6 @@ public:
 	void onLogic() override;
 	
 	void onMousePressed(MouseEvent* ev) override;
-	void onMouseMove(MouseEvent* ev) override;
 
 	void onKeyPressed(KeyEvent* ev) override;
 
