@@ -59,6 +59,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	SetConsoleAtt(FORE_WHITE);
 #endif
 
+	SaveInfo::onDestroyInfoManagers();
 	gameData.onDestroy();
 	pixelShaderMap.onDestroy();
 	vertexShaderMap.onDestroy();
