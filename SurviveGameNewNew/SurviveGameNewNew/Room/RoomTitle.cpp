@@ -7,7 +7,16 @@ using namespace std;
 
 Room_Title::Room_Title() {
 	visibleNum = VF_Title;
-	/*
+
+	wstring arr[]{ _T("TESSSS"), _T("DFABH"), _T("YOYOSB") };
+	for (wstring wstr : arr) {
+		SaveInfo si;
+		si.saveName = si.saveNameInFile = wstr;
+		si.seed = rand() % 1003;
+		si.time = time(nullptr);
+		si.save();
+		si.load(wstr);
+	}
 	{//标题界面
 		SC int offY = 40;
 
@@ -51,19 +60,22 @@ Room_Title::Room_Title() {
 		btnCreate->move(175, 5);
 		btnCreate->setSlot(this, (ButtonFunc)&Room_Title::onBtnCreateClicked);
 
-		Button* btnJoin = new Button(gameData.btnMedium, _T("进入"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
-		btnJoin->move(5, 5);
-		btnJoin->setSlot(this, (ButtonFunc)&Room_Title::onBtnSigleplayerJoinClicked);
+		selectSaveMenu.btnJoin = new Button(gameData.btnMedium, _T("进入"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
+		selectSaveMenu.btnJoin->isEnabled = false;
+		selectSaveMenu.btnJoin->move(5, 5);
+		selectSaveMenu.btnJoin->setSlot(this, (ButtonFunc)&Room_Title::onBtnSigleplayerJoinClicked);
 
-		Button* btnRename = new Button(gameData.btnVerySmall, _T("重命名"), engine.g_pFontVerySmall, 
+		selectSaveMenu.btnRename = new Button(gameData.btnVerySmall, _T("重命名"), engine.g_pFontVerySmall,
 			DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
-		btnRename->move(88, 46);
-		btnRename->setSlot(this, (ButtonFunc)&Room_Title::onBtnSaveRenameClicked);
+		selectSaveMenu.btnRename->isEnabled = false;
+		selectSaveMenu.btnRename->move(88, 46);
+		selectSaveMenu.btnRename->setSlot(this, (ButtonFunc)&Room_Title::onBtnRenameClicked);
 
-		Button* btnDelete = new Button(gameData.btnVerySmall, _T("删除"), engine.g_pFontVerySmall, 
+		selectSaveMenu.btnDelete = new Button(gameData.btnVerySmall, _T("删除"), engine.g_pFontVerySmall,
 			DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
-		btnDelete->move(5, 46);
-		btnDelete->setSlot(this, (ButtonFunc)&Room_Title::onBtnSaveDeleteClicked);
+		selectSaveMenu.btnDelete->isEnabled = false;
+		selectSaveMenu.btnDelete->move(5, 46);
+		selectSaveMenu.btnDelete->setSlot(this, (ButtonFunc)&Room_Title::onBtnSaveDeleteClicked);
 	}
 	{//存档创建界面 /同时也是存档重命名界面
 		ImageLabel* widget = new ImageLabel(gameData.saveCreate);
@@ -74,36 +86,42 @@ Room_Title::Room_Title() {
 		btnBack->move(5, 5);
 		btnBack->setSlot(this, (ButtonFunc)&Room_Title::onBtnBackToSelectClicked);
 
+		TextLabel* saveNameLeft = new TextLabel(_T("存档名称"), engine.g_pFontVerySmall, DT_LEFT | DT_BOTTOM, 220, 22, Align::Top, widget);
+		saveNameLeft->textColor = 0xffffffff;
+		saveNameLeft->move(-110, 24);
+
+		TextLabel* saveNameRight = new TextLabel(_T("限制:35个字符"), engine.g_pFontVerySmall, DT_RIGHT | DT_BOTTOM, 220, 22, Align::Top, widget);
+		saveNameRight->textColor = 0xffffffff;
+		saveNameRight->move(110, 24);
+
+		selectSaveMenu.saveNameEdit = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 440, 35, Align::Top, widget);
+		selectSaveMenu.saveNameEdit->move(0, 50);
+		selectSaveMenu.saveNameEdit->maxLength = 35;
+		selectSaveMenu.saveNameEdit->textRegex = new regex("[^\\\\/:\\*?\"<>\\|\\.]*");
+
 		{//存档创建界面
 			TextLabel* textLabel = new TextLabel(_T("创建存档"), engine.g_pFontVerySmall, DT_CENTER | DT_VCENTER, widget->w, 20, Align::Top, widget);
 			textLabel->setVisibleOperation(new OperationClass_Equal(VF_SaveCreate), &visibleNum);
 			textLabel->textColor = 0xffcccccc;
+
+			Button* btnAccept = new Button(gameData.btnSmall, _T("创建"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
+			btnAccept->move(5, 5);
+			btnAccept->setSlot(this, (ButtonFunc)&Room_Title::onBtnCreateAcceptClicked);
 		}
 		{//存档重命名界面
 			TextLabel* textLabel = new TextLabel(_T("重命名存档"), engine.g_pFontVerySmall, DT_CENTER | DT_VCENTER, widget->w, 20, Align::Top, widget);
 			textLabel->setVisibleOperation(new OperationClass_Equal(VF_SaveRename), &visibleNum);
 			textLabel->textColor = 0xffcccccc;
+
+			Button* btnAccept = new Button(gameData.btnSmall, _T("确定"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
+			btnAccept->move(5, 5);
+			btnAccept->setSlot(this, (ButtonFunc)&Room_Title::onBtnRenameAcceptClicked);
 		}
 	}
 	Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER);
 	btnBack->setVisibleOperation(new OperationClass_AnyEqual(vector<int>{VF_Multiplayer, VF_Settings}), &visibleNum);
 	btnBack->setSlot(this, (ButtonFunc)&Room_Title::onBtnBackClicked);
 	addWidget(btnBack);
-	*/
-	LineEdit* lineEdit1 = new LineEdit(engine.g_pFontSmall, TextAlign::Center, 350, 40, Align::Left | Align::Top);
-	lineEdit1->text = _T("测试文字 a a");
-	lineEdit1->move(50, 50);
-	addWidget(lineEdit1);
-
-	LineEdit* lineEdit2 = new LineEdit(engine.g_pFontSmall, TextAlign::Left, 350, 40, Align::Left | Align::Top);
-	lineEdit2->text = _T("测试文字 aa                    ");
-	lineEdit2->move(50, 100);
-	addWidget(lineEdit2);
-
-	LineEdit* lineEdit3 = new LineEdit(engine.g_pFontSmall, TextAlign::Scroll, 350, 40, Align::Left | Align::Top);
-	lineEdit3->text = _T("测试文字 aa          ABCabc____");
-	lineEdit3->move(50, 150);
-	addWidget(lineEdit3);
 }
 
 void Room_Title::onLogic() {
@@ -114,4 +132,25 @@ void Room_Title::onLogic() {
 void Room_Title::onRender() {
 	
 	Room::onRender();
+}
+
+
+void Room_Title::setVisibleNum(int num) {
+	switch (num) {
+	case VF_SaveCreate:
+	case VF_SaveRename:
+		selectSaveMenu.saveNameEdit->text = _T("");
+		break;
+	}
+
+	Room::setVisibleNum(num);
+}
+
+
+void Room_Title::onBtnCreateAcceptClicked(AbstractButton*) {
+	setVisibleNum(VF_SaveSelect);
+}
+
+void Room_Title::onBtnRenameAcceptClicked(AbstractButton*) {
+	setVisibleNum(VF_SaveSelect);
 }

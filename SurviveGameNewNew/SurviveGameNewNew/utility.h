@@ -44,8 +44,11 @@ struct Vertex
 
 #include <string>
 #include <vector>
+#include <list>
 #include <map>
 #include <mutex>
+#include <regex>
+#include <fstream>
 
 #pragma region d3d9µÄÒ»Ð©typedef
 typedef LPDIRECT3DTEXTURE9 LPTexture;
@@ -99,6 +102,10 @@ typedef D3DXIMAGE_INFO ImageInfo;
 
 std::wstring stringToWstring(const std::string& orig);
 std::string wstringToString(const std::wstring& str);
+
+inline bool isAscii(char ch) {
+    return ch >= 0 && ch <= 127;
+}
 
 namespace My {
     inline void createTextureFromFile(LPDevice g_pDevice, std::wstring& path, UINT w, UINT h, ImageInfo* imageInfo, LPTexture* g_pTexture);

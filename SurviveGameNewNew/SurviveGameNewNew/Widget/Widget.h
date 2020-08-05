@@ -30,7 +30,7 @@ public:
 	void onRender(RenderEvent* ev);	//控件的渲染
 	virtual void onSelfRender(int, int) {}	//控件自身的渲染
 
-	void onDestroy();	//控件销毁
+	virtual void onDestroy();	//控件销毁
 
 	void getMouseAtWidget(Widget** pMouseAtWidget, int mouseX, int mouseY);	//得到鼠标悬停的控件
 	virtual void onMousePressed(MouseEvent*) {}

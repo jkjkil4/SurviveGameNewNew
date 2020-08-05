@@ -9,6 +9,8 @@
 #include "../Widget/Button/Button.h"
 #include "../Widget/LineEdit/LineEdit.h"
 
+#include "../Game/Save.h"
+
 namespace My {
 	class Room_Title;
 }
@@ -31,6 +33,8 @@ public:
 
 	void onRender() override;
 
+	void setVisibleNum(int num) override;
+
 	void onBtnSigleplayerClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 	void onBtnMultiplayerClicked(AbstractButton*) { setVisibleNum(VF_Multiplayer); }
 	void onBtnSettingsClicked(AbstractButton*) { setVisibleNum(VF_Settings); }
@@ -38,10 +42,17 @@ public:
 
 	void onBtnBackClicked(AbstractButton*) { setVisibleNum(VF_Title); }
 	void onBtnCreateClicked(AbstractButton*) { setVisibleNum(VF_SaveCreate); }
+	void onBtnCreateAcceptClicked(AbstractButton*);
 	void onBtnSigleplayerJoinClicked(AbstractButton*) {  }
-	void onBtnSaveRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
+	void onBtnRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
+	void onBtnRenameAcceptClicked(AbstractButton*);
 	void onBtnSaveDeleteClicked(AbstractButton*) {  }
 	void onBtnBackToSelectClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 
+	struct SelectSaveMenu
+	{
+		Button* btnJoin, * btnRename, * btnDelete;
+		LineEdit* saveNameEdit;
+	}selectSaveMenu;
 	
 };

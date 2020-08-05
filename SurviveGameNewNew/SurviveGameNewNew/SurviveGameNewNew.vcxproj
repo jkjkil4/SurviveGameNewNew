@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\Dir.cpp" />
     <ClCompile Include="Class\TextureManager.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Engine_DrawFunc.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Engine\Engine_ThreadFunc.cpp" />
     <ClCompile Include="Engine\Engine_WndProcFunc.cpp" />
     <ClCompile Include="Game\Data.cpp" />
+    <ClCompile Include="Game\Save.cpp" />
     <ClCompile Include="Game\Shader.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomTitle.cpp" />
@@ -200,6 +202,8 @@
     <ClInclude Include="Class\TextureManager.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Game\Data.h" />
+    <ClInclude Include="Game\InfoManager.h" />
+    <ClInclude Include="Game\Save.h" />
     <ClInclude Include="Game\Shader.h" />
     <ClInclude Include="NameSpace.h" />
     <ClInclude Include="resource.h" />

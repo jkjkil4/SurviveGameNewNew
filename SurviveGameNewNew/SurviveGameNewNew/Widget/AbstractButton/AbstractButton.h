@@ -18,6 +18,7 @@ public:
 	void setSlot(Object* slot, ButtonFunc slotMemberFunc);
 	Object* slot = nullptr;
 	ButtonFunc slotMemberFunc = nullptr;
+	bool isEnabled = true;
 
 	void onMouseReleased(MouseEvent* ev) override;
 

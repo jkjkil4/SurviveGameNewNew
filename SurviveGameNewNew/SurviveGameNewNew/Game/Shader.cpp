@@ -8,7 +8,7 @@ VertexShaderMap My::vertexShaderMap;
 
 void PixelShaderMap::onInit(const wstring& path) {
 	vector<wstring> files;
-	Dir::entryList(path, nullptr, &files, Dir::File);
+	Dir::entryList(path, nullptr, &files);
 
 	for (wstring file : files) {
 		LPD3DXBUFFER codeBuffer = nullptr;
@@ -81,7 +81,7 @@ void PixelShaderMap::onDestroy() {
 
 void VertexShaderMap::onInit(const wstring& path) {
 	vector<wstring> files;
-	Dir::entryList(path, nullptr, &files, Dir::File);
+	Dir::entryList(path, nullptr, &files);
 
 	for (wstring file : files) {
 		LPD3DXBUFFER codeBuffer = nullptr;

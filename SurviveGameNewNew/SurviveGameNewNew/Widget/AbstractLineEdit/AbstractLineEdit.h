@@ -8,7 +8,7 @@ namespace My {
 	class AbstractLineEdit;
 }
 
-#define DEBUG_LINEEDIT
+//#define DEBUG_LINEEDIT
 
 class My::AbstractLineEdit : public Widget
 {
@@ -21,6 +21,7 @@ public:
 	~AbstractLineEdit() override = default;
 
 	void onLogic() override;
+	void onDestroy() override;
 	
 	void onMousePressed(MouseEvent* ev) override;
 
@@ -28,6 +29,7 @@ public:
 
 	void onTextInput(std::wstring& input) override;
 
+	void insertText(std::wstring& input);
 	void setCursorEnable();
 	void updateOffsetByIndex(int index);
 
@@ -41,7 +43,9 @@ public:
 	TextAlign textAlign;
 	std::wstring text;
 	D3DCOLOR textColor = 0xff000000;
+	std::regex* textRegex = nullptr;
 	int margin = 2;
+	int maxLength = -1;
 
 	//当textAlign为Scroll时用来定位字符位置的东西
 	int strPos = 0;	

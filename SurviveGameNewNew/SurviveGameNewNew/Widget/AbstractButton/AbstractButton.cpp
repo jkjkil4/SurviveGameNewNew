@@ -3,7 +3,7 @@
 using namespace My;
 
 void AbstractButton::onMouseReleased(MouseEvent* ev) {
-	if (ev->button == Mouse::Left && isChecking()) {
+	if (isEnabled && ev->button == Mouse::Left && isChecking()) {
 		if (slotMemberFunc)
 			(slot->*slotMemberFunc)(this);
 	}

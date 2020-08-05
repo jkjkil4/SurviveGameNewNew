@@ -37,6 +37,12 @@ void AbstractLineEdit::onLogic() {
 	Widget::onLogic();
 }
 
+void AbstractLineEdit::onDestroy() {
+	safeDelete(textRegex);
+
+	Widget::onDestroy();
+}
+
 void AbstractLineEdit::onMousePressed(MouseEvent* ev) {
 	//光标位置
 	cursorBegin = getCursorIndex(ev->mouseX);
@@ -72,7 +78,7 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 		break;
 	case VK_DELETE:	//DEL键(向右删除文字)
 		if (cursorBegin == cursorEnd) {
-			if (cursorEnd < text.length()) {
+			if (cursorEnd < (int)text.length()) {
 				text.erase(text.begin() + cursorEnd);
 			}
 		}
@@ -137,11 +143,26 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 void AbstractLineEdit::onTextInput(wstring& input) {
 	if (engine.isKey(VK_LBUTTON))
 		return;
+	insertText(input);
+	setCursorEnable();
+}
+
+
+void AbstractLineEdit::insertText(wstring& input) {
 	wstring insertText;
 	int res;
 	for (auto iter = input.begin(); iter < input.end(); iter++) {
+		if (maxLength != -1 && text.length() + insertText.length() >= (size_t)maxLength)
+			break;
 		WCHAR wch = *iter;
 		if (wch < 0x0020) continue;	//除去控制字符
+		if (textRegex) {	//除去不符合正则表达式的
+			string regText;
+			regText += *(char*)&wch;
+			regText += *((char*)&wch + 1);
+			if (!regex_match(regText, *textRegex))
+				continue;
+		}
 		insertText += wch;
 	}
 	if (insertText.length() == 0)
@@ -149,7 +170,6 @@ void AbstractLineEdit::onTextInput(wstring& input) {
 	if (cursorBegin == cursorEnd) {
 		res = cursorEnd + insertText.length();
 		text.insert(cursorEnd, insertText.c_str());
-		
 	}
 	else {
 		res = min(cursorBegin, cursorEnd) + insertText.length();
@@ -161,10 +181,7 @@ void AbstractLineEdit::onTextInput(wstring& input) {
 
 	if (textAlign == TextAlign::Scroll)
 		updateOffsetByIndex(cursorEnd);
-
-	setCursorEnable();
 }
-
 
 void AbstractLineEdit::setCursorEnable() {
 	cursorShowCountTimes = 0;
@@ -446,6 +463,7 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 		_T("  Begin: ") + std::to_wstring(cursorBegin) + _T("  End: ") + std::to_wstring(cursorEnd);
 	if (textAlign == TextAlign::Scroll)
 		deText += _T("  Pos: ") + std::to_wstring(strPos) + _T("  Offset: ") + std::to_wstring(charOffset);
+
 	engine.g_pFontVerySmall->DrawText(engine.g_pSprite, deText.c_str(), -1,
 		&mkRect(renderX + boxOffset.xOffset, renderY + boxOffset.yOffset, w + boxOffset.wOffset, h + boxOffset.hOffset), 
 		DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);
