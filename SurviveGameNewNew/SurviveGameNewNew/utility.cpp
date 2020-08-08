@@ -2,6 +2,26 @@
 
 using namespace std;
 
+std::wstring strTrimmed(const wstring& wstr) {
+	int begin = 0, end = wstr.length();
+	for (int i = 0; i < wstr.length(); i++) {
+		if (wstr[i] != _T(' ')) {
+			begin = i;
+			break;
+		}
+	}
+	bool hasExpectSpace = false;
+	for (int i = wstr.length() - 1; i >= 0; i--) {
+		if (wstr[i] != _T(' ')) {
+			hasExpectSpace = true;
+			end = i + 1;
+			break;
+		}
+	}
+	if (!hasExpectSpace) end = 0;
+	return wstring(wstr.begin() + begin, wstr.begin() + end);
+}
+
 wstring stringToWstring(const string& orig) {
 	wstring result;
 	int slength = (int)orig.length() + 1;

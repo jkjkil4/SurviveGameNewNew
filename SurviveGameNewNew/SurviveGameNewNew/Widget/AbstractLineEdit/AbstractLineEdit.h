@@ -6,6 +6,7 @@ namespace My {
 	//输入框的抽象类，继承该类重写onSelfRender来进行绘制
 	//调用该类的drawText来绘制文字
 	class AbstractLineEdit;
+	typedef void(Object::* LineEditSlot)(AbstractLineEdit*);
 }
 
 //#define DEBUG_LINEEDIT
@@ -38,6 +39,11 @@ public:
 	int getIndexX(int index);
 
 	void drawText(int renderX, int renderY);
+
+	void setTextChangedSlot(Object* slot, LineEditSlot slotFunc);
+	void emitTextChanged();
+	Object* slot = nullptr;
+	LineEditSlot slotFunc = nullptr;
 
 	LPFont font;
 	TextAlign textAlign;

@@ -4,7 +4,7 @@
 
 namespace My {
 	class AbstractButton;
-	typedef void(Object::* ButtonFunc)(AbstractButton*);
+	typedef void(Object::* ButtonSlot)(AbstractButton*);
 }
 
 
@@ -15,9 +15,9 @@ public:
 		: Widget(w, h, align, parent) {}
 	~AbstractButton() override = default;
 
-	void setSlot(Object* slot, ButtonFunc slotMemberFunc);
+	void setSlot(Object* slot, ButtonSlot slotMemberFunc);
 	Object* slot = nullptr;
-	ButtonFunc slotMemberFunc = nullptr;
+	ButtonSlot slotMemberFunc = nullptr;
 	bool isEnabled = true;
 
 	void onMouseReleased(MouseEvent* ev) override;

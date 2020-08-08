@@ -3,12 +3,13 @@
 #include "../utility.h"
 
 namespace Dir {
-	bool isExists(std::string path);
+	bool isExists(const std::string& path);
+	inline  bool isExists(const std::wstring& path) { return isExists(wstringToString(path)); }
 
-	void createDirectory(std::wstring path);
+	void createDirectory(const std::wstring& path);
 
-	bool removeDirectory(std::wstring path);
-	bool deleteFile(std::wstring path);
+	bool removeDirectory(const std::wstring& path);
+	bool deleteFile(const std::wstring& path);
 
-	void entryList(std::wstring path, std::vector<std::wstring>* dirs, std::vector<std::wstring>* files);
+	void entryList(const std::wstring& path, std::vector<std::wstring>* dirs, std::vector<std::wstring>* files);
 }

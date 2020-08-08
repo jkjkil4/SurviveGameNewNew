@@ -51,9 +51,6 @@
     <ClCompile Include="Room\Room.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Room\RoomTitle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Widget\AbstractButton\AbstractButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -82,6 +79,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Class\Dir.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\Room_Title.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\Room_CreateSave.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\World.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -141,9 +147,6 @@
     <ClInclude Include="Room\Room.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Room\RoomTitle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Widget\AbstractButton\AbstractButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -175,6 +178,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Game\InfoManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\Room_Title.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\Room_CreateSave.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\World.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Block.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

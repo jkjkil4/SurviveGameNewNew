@@ -1,15 +1,15 @@
 #include "Dir.h"
 
-bool Dir::isExists(std::string path) {
+bool Dir::isExists(const std::string& path) {
 	struct stat buffer;
 	return stat((path).c_str(), &buffer) == 0;
 }
 
-void Dir::createDirectory(std::wstring path) {
+void Dir::createDirectory(const std::wstring& path) {
 	CreateDirectory(path.c_str(), nullptr);
 }
 
-bool Dir::removeDirectory(std::wstring path) {
+bool Dir::removeDirectory(const std::wstring& path) {
 	std::vector<std::wstring> childFiles, childDirs;
 	entryList(path, &childDirs, &childFiles);
 	//É¾³ýÎÄ¼þ
@@ -23,14 +23,14 @@ bool Dir::removeDirectory(std::wstring path) {
 	return RemoveDirectory(path.c_str());
 }
 
-bool Dir::deleteFile(std::wstring path) {
+bool Dir::deleteFile(const std::wstring& path) {
 	DeleteFile(path.c_str());
 }
 
-void Dir::entryList(std::wstring path, std::vector<std::wstring>* dirs, std::vector<std::wstring>* files) {
+void Dir::entryList(const std::wstring& path, std::vector<std::wstring>* dirs, std::vector<std::wstring>* files) {
 	if (dirs) dirs->clear();
 	if (files) files->clear();
-	if (!isExists(wstringToString(path)))
+	if (!isExists(path))
 		return;
 	HANDLE hFile = NULL;
 	WIN32_FIND_DATA data;

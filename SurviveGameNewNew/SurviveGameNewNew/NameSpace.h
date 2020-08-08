@@ -10,6 +10,11 @@
 		return (EnumClass)((int)part1 | (int)part2);\
 	}
 
+struct Size {
+	Size(int w, int h) : w(w), h(h) {}
+	int w, h;
+};
+
 namespace My {
 	//不include的类(防止循环包含)
 	class Room;

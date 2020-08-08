@@ -100,6 +100,27 @@ typedef D3DXIMAGE_INFO ImageInfo;
 //
 //#pragma endregion
 
+template<typename T>inline void safeDelete(T*& p) {
+    if (p) {
+        delete p;
+        p = nullptr;
+    }
+}
+template<typename T>inline void safeDeleteArray(T*& p) {
+    if (p) {
+        delete[] p;
+        p = nullptr;
+    }
+}
+template<typename T>inline void safeRelease(T*& p) {
+    if (p) {
+        p->Release();
+        p = nullptr;
+    }
+}
+
+std::wstring strTrimmed(const std::wstring& wstr);
+
 std::wstring stringToWstring(const std::string& orig);
 std::string wstringToString(const std::wstring& str);
 
@@ -113,25 +134,6 @@ namespace My {
 
     void setSpriteScale(LPSprite pSpr, float scalePosX, float scalePosY, float xScale, float yScale,
         float rotPosX = 0, float rotPosY = 0, float rot = 0);
-	
-    template<typename T>inline void safeDelete(T*& p) {
-        if (p) {
-            delete p;
-            p = nullptr;
-        }
-    }
-    template<typename T>inline void safeDeleteArray(T*& p) {
-        if (p) {
-            delete[] p;
-            p = nullptr;
-        }
-    }
-    template<typename T>inline void safeRelease(T*& p) {
-        if (p) {
-            p->Release();
-            p = nullptr;
-        }
-    }
 }
 
 

@@ -2,59 +2,53 @@
 
 #include "InfoManager.h"
 
+#include "World.h"
+
 namespace My {
 	class SaveInfo;
+	class Save;
 }
 
 #define SAVE_CUR_VERSION 0
 
-
 class My::SaveInfo 
 {
 public:
-	struct InfoManagerVersionControler {
-		InfoManagerVersionControler(UINT version, const std::vector<InfoManager*>& infoManagers)
-			: version(version), infoManagers(infoManagers) {}
-		UINT version;
-		std::vector<InfoManager*> infoManagers;
-	};
-
 	static void onDestroyInfoManagers() {
-		for (InfoManagerVersionControler& vc : infoManagerVersionControlers) {
-			for (InfoManager* im : vc.infoManagers) {
+		for (InfoManagerVersionControler<SaveInfo>& vc : imvc) {
+			for (InfoManager<SaveInfo>* im : vc.infoManagers) {
 				delete im;
 			}
 			vc.infoManagers.clear();
 		}
-		infoManagerVersionControlers.clear();
-	}
-	
-	static std::vector<InfoManager*>* getSuitableInfoManager(UINT version) {
-		if (version > SAVE_CUR_VERSION)
-			return nullptr;
-		for (auto iter = infoManagerVersionControlers.rbegin(); iter < infoManagerVersionControlers.rend(); iter++) {
-			InfoManagerVersionControler& vc = *iter;
-			if (vc.version <= version)
-				return &vc.infoManagers;
-		}
-		return nullptr;
-	}
-	static std::vector<InfoManager*>& getNewestInfoManager() {
-		return (*infoManagerVersionControlers.rbegin()).infoManagers;
+		imvc.clear();
 	}
 
-	static std::vector<InfoManagerVersionControler> infoManagerVersionControlers;
+	static std::vector<InfoManagerVersionControler<SaveInfo>> imvc;
 
-	virtual ~SaveInfo() = default;
+	bool load(const std::wstring& name, std::list<std::wstring>* errWhat = nullptr);
+	bool save(std::list<std::wstring>* errWhat = nullptr);
+	void create(const std::wstring& name, UINT seed_);
 
-	virtual bool load(const std::wstring& name, std::list<std::wstring>* errWhat = nullptr);
-	virtual bool save(std::list<std::wstring>* errWhat = nullptr);
-
-	virtual void createDirectory();
+	void createDirectory();
 
 	UINT version = 0;
 	std::wstring saveName;
 	std::wstring saveNameInFile;
 	UINT seed = 1;
 	time_t time = 2;
+};
+
+
+class My::Save
+{
+public:
+	bool load(const std::wstring& name, std::list<std::wstring>* errWhat = nullptr);
+	bool save(std::list<std::wstring>* errWhat = nullptr);
+	bool create(const std::wstring& name, UINT seed_, 
+		int wMainWorldWidth, int wMainWorldHeight,
+		std::list<std::wstring>* errWhat = nullptr);
+
+	SaveInfo saveInfo;
+	World_MainWorld wMainWorld;
 };

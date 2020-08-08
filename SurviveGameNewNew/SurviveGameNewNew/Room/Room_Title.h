@@ -26,14 +26,18 @@ public:
 		VF_Settings
 	};
 
-	Room_Title();
+	Room_Title(int visibleNum_);
 	~Room_Title() override = default;
 
 	void onLogic() override;
 
 	void onRender() override;
 
+	void onDestroy() override;
+
 	void setVisibleNum(int num) override;
+
+	bool isSaveNameRight(const std::wstring& name);
 
 	void onBtnSigleplayerClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 	void onBtnMultiplayerClicked(AbstractButton*) { setVisibleNum(VF_Multiplayer); }
@@ -51,6 +55,7 @@ public:
 
 	struct SelectSaveMenu
 	{
+		std::vector<SaveInfo*> savesInfo;
 		Button* btnJoin, * btnRename, * btnDelete;
 		LineEdit* saveNameEdit;
 	}selectSaveMenu;

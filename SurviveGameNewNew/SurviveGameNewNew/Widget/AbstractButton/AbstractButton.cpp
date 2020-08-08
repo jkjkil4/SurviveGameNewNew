@@ -10,7 +10,7 @@ void AbstractButton::onMouseReleased(MouseEvent* ev) {
 }
 
 
-void AbstractButton::setSlot(Object* slot, ButtonFunc slotMemberFunc) {
+void AbstractButton::setSlot(Object* slot, ButtonSlot slotMemberFunc) {
 	this->slot = slot;
 	this->slotMemberFunc = slotMemberFunc;
 }

@@ -1,7 +1,9 @@
 #include "Engine/Engine.h"
 #include "Game/Data.h"
 
-#include "Room/RoomTitle.h"
+#include "Room/Room_Title.h"
+
+#include "Game/Save.h"
 
 using namespace My;
 using namespace std;
@@ -36,7 +38,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 	gameData.onInit();
 	pixelShaderMap.onInit(_T("data/shader/PixelShader"));
 	vertexShaderMap.onInit(_T("data/shader/VertexShader"));
-	engine.setCurrentRoom(new Room_Title);
+	engine.setCurrentRoom(new Room_Title(Room_Title::VF_Title));
 
 #ifdef DEBUG_CONSOLE
 	SetConsoleAtt(FORE_WHITE + FORE_LIGHT);
@@ -60,6 +62,7 @@ INT WINAPI WinMain(__in HINSTANCE hInstance,
 #endif
 
 	SaveInfo::onDestroyInfoManagers();
+	World_MainWorld::onDestroyInfoManagers();
 	gameData.onDestroy();
 	pixelShaderMap.onDestroy();
 	vertexShaderMap.onDestroy();

@@ -63,6 +63,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 				cursorBegin--;
 				cursorEnd--;
 				text.erase(text.begin() + cursorEnd);
+
+				emitTextChanged();
 			}
 		}
 		else {
@@ -71,6 +73,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			int res = min(cursorBegin, cursorEnd);
 			cursorBegin = res;
 			cursorEnd = res;
+
+			emitTextChanged();
 		}
 		if (textAlign == TextAlign::Scroll)
 			updateOffsetByIndex(cursorEnd);
@@ -80,6 +84,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 		if (cursorBegin == cursorEnd) {
 			if (cursorEnd < (int)text.length()) {
 				text.erase(text.begin() + cursorEnd);
+
+				emitTextChanged();
 			}
 		}
 		else {
@@ -88,6 +94,8 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 			int res = min(cursorBegin, cursorEnd);
 			cursorBegin = res;
 			cursorEnd = res;
+
+			emitTextChanged();
 		}
 		if (textAlign == TextAlign::Scroll)
 			updateOffsetByIndex(cursorEnd);
@@ -181,6 +189,8 @@ void AbstractLineEdit::insertText(wstring& input) {
 
 	if (textAlign == TextAlign::Scroll)
 		updateOffsetByIndex(cursorEnd);
+
+	emitTextChanged();
 }
 
 void AbstractLineEdit::setCursorEnable() {
@@ -468,4 +478,15 @@ void AbstractLineEdit::drawText(int renderX, int renderY) {
 		&mkRect(renderX + boxOffset.xOffset, renderY + boxOffset.yOffset, w + boxOffset.wOffset, h + boxOffset.hOffset), 
 		DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);
 #endif
+}
+
+void AbstractLineEdit::setTextChangedSlot(Object* slot, LineEditSlot slotFunc) {
+	this->slot = slot;
+	this->slotFunc = slotFunc;
+}
+
+void AbstractLineEdit::emitTextChanged() {
+	if (slot) {
+		(slot->*slotFunc)(this);
+	}
 }
