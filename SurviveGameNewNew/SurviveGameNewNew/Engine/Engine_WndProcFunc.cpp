@@ -61,9 +61,14 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		break;
 	}
 	case WM_CHAR:
-		inputWStrMutex.lock();
+		mutexInputWStr.lock();
 		inputWStr += (WCHAR)wParam;
-		inputWStrMutex.unlock();
+		mutexInputWStr.unlock();
+		break;
+	case WM_MOUSEWHEEL:
+		mutexWheelDelta.lock();
+		wheelDelta += (short)HIWORD(wParam);
+		mutexWheelDelta.unlock();
 		break;
 	case WM_CLOSE: {
 		setClosed(true);

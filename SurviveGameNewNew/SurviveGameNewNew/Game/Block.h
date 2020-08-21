@@ -3,7 +3,7 @@
 #include "../utility.h"
 
 struct Block {
-	enum CornerFlag { LeftTop, RightTop, LeftBottom, RightBottom };
+	enum CornerFlag { LeftTop = 0b1, RightTop = 0b10, LeftBottom = 0b100, RightBottom = 0b1000 };
 
 	Block() = default;
 	Block(USHORT fore, USHORT back, UCHAR cornerFlag) 

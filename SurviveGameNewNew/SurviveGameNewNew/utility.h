@@ -119,6 +119,12 @@ template<typename T>inline void safeRelease(T*& p) {
     }
 }
 
+//
+//template<typename T>inline T jMin(T a, T b) {
+//    return a > b ? b : a;
+//}
+
+
 std::wstring strTrimmed(const std::wstring& wstr);
 
 std::wstring stringToWstring(const std::string& orig);

@@ -121,7 +121,13 @@ void Room::evKey(KeyEvent* ev) {
 	}
 }
 
-void Room::evTextInput(std::wstring& input) {
+void Room::evMouseWheel(int delta) {
+	if (mouseAtWidget) {
+		mouseAtWidget->onMouseWheel(delta);
+	}
+}
+
+void Room::evTextInput(const std::wstring& input) {
 	if (focusWidget) {
 		focusWidget->onTextInput(input);
 	}

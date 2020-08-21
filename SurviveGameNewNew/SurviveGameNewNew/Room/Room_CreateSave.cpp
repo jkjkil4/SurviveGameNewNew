@@ -11,9 +11,9 @@ Room_CreateSave::Room_CreateSave(const wstring& save) {
 }
 
 void Room_CreateSave::threadCreateSave() {
-	SaveInfo si;
-	si.create(saveName, rand() % 114514);
-	si.save();
+	Save save;
+	save.create(saveName, rand() % 114514, 8000, 2000);
+	save.save();
 }
 
 void Room_CreateSave::onLogic() {
@@ -27,6 +27,7 @@ void Room_CreateSave::onLogic() {
 }
 
 void Room_CreateSave::onDestroy() {
+	thCreate->join();
 	delete thCreate;
 
 	Room::onDestroy();

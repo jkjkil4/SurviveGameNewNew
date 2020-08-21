@@ -11,11 +11,11 @@ Room_Title::Room_Title(int visibleNum_) {
 	{//标题界面
 		SC int offY = 40;
 
-		Button* btnSigleplayer = new Button(gameData.btnBig, _T("单人游戏"), engine.g_pFont, DT_CENTER | DT_VCENTER);
-		btnSigleplayer->move(0, -70 + offY);
-		btnSigleplayer->setVisibleOperation(new OperationClass_Equal(VF_Title), &visibleNum);
-		btnSigleplayer->setSlot(this, (ButtonSlot)&Room_Title::onBtnSigleplayerClicked);
-		addWidget(btnSigleplayer);
+		Button* btnSingleplayer = new Button(gameData.btnBig, _T("单人游戏"), engine.g_pFont, DT_CENTER | DT_VCENTER);
+		btnSingleplayer->move(0, -70 + offY);
+		btnSingleplayer->setVisibleOperation(new OperationClass_Equal(VF_Title), &visibleNum);
+		btnSingleplayer->setSlot(this, (ButtonSlot)&Room_Title::onBtnSingleplayerClicked);
+		addWidget(btnSingleplayer);
 
 		Button* btnMultiplayer = new Button(gameData.btnBig, _T("多人游戏(没做)"), engine.g_pFont, DT_CENTER | DT_VCENTER);
 		btnMultiplayer->move(0, offY);
@@ -43,6 +43,10 @@ Room_Title::Room_Title(int visibleNum_) {
 		TextLabel* textLabel = new TextLabel(_T("选择存档"), engine.g_pFontVerySmall, DT_CENTER | DT_VCENTER, widget->w, 20, Align::Top, widget);
 		textLabel->textColor = 0xffcccccc;
 
+		ListWidget* saveListWidget = new ListWidget(420, 450, Align::Left | Align::Top, widget);
+		saveListWidget->move(5, 25);
+		saveListWidget->canBtnBeFocused = true;
+
 		Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Left | Align::Bottom, widget);
 		btnBack->move(5, 5);
 		btnBack->setSlot(this, (ButtonSlot)&Room_Title::onBtnBackClicked);
@@ -54,7 +58,7 @@ Room_Title::Room_Title(int visibleNum_) {
 		selectSaveMenu.btnJoin = new Button(gameData.btnMedium, _T("进入"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
 		selectSaveMenu.btnJoin->isEnabled = false;
 		selectSaveMenu.btnJoin->move(5, 5);
-		selectSaveMenu.btnJoin->setSlot(this, (ButtonSlot)&Room_Title::onBtnSigleplayerJoinClicked);
+		selectSaveMenu.btnJoin->setSlot(this, (ButtonSlot)&Room_Title::onBtnSingleplayerJoinClicked);
 
 		selectSaveMenu.btnRename = new Button(gameData.btnVerySmall, _T("重命名"), engine.g_pFontVerySmall,
 			DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
@@ -181,11 +185,6 @@ void Room_Title::onBtnCreateAcceptClicked(AbstractButton*) {
 		return;
 	if(!Dir::isExists(_T("data/saves/") + saveName))
 		throw RoomGoto(new Room_CreateSave(saveName));
-	//SaveInfo si;
-	//si.create(selectSaveMenu.saveNameEdit->text, 0);
-	//if (si.save()) {
-	//	setVisibleNum(VF_SaveSelect);
-	//}
 	
 }
 

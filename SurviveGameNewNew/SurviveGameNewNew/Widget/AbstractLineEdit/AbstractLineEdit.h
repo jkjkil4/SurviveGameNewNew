@@ -28,9 +28,9 @@ public:
 
 	void onKeyPressed(KeyEvent* ev) override;
 
-	void onTextInput(std::wstring& input) override;
+	void onTextInput(const std::wstring& input) override;
 
-	void insertText(std::wstring& input);
+	void insertText(const std::wstring& input);
 	void setCursorEnable();
 	void updateOffsetByIndex(int index);
 

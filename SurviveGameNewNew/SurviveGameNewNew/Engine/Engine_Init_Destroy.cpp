@@ -69,7 +69,9 @@ void Engine::initDirectx() {
 
 	//创建D3D的设备指针
 	d3dpp.BackBufferCount = 1;
+
 	d3dpp.Windowed = TRUE;
+
 	d3dpp.BackBufferWidth = getDefWidth();
 	d3dpp.BackBufferHeight = getDefHeight();
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;	//翻转效果：抛弃

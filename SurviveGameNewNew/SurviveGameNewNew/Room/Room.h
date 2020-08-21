@@ -21,7 +21,8 @@ public:
 
 	void evResized();	//窗口大小改变事件
 	void evKey(KeyEvent* ev);
-	void evTextInput(std::wstring& input);
+	void evMouseWheel(int delta);
+	void evTextInput(const std::wstring& input);
 
 	virtual void onKeyPressed(KeyEvent* ev) {}
 	virtual void onKeyReleased(KeyEvent* ev) {}

@@ -148,7 +148,7 @@ void AbstractLineEdit::onKeyPressed(KeyEvent* ev) {
 	}
 }
 
-void AbstractLineEdit::onTextInput(wstring& input) {
+void AbstractLineEdit::onTextInput(const wstring& input) {
 	if (engine.isKey(VK_LBUTTON))
 		return;
 	insertText(input);
@@ -156,7 +156,7 @@ void AbstractLineEdit::onTextInput(wstring& input) {
 }
 
 
-void AbstractLineEdit::insertText(wstring& input) {
+void AbstractLineEdit::insertText(const wstring& input) {
 	wstring insertText;
 	int res;
 	for (auto iter = input.begin(); iter < input.end(); iter++) {

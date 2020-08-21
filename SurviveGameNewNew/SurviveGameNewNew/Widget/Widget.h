@@ -41,7 +41,9 @@ public:
 	virtual void onKeyPressed(KeyEvent*) {}
 	virtual void onKeyReleased(KeyEvent*) {}
 
-	virtual void onTextInput(std::wstring&) {}
+	virtual void onMouseWheel(int) {}
+
+	virtual void onTextInput(const std::wstring&) {}
 
 	void setVisibleOperation(OperationClass* oper, int* pVisibleNum);
 	bool isVisible();

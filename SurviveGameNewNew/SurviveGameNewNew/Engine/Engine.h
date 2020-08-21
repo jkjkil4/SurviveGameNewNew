@@ -95,6 +95,8 @@ public:
 	void drawRestart();
 	void drawRect(int x, int y, int w, int h, DWORD col);
 	void drawRect(int x, int y, int w, int h, DWORD col1, DWORD col2, DWORD col3, DWORD col4);
+	void drawRect(RECT rect, DWORD col);
+	void drawRect(RECT rect, DWORD col1, DWORD col2, DWORD col3, DWORD col4);
 	void drawBorder(int x, int y, int w, int h, int size, DWORD col = 0xff000000);
 	//绘制矩形的顶点Buffer
 	LPDIRECT3DVERTEXBUFFER9 vbRectangle = nullptr;
@@ -136,8 +138,12 @@ public:
 	std::mutex mutexEvent;
 	std::vector<EngineFunc> vecEvents;
 	#pragma endregion
+private:
+	int wheelDelta = 0;
+	std::mutex mutexWheelDelta;
+public:
 
-	std::mutex inputWStrMutex;
+	std::mutex mutexInputWStr;
 	std::wstring inputWStr;
 
 	void setCursorShape(LPCWSTR shape);
@@ -146,7 +152,7 @@ public:
 	void showMsgBox(std::wstring text);
 	void showMsgBox(std::wstring caption, std::wstring text, UINT btns);
 
-	#pragma region 获取和设定变量的函数
+
 	//std::mutex mutexThreadCount;
 	//NEEDLOCK_GET_FUNC(mutexThreadCount, ThreadCount, threadCount, int)
 
@@ -165,7 +171,6 @@ public:
 	NEEDLOCK_VARIBLE_FUNC(DefHeight, defHeight, int)
 	NEEDLOCK_VARIBLE_FUNC(ViewW, viewW, int)
 	NEEDLOCK_VARIBLE_FUNC(ViewH, viewH, int)
-	#pragma endregion
 
 private:
 	void initWnd();

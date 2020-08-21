@@ -8,6 +8,7 @@
 #include "../Widget/TextLabel/TextLabel.h"
 #include "../Widget/Button/Button.h"
 #include "../Widget/LineEdit/LineEdit.h"
+#include "../Widget/ListWidget/ListWidget.h"
 
 #include "../Game/Save.h"
 
@@ -39,7 +40,7 @@ public:
 
 	bool isSaveNameRight(const std::wstring& name);
 
-	void onBtnSigleplayerClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
+	void onBtnSingleplayerClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 	void onBtnMultiplayerClicked(AbstractButton*) { setVisibleNum(VF_Multiplayer); }
 	void onBtnSettingsClicked(AbstractButton*) { setVisibleNum(VF_Settings); }
 	void onBtnExitClicked(AbstractButton*) { throw RoomGoto(nullptr); }
@@ -47,7 +48,7 @@ public:
 	void onBtnBackClicked(AbstractButton*) { setVisibleNum(VF_Title); }
 	void onBtnCreateClicked(AbstractButton*) { setVisibleNum(VF_SaveCreate); }
 	void onBtnCreateAcceptClicked(AbstractButton*);
-	void onBtnSigleplayerJoinClicked(AbstractButton*) {  }
+	void onBtnSingleplayerJoinClicked(AbstractButton*) {  }
 	void onBtnRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
 	void onBtnRenameAcceptClicked(AbstractButton*);
 	void onBtnSaveDeleteClicked(AbstractButton*) {  }

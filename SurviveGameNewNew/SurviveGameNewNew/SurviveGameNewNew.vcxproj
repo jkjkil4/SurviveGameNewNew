@@ -180,6 +180,7 @@
     <ClCompile Include="Widget\ImageLabel\ImageLabel.cpp" />
     <ClCompile Include="Widget\AbstractLineEdit\AbstractLineEdit.cpp" />
     <ClCompile Include="Widget\LineEdit\LineEdit.cpp" />
+    <ClCompile Include="Widget\ListWidget\ListWidget.cpp" />
     <ClCompile Include="Widget\TextLabel\TextLabel.cpp" />
     <ClCompile Include="Widget\Widget.cpp" />
   </ItemGroup>
@@ -220,6 +221,8 @@
     <ClInclude Include="Widget\ImageLabel\ImageLabel.h" />
     <ClInclude Include="Widget\AbstractLineEdit\AbstractLineEdit.h" />
     <ClInclude Include="Widget\LineEdit\LineEdit.h" />
+    <ClInclude Include="Widget\ListWidget\ListWidget.h" />
+    <ClInclude Include="Widget\ListWidget\ListWidgetItem.h" />
     <ClInclude Include="Widget\TextLabel\TextLabel.h" />
     <ClInclude Include="Widget\Widget.h" />
   </ItemGroup>

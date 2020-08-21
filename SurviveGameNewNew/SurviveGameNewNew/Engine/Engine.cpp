@@ -59,13 +59,21 @@ void Engine::onLogic() {
 			currentRoom->evKey(&*it);
 		}
 
+		//调用控件的鼠标滚轮函数
+		mutexWheelDelta.lock();
+		if (wheelDelta != 0) {
+			currentRoom->evMouseWheel(wheelDelta);
+			wheelDelta = 0;
+		}
+		mutexWheelDelta.unlock();
+
 		//调用控件的文字输入函数
-		inputWStrMutex.lock();
+		mutexInputWStr.lock();
 		if (inputWStr.length() != 0) {
 			currentRoom->evTextInput(inputWStr);
 			inputWStr = _T("");
 		}
-		inputWStrMutex.unlock();
+		mutexInputWStr.unlock();
 	}
 	//清空KeyBuffer
 	vecKeyBuffer.clear();
@@ -97,7 +105,7 @@ void Engine::onRenderEnd(RenderError& err) {
 	g_pSpriteRender->Draw(g_pRenderTexture, nullptr, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 0, 0), 0xffffffff);
 	g_pSpriteRender->End();
 	g_pDevice->EndScene();		//结束绘制
-	
+
 	Counter counter;
 	counter.start();
 	HRESULT hr = g_pDevice->Present(nullptr, nullptr, 0, nullptr);	//前后台缓冲区交换的"源动力"
