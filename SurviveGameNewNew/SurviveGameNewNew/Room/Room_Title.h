@@ -54,7 +54,7 @@ public:
 	void onBtnSingleplayerJoinClicked(AbstractButton*) {  }
 	void onBtnRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
 	void onBtnRenameAcceptClicked(AbstractButton*);
-	void onBtnSaveDeleteClicked(AbstractButton*) { setVisibleNum(VF_SaveDelete); }
+	void onBtnSaveDeleteClicked(AbstractButton*);
 	void onBtnSaveDeleteBack(int index);
 	void onBtnBackToSelectClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
 
@@ -69,4 +69,6 @@ public:
 
 		TextLabel* saveInfoWidget;
 	}selectSaveMenu;
+
+	MsgBox* deleteSaveMsgBox;
 };

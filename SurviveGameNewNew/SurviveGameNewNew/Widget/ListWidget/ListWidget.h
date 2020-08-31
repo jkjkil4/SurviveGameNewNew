@@ -28,6 +28,8 @@ public:
 	void updateMouseIndexByMousePos();
 	int getMouseIndex(int mouseX, int mouseY);
 
+	ListWidgetItem* getFocusedItem();
+
 	void addItem(ListWidgetItem* item);
 	void removeItem(ListWidgetItem* item);
 	void clearItem();

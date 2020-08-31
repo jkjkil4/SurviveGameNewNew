@@ -160,7 +160,7 @@ void AbstractLineEdit::insertText(const wstring& input) {
 	wstring insertText;
 	int res;
 	for (auto iter = input.begin(); iter < input.end(); iter++) {
-		if (maxLength != -1 && text.length() + insertText.length() >= (size_t)maxLength)
+		if (maxLength != -1 && text.length() + insertText.length() >= (size_t)(maxLength + abs(cursorBegin - cursorEnd)))
 			break;
 		WCHAR wch = *iter;
 		if (wch < 0x0020) continue;	//³ýÈ¥¿ØÖÆ×Ö·û

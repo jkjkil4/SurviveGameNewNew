@@ -158,6 +158,13 @@ int ListWidget::getMouseIndex(int mouseX, int mouseY) {
 }
 
 
+ListWidgetItem* ListWidget::getFocusedItem() {
+    if (focusIndex == -1 || !canBtnBeFocused)
+        return nullptr;
+    return vItems[focusIndex];
+}
+
+
 void ListWidget::addItem(ListWidgetItem* item) {
 	vItems.push_back(item);
 }

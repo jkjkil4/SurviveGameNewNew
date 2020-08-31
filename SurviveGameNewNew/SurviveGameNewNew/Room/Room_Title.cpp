@@ -126,12 +126,12 @@ Room_Title::Room_Title(int visibleNum_) {
 		list<wstring> lButtons;
 		lButtons.push_back(_T("取消"));
 		lButtons.push_back(_T("确认"));
-		MsgBox* box = new MsgBox(_T("删除存档"), engine.g_pFontVerySmall, _T("确认要删除吗"), engine.g_pFontSmall, lButtons,
+		deleteSaveMsgBox = new MsgBox(_T("删除存档"), engine.g_pFontVerySmall, _T("确认要删除吗"), engine.g_pFontSmall, lButtons,
 			gameData.btnSmall, engine.g_pFont, 300, 200);
-		box->setVisibleOperation(new OperationClass_Equal(VF_SaveDelete), &visibleNum);
-		box->setSlot(this, (MsgBoxSlot)&Room_Title::onBtnSaveDeleteBack);
+		deleteSaveMsgBox->setVisibleOperation(new OperationClass_Equal(VF_SaveDelete), &visibleNum);
+		deleteSaveMsgBox->setSlot(this, (MsgBoxSlot)&Room_Title::onBtnSaveDeleteBack);
 		
-		addWidget(box);
+		addWidget(deleteSaveMsgBox);
 	}
 	Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER);
 	btnBack->setVisibleOperation(new OperationClass_AnyEqual(vector<int>{VF_Multiplayer, VF_Settings}), &visibleNum);
@@ -210,10 +210,19 @@ void Room_Title::onBtnRenameAcceptClicked(AbstractButton*) {
 	setVisibleNum(VF_SaveSelect);
 }
 
+void Room_Title::onBtnSaveDeleteClicked(AbstractButton*) {
+	SaveListItem* item = (SaveListItem*)selectSaveMenu.saveListWidget->getFocusedItem();
+	deleteSaveMsgBox->text = _T("确认要删除 \n") + item->info.saveName + _T(" 吗\n删除的存档无法恢复");
+
+	setVisibleNum(VF_SaveDelete);
+}
 
 void Room_Title::onBtnSaveDeleteBack(int index) {
 	if (index == 1) {
-		engine.showMsgBox(_T("aaaa"));
+		SaveListItem* item = (SaveListItem*)selectSaveMenu.saveListWidget->getFocusedItem();
+		if (item->info.saveName.length() != 0) {
+			Dir::removeDirectory(_T("data/saves/") + item->info.saveName);
+		}
 	}
 
 	setVisibleNum(VF_SaveSelect);
