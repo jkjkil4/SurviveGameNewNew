@@ -52,7 +52,7 @@ public:
 	void onBtnCreateClicked(AbstractButton*) { setVisibleNum(VF_SaveCreate); }
 	void onBtnCreateAcceptClicked(AbstractButton*);
 	void onBtnSingleplayerJoinClicked(AbstractButton*) {  }
-	void onBtnRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
+	void onBtnRenameClicked(AbstractButton*);
 	void onBtnRenameAcceptClicked(AbstractButton*);
 	void onBtnSaveDeleteClicked(AbstractButton*);
 	void onBtnSaveDeleteBack(int index);
@@ -67,8 +67,10 @@ public:
 		Button* btnJoin, * btnRename, * btnDelete;
 		LineEdit* saveNameEdit;
 
+		TextLabel* oldSaveNameLabel;
+
+		MsgBox* deleteSaveMsgBox;
+
 		TextLabel* saveInfoWidget;
 	}selectSaveMenu;
-
-	MsgBox* deleteSaveMsgBox;
 };

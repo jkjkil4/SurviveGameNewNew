@@ -25,8 +25,8 @@ public:
 		textRect.right -= 2;
 		textRect.top += 2;
 		textRect.bottom -= 2;
-		engine.g_pFontSmall->DrawText(engine.g_pSprite, info.saveName.c_str(), -1, &textRect, DT_LEFT | DT_TOP, 0xffffffff);
-		engine.g_pFontVerySmall->DrawText(engine.g_pSprite, info.saveNameInFile.c_str(), -1, &textRect, DT_LEFT | DT_BOTTOM, 0xffbbbbbb);
+		engine.g_pFontSmall->DrawText(engine.g_pSprite, info.saveNameInFile.c_str(), -1, &textRect, DT_LEFT | DT_TOP, 0xffffffff);
+		engine.g_pFontVerySmall->DrawText(engine.g_pSprite, info.saveName.c_str(), -1, &textRect, DT_LEFT | DT_BOTTOM, 0xffbbbbbb);
 	}
 
 	SaveInfo info;

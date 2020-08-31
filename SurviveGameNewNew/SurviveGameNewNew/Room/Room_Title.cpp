@@ -115,6 +115,11 @@ Room_Title::Room_Title(int visibleNum_) {
 			textLabel->setVisibleOperation(new OperationClass_Equal(VF_SaveRename), &visibleNum);
 			textLabel->textColor = 0xffcccccc;
 
+			selectSaveMenu.oldSaveNameLabel = new TextLabel(_T("存档原名: "), engine.g_pFontVerySmall, DT_LEFT | DT_TOP, 440, 22, Align::Top, widget);
+			selectSaveMenu.oldSaveNameLabel->setVisibleOperation(new OperationClass_Equal(VF_SaveRename), &visibleNum);
+			selectSaveMenu.oldSaveNameLabel->move(0, 98);
+			selectSaveMenu.oldSaveNameLabel->textColor = 0xffcccccc;
+
 			Button* btnAccept = new Button(gameData.btnSmall, _T("确定"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Right | Align::Bottom, widget);
 			btnAccept->setVisibleOperation(new OperationClass_Equal(VF_SaveRename), &visibleNum);
 			btnAccept->move(5, 5);
@@ -126,12 +131,12 @@ Room_Title::Room_Title(int visibleNum_) {
 		list<wstring> lButtons;
 		lButtons.push_back(_T("取消"));
 		lButtons.push_back(_T("确认"));
-		deleteSaveMsgBox = new MsgBox(_T("删除存档"), engine.g_pFontVerySmall, _T("确认要删除吗"), engine.g_pFontSmall, lButtons,
+		selectSaveMenu.deleteSaveMsgBox = new MsgBox(_T("删除存档"), engine.g_pFontVerySmall, _T("确认要删除吗"), engine.g_pFontSmall, lButtons,
 			gameData.btnSmall, engine.g_pFont, 300, 200);
-		deleteSaveMsgBox->setVisibleOperation(new OperationClass_Equal(VF_SaveDelete), &visibleNum);
-		deleteSaveMsgBox->setSlot(this, (MsgBoxSlot)&Room_Title::onBtnSaveDeleteBack);
+		selectSaveMenu.deleteSaveMsgBox->setVisibleOperation(new OperationClass_Equal(VF_SaveDelete), &visibleNum);
+		selectSaveMenu.deleteSaveMsgBox->setSlot(this, (MsgBoxSlot)&Room_Title::onBtnSaveDeleteBack);
 		
-		addWidget(deleteSaveMsgBox);
+		addWidget(selectSaveMenu.deleteSaveMsgBox);
 	}
 	Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER);
 	btnBack->setVisibleOperation(new OperationClass_AnyEqual(vector<int>{VF_Multiplayer, VF_Settings}), &visibleNum);
@@ -206,13 +211,29 @@ void Room_Title::onBtnCreateAcceptClicked(AbstractButton*) {
 	
 }
 
+void Room_Title::onBtnRenameClicked(AbstractButton*) {
+	SaveListItem* item = (SaveListItem*)selectSaveMenu.saveListWidget->getFocusedItem();
+	selectSaveMenu.oldSaveNameLabel->text = _T("存档原名: ") + item->info.saveNameInFile;
+
+	setVisibleNum(VF_SaveRename);
+}
+
 void Room_Title::onBtnRenameAcceptClicked(AbstractButton*) {
-	setVisibleNum(VF_SaveSelect);
+	SaveListItem* item = (SaveListItem*)selectSaveMenu.saveListWidget->getFocusedItem();
+	SaveInfo& si = item->info;
+	const wstring& repSaveName = selectSaveMenu.saveNameEdit->text;
+	if (Dir::isExists(_T("data/saves/") + si.saveName)) {
+		si.saveNameInFile = repSaveName;
+		si.time = time(nullptr);
+		si.save();
+
+		setVisibleNum(VF_SaveSelect);
+	}
 }
 
 void Room_Title::onBtnSaveDeleteClicked(AbstractButton*) {
 	SaveListItem* item = (SaveListItem*)selectSaveMenu.saveListWidget->getFocusedItem();
-	deleteSaveMsgBox->text = _T("确认要删除 \n") + item->info.saveName + _T(" 吗\n删除的存档无法恢复");
+	selectSaveMenu.deleteSaveMsgBox->text = _T("确认要删除 \n") + item->info.saveNameInFile + _T(" 吗\n删除的存档无法恢复");
 
 	setVisibleNum(VF_SaveDelete);
 }
@@ -241,7 +262,7 @@ void Room_Title::onSaveListClicked(ListWidgetItem* item) {
 		+ to_wstring(ltm->tm_mday) + TEXT("日 ") + to_wstring(ltm->tm_hour) + TEXT(":") + timeMinStr;
 
 	selectSaveMenu.saveInfoWidget->text 
-		= _T("名称: ") + si.saveName
+		= _T("名称: ") + si.saveNameInFile
 		+ _T("\n\n时间: ") + timeStr
 		+ _T("\n种子: ") + to_wstring(si.seed);
 
