@@ -43,9 +43,15 @@ Room_Title::Room_Title(int visibleNum_) {
 		TextLabel* textLabel = new TextLabel(_T("选择存档"), engine.g_pFontVerySmall, DT_CENTER | DT_VCENTER, widget->w, 20, Align::Top, widget);
 		textLabel->textColor = 0xffcccccc;
 
-		ListWidget* saveListWidget = new ListWidget(420, 450, Align::Left | Align::Top, widget);
-		saveListWidget->move(5, 25);
-		saveListWidget->canBtnBeFocused = true;
+		selectSaveMenu.saveListWidget = new ListWidget(412, 442, Align::Left | Align::Top, widget);
+		selectSaveMenu.saveListWidget->move(9, 29);
+		selectSaveMenu.saveListWidget->margin = 0;
+		selectSaveMenu.saveListWidget->canBtnBeFocused = true;
+		selectSaveMenu.saveListWidget->setClickedSlot(this, (ListWidgetSlot)&Room_Title::onSaveListClicked);
+
+		selectSaveMenu.saveInfoWidget = new TextLabel(_T(""), engine.g_pFontVerySmall, DT_LEFT | DT_TOP, 159, 276, Align::Right | Align::Top, widget);
+		selectSaveMenu.saveInfoWidget->move(7, 168);
+		selectSaveMenu.saveInfoWidget->textColor = 0xffffffff;
 
 		Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER, Align::Left | Align::Bottom, widget);
 		btnBack->move(5, 5);
@@ -115,6 +121,18 @@ Room_Title::Room_Title(int visibleNum_) {
 			btnAccept->setSlot(this, (ButtonSlot)&Room_Title::onBtnRenameAcceptClicked);
 		}
 	}
+	//存档删除界面
+	{
+		list<wstring> lButtons;
+		lButtons.push_back(_T("取消"));
+		lButtons.push_back(_T("确认"));
+		MsgBox* box = new MsgBox(_T("删除存档"), engine.g_pFontVerySmall, _T("确认要删除吗"), engine.g_pFontSmall, lButtons,
+			gameData.btnSmall, engine.g_pFont, 300, 200);
+		box->setVisibleOperation(new OperationClass_Equal(VF_SaveDelete), &visibleNum);
+		box->setSlot(this, (MsgBoxSlot)&Room_Title::onBtnSaveDeleteBack);
+		
+		addWidget(box);
+	}
 	Button* btnBack = new Button(gameData.btnSmall, _T("返回"), engine.g_pFont, DT_CENTER | DT_VCENTER);
 	btnBack->setVisibleOperation(new OperationClass_AnyEqual(vector<int>{VF_Multiplayer, VF_Settings}), &visibleNum);
 	btnBack->setSlot(this, (ButtonSlot)&Room_Title::onBtnBackClicked);
@@ -134,9 +152,7 @@ void Room_Title::onRender() {
 }
 
 void Room_Title::onDestroy() {
-	for (SaveInfo* si : selectSaveMenu.savesInfo)
-		delete si;
-	selectSaveMenu.savesInfo.clear();
+	selectSaveMenu.saveListWidget->clearItem();
 
 	Room::onDestroy();
 }
@@ -145,23 +161,25 @@ void Room_Title::onDestroy() {
 void Room_Title::setVisibleNum(int num) {
 	switch (num) {
 	case VF_SaveSelect: {
-		//删除原先的存档信息
-		for (SaveInfo* si : selectSaveMenu.savesInfo)
-			delete si;
-		selectSaveMenu.savesInfo.clear();
+		ListWidget* saveListWidget = selectSaveMenu.saveListWidget;
+		//重置原先的东西
+		saveListWidget->clearItem();
+		selectSaveMenu.saveInfoWidget->text = _T("");
+		selectSaveMenu.btnJoin->isEnabled = false;
+		selectSaveMenu.btnDelete->isEnabled = false;
+		selectSaveMenu.btnRename->isEnabled = false;
 		//得到存档文件列表
 		vector<wstring> saves;
 		Dir::entryList(_T("data/saves"), &saves, nullptr);
 		//读取存档信息
-		for (wstring save : saves) {
-			SaveInfo* si = new SaveInfo;
-			if (!si->load(save)) {
-				delete si;
-			}
-			else selectSaveMenu.savesInfo.push_back(si);
+		for (wstring& save : saves) {
+			saveListWidget->addItem(new SaveListItem(save));
 		}
 		//排序
-		sort(selectSaveMenu.savesInfo.begin(), selectSaveMenu.savesInfo.end(), [](SaveInfo* a, SaveInfo* b) -> bool { return a->time > b->time; });
+		sort(saveListWidget->vItems.begin(), saveListWidget->vItems.end(), 
+			[](ListWidgetItem* a, ListWidgetItem* b) -> bool { 
+				return ((SaveListItem*)a)->info.time > ((SaveListItem*)b)->info.time;
+			});
 		break;
 	}
 	case VF_SaveCreate:
@@ -190,4 +208,35 @@ void Room_Title::onBtnCreateAcceptClicked(AbstractButton*) {
 
 void Room_Title::onBtnRenameAcceptClicked(AbstractButton*) {
 	setVisibleNum(VF_SaveSelect);
+}
+
+
+void Room_Title::onBtnSaveDeleteBack(int index) {
+	if (index == 1) {
+		engine.showMsgBox(_T("aaaa"));
+	}
+
+	setVisibleNum(VF_SaveSelect);
+}
+
+
+void Room_Title::onSaveListClicked(ListWidgetItem* item) {
+	SaveListItem* sItem = (SaveListItem*)item;
+	SaveInfo& si = sItem->info;
+
+	tm* ltm = localtime(&si.time);
+	wstring timeMinStr = to_wstring(ltm->tm_min);
+	if (timeMinStr.length() == 1)
+		timeMinStr.insert(timeMinStr.begin(), TEXT('0'));
+	wstring timeStr = to_wstring(1900 + ltm->tm_year) + TEXT("年") + to_wstring(1 + ltm->tm_mon) + TEXT("月")
+		+ to_wstring(ltm->tm_mday) + TEXT("日 ") + to_wstring(ltm->tm_hour) + TEXT(":") + timeMinStr;
+
+	selectSaveMenu.saveInfoWidget->text 
+		= _T("名称: ") + si.saveName
+		+ _T("\n\n时间: ") + timeStr
+		+ _T("\n种子: ") + to_wstring(si.seed);
+
+	selectSaveMenu.btnJoin->isEnabled = true;
+	selectSaveMenu.btnDelete->isEnabled = true;
+	selectSaveMenu.btnRename->isEnabled = true;
 }

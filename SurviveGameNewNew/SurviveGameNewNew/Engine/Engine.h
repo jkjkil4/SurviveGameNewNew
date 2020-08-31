@@ -121,6 +121,7 @@ public:
 	std::mutex mutexKeyPressed;
 	std::mutex mutexKey;
 	std::mutex mutexKeyReleased;
+	std::mutex mutexVecKeyBuffer;
 	bool keyPressed[keyNumber];
 	bool key[keyNumber];
 	bool keyReleased[keyNumber];

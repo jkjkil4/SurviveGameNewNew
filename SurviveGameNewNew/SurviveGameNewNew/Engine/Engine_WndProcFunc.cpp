@@ -8,16 +8,20 @@ LRESULT CALLBACK Engine::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-#define MOUSE_CHECK(btn)\
-	case WM_##btn##DOWN:\
-		setCountCapture();\
-		setKey(VK_##btn);\
+#define MOUSE_CHECK(btn)				\
+	case WM_##btn##DOWN:				\
+		setCountCapture();				\
+		setKey(VK_##btn);				\
+		mutexVecKeyBuffer.lock();		\
 		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Press, false));\
-		break;\
-	case WM_##btn##UP:\
-		releaseCountCapture();\
-		setKey(VK_##btn, false);\
+		mutexVecKeyBuffer.unlock();		\
+		break;							\
+	case WM_##btn##UP:					\
+		releaseCountCapture();			\
+		setKey(VK_##btn, false);		\
+		mutexVecKeyBuffer.lock();		\
 		vecKeyBuffer.push_back(Key(VK_##btn, Key::State::Release, false));\
+		mutexVecKeyBuffer.unlock();		\
 		break
 
 LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -35,13 +39,17 @@ LRESULT CALLBACK Engine::ProcWndMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		else {
 			setKey(keyNum);
 		}
+		mutexVecKeyBuffer.lock();
 		vecKeyBuffer.push_back(Key(keyNum, Key::State::Press, isAutoRepeat));
+		mutexVecKeyBuffer.unlock();
 		break;
 	}
 	case WM_KEYUP: {
 		int keyNum = wParam;
 		setKey(keyNum, false);
+		mutexVecKeyBuffer.lock();
 		vecKeyBuffer.push_back(Key(keyNum, Key::State::Release));
+		mutexVecKeyBuffer.unlock();
 		break;
 	}
 	#pragma endregion

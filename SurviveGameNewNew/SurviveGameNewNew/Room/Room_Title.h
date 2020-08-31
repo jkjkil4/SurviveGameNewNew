@@ -9,6 +9,9 @@
 #include "../Widget/Button/Button.h"
 #include "../Widget/LineEdit/LineEdit.h"
 #include "../Widget/ListWidget/ListWidget.h"
+#include "../Widget/MsgBox/MsgBox.h"
+
+#include "../Widget/ListWidget/Item/SaveListItem.h"
 
 #include "../Game/Save.h"
 
@@ -22,7 +25,7 @@ class My::Room_Title : public Room
 public:
 	enum VisibleFlags { 
 		VF_Title, 
-		VF_SaveSelect, VF_SaveCreate, VF_SaveRename,
+		VF_SaveSelect, VF_SaveCreate, VF_SaveRename, VF_SaveDelete,
 		VF_Multiplayer,
 		VF_Settings
 	};
@@ -51,14 +54,19 @@ public:
 	void onBtnSingleplayerJoinClicked(AbstractButton*) {  }
 	void onBtnRenameClicked(AbstractButton*) { setVisibleNum(VF_SaveRename); }
 	void onBtnRenameAcceptClicked(AbstractButton*);
-	void onBtnSaveDeleteClicked(AbstractButton*) {  }
+	void onBtnSaveDeleteClicked(AbstractButton*) { setVisibleNum(VF_SaveDelete); }
+	void onBtnSaveDeleteBack(int index);
 	void onBtnBackToSelectClicked(AbstractButton*) { setVisibleNum(VF_SaveSelect); }
+
+	void onSaveListClicked(ListWidgetItem* item);
 
 	struct SelectSaveMenu
 	{
-		std::vector<SaveInfo*> savesInfo;
+		//std::vector<SaveInfo*> savesInfo;
+		ListWidget* saveListWidget;
 		Button* btnJoin, * btnRename, * btnDelete;
 		LineEdit* saveNameEdit;
+
+		TextLabel* saveInfoWidget;
 	}selectSaveMenu;
-	
 };

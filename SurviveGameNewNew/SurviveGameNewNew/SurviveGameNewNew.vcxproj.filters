@@ -93,6 +93,9 @@
     <ClCompile Include="Widget\ListWidget\ListWidget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Widget\MsgBox\MsgBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SurviveGameNewNew.rc">
@@ -199,6 +202,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Widget\ListWidget\ListWidgetItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\ListWidget\Item\SaveListItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Widget\MsgBox\MsgBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

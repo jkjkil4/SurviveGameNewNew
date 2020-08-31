@@ -12,7 +12,7 @@ Room_CreateSave::Room_CreateSave(const wstring& save) {
 
 void Room_CreateSave::threadCreateSave() {
 	Save save;
-	save.create(saveName, rand() % 114514, 8000, 2000);
+	save.create(saveName, rand() % 114514, 1000, 500);
 	save.save();
 }
 

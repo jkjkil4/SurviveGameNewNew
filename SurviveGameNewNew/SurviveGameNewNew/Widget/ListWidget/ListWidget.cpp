@@ -7,8 +7,6 @@ ListWidget::ListWidget(int w, int h, Align align, Widget* parent) : Widget(w, h,
 {
     createRenderTarget();
     isMouseTracking = true;
-    repeat(i, 20)
-        addItem(new ListWidgetItem);
 }
 
 
@@ -33,8 +31,6 @@ void ListWidget::onSelfRender(int renderX, int renderY) {
     
     int startIndex = max((-yOffset - margin) / (btnHeight + spacing), 0);
     int endIndex = min((h - yOffset - margin) / (btnHeight + spacing) + 1, (int)vItems.size());
-
-    engine.g_pFont->DrawText(engine.g_pSprite, (to_wstring(mouseIndex) + _T(" ") + to_wstring(vItems.size())).c_str(), -1, &mkRect(renderX, renderY, 100, 100), DT_LEFT | DT_TOP | DT_NOCLIP, 0xffff0000);
 
     engine.drawRestart();
     for (int i = startIndex; i < endIndex; i++) {
@@ -72,8 +68,12 @@ void ListWidget::onMousePressed(MouseEvent* ev) {
     if (ev->button == Mouse::Left) {
         isHolding = true;
         updateMouseIndexByMousePos();
+
         if (canBtnBeFocused && mouseIndex != -1) {
             focusIndex = mouseIndex;
+        }
+        if (mouseIndex != -1 && slotObject) {
+            (slotObject->*slot)(vItems[mouseIndex]);
         }
     }
 }
@@ -88,10 +88,6 @@ void ListWidget::onMouseMove(MouseEvent* ev) {
 
 void ListWidget::onMouseReleased(MouseEvent* ev) {
     if (ev->button == Mouse::Left) {
-        if (mouseIndex != -1 && slotObject) {
-            (slotObject->*slot)(vItems[mouseIndex]);
-        }
-
         isHolding = false;
 
         updateMouseIndexByMousePos();
@@ -174,8 +170,8 @@ void ListWidget::removeItem(ListWidgetItem* item) {
 			break;
 		}
 	}
-    if (mouseIndex >= (int)vItems.size())
-        mouseIndex = -1;
+    mouseIndex = -1;
+    focusIndex = -1;
     needUpdateOffset = true;
 }
 
@@ -185,6 +181,7 @@ void ListWidget::clearItem() {
 	}
 	vItems.clear();
     mouseIndex = -1;
+    focusIndex = -1;
     needUpdateOffset = true;
 }
 

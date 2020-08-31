@@ -24,9 +24,14 @@ void Engine::onLogic() {
 	mutexEvent.unlock();
 
 	//处理按键
+	mutexKeyPressed.lock();
 	ZeroMemory(keyPressed, sizeof(keyPressed));
+	mutexKeyPressed.unlock();
+	mutexKeyReleased.lock();
 	ZeroMemory(keyReleased, sizeof(keyReleased));
+	mutexKeyReleased.unlock();
 	//设置按键Pressed和Released的状态
+	mutexVecKeyBuffer.lock();
 	for (auto it = vecKeyBuffer.begin(); it < vecKeyBuffer.end(); it++) {
 		Key key = *it;
 		if (!key.isAutoRepeat) {
@@ -35,6 +40,7 @@ void Engine::onLogic() {
 			else setKeyReleased(key.key);
 		}
 	}
+	mutexVecKeyBuffer.unlock();
 
 	//得到鼠标位置
 	POINT mPos;
